@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1028239159117",
+    "project_id": "sweatpal",
+    "storage_bucket": "sweatpal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028239159117:android:a919d27e4165f520d25104",
+        "android_client_info": {
+          "package_name": "com.example.sweatpals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1028239159117-8fuc2hmee3604hvjkb8klb2cj373akja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtwOKz5L0tcyEwmAkFJH7LaoXEhEtyRyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1028239159117-8fuc2hmee3604hvjkb8klb2cj373akja.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1028239159117-7qscq4h0e4vsus9arrdhoklsuus9gujr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sweatpals"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
