@@ -1,7 +1,7 @@
+const mainRoute = '/main/';
 const loginRoute = '/login/';
 const registerRoute = '/register/';
 const verifyEmailRoute = '/verify-email/';
-const mainRoute = '/main/';
 
 const naviBarRoute = '/navi-bar/';
 const homeRoute = '/home/';

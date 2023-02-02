@@ -7,6 +7,11 @@ import 'package:sweatpals/views/register_view.dart';
 import 'package:sweatpals/views/verify_email_view.dart';
 import 'package:sweatpals/views/navi_bar.dart';
 
+import 'package:sweatpals/views/home_view.dart';
+import 'package:sweatpals/views/map_view.dart';
+import 'package:sweatpals/views/profile_view.dart';
+import 'package:sweatpals/views/settings_view.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // have to initialize firebase before running the app
@@ -33,9 +38,10 @@ void main() async {
         registerRoute: (context) => const RegisterView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
         naviBarRoute: (context) => const NaviBar(),
-        // homeRoute: (context) => const HomeView(),
-        // mapRoute: (context) => const MapView(),
-        // profileRoute: (context) => const ProfileView(),
+        homeRoute: (context) => const HomeView(),
+        mapRoute: (context) => const MapView(),
+        profileRoute: (context) => const ProfileView(),
+        settingsRoute: (context) => const SettingsView(),
       },
     ),
   );
@@ -54,7 +60,7 @@ class MainPage extends StatelessWidget {
             final user = AuthService.firebase().currentUser;
             if (user != null) {
               if (user.isEmailVerified) {
-                // main page
+                // app
                 return const NaviBar();
               } else {
                 return const VerifyEmailView();
