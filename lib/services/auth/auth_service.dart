@@ -10,10 +10,12 @@ class AuthService implements AuthProvider {
 
   @override
   Future<AuthUser> createUser({
+    required String username,
     required String email,
     required String password,
   }) =>
       provider.createUser(
+        username: username,
         email: email,
         password: password,
       );
@@ -39,4 +41,12 @@ class AuthService implements AuthProvider {
 
   @override
   Future<void> initialize() => provider.initialize();
+
+  @override
+  Future<AuthUser> logInAnon({
+    required String username,
+  }) =>
+      provider.logInAnon(
+        username: username,
+      );
 }

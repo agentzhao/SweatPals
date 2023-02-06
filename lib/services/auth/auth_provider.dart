@@ -11,6 +11,7 @@ abstract class AuthProvider {
   AuthUser? get currentUser;
 
   Future<AuthUser> createUser({
+    required String username,
     required String email,
     required String password,
   });
@@ -18,4 +19,10 @@ abstract class AuthProvider {
   Future<void> logOut();
 
   Future<void> sendEmailVerification();
+
+  Future<AuthUser> logInAnon({
+    required String username,
+  });
+
+  // Future<void> updateDisplayName(String username);
 }

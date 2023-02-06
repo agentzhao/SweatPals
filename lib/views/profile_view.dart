@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 
-import 'package:sweatpals/enums/menu_action.dart';
+// import 'package:sweatpals/enums/menu_action.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -12,8 +12,7 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  // late final NotesService _notesService;
-  String get userEmail => AuthService.firebase().currentUser!.email!;
+  String get username => AuthService.firebase().currentUser!.username!;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Logged in as $userEmail'),
+            Text('Logged in as $username'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {

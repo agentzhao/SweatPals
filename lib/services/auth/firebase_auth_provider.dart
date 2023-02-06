@@ -17,6 +17,7 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   Future<AuthUser> createUser({
+    required String username,
     required String email,
     required String password,
   }) async {
@@ -26,6 +27,7 @@ class FirebaseAuthProvider implements AuthProvider {
         password: password,
       );
       final user = currentUser;
+      updateDisplayName(username);
       if (user != null) {
         return user;
       } else {
@@ -100,6 +102,42 @@ class FirebaseAuthProvider implements AuthProvider {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       await user.sendEmailVerification();
+    } else {
+      throw UserNotLoggedInAuthException();
+    }
+  }
+
+  @override
+  Future<AuthUser> logInAnon({
+    required String username,
+  }) async {
+    try {
+      await FirebaseAuth.instance.signInAnonymously();
+      final user = currentUser;
+      updateDisplayName(username);
+      if (user != null) {
+        return user;
+      } else {
+        throw UserNotLoggedInAuthException();
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw UserNotFoundAuthException();
+      } else if (e.code == 'wrong-password') {
+        throw WrongPasswordAuthException();
+      } else {
+        throw GenericAuthException();
+      }
+    } catch (_) {
+      throw GenericAuthException();
+    }
+  }
+
+  @override
+  Future<void> updateDisplayName(String username) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.updateDisplayName(username);
     } else {
       throw UserNotLoggedInAuthException();
     }
