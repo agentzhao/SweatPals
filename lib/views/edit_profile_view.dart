@@ -14,7 +14,6 @@ class _EditProfileViewState extends State<EditProfileView> {
   late final TextEditingController _username;
   late final TextEditingController _email;
   late final bool _isUserVerified;
-  late final TextEditingController _photoUrl;
 
   String get uid => AuthService.firebase().currentUser!.uid;
   String get username => AuthService.firebase().currentUser!.username!;
@@ -22,7 +21,6 @@ class _EditProfileViewState extends State<EditProfileView> {
       AuthService.firebase().currentUser?.email ?? "no email (guest)";
   bool get isUserVerified =>
       AuthService.firebase().currentUser!.isEmailVerified;
-  // String get photoUrl => AuthService.firebase().currentUser!.photoUrl!;
 
   @override
   void initState() {
@@ -30,7 +28,6 @@ class _EditProfileViewState extends State<EditProfileView> {
     _username = TextEditingController(text: username);
     _email = TextEditingController(text: email);
     _isUserVerified = isUserVerified;
-    // _photoUrl = TextEditingController(text: photoUrl);
     super.initState();
   }
 
@@ -38,7 +35,6 @@ class _EditProfileViewState extends State<EditProfileView> {
   void dispose() {
     _username.dispose();
     _email.dispose();
-    // _photoUrl.dispose();
     super.dispose();
   }
 

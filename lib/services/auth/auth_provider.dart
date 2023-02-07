@@ -26,5 +26,5 @@ abstract class AuthProvider {
 
   Future<void> updateDisplayName(String username);
 
-  Future<void> updatePhotoUrl(String photoUrl);
+  Future<void> updatePhotoURL(String photoURL);
 }

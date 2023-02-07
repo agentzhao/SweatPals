@@ -18,8 +18,8 @@ class _ProfileViewState extends State<ProfileView> {
   String get username => AuthService.firebase().currentUser!.username!;
   String get userEmail =>
       AuthService.firebase().currentUser?.email ?? "no email (guest)";
-  String get photoUrl =>
-      AuthService.firebase().currentUser?.photoUrl ??
+  String get photoURL =>
+      AuthService.firebase().currentUser?.photoURL ??
       "https://pngimg.com/uploads/github/github_PNG80.png";
 
   @override
@@ -79,7 +79,7 @@ class _ProfileViewState extends State<ProfileView> {
               left: 10,
               right: 10,
               child: ProfilePicture(
-                imagePath: photoUrl,
+                imagePath: photoURL,
                 isEdit: true,
                 onClicked: () => selectImage(),
               ),

@@ -34,10 +34,10 @@ class FirebaseAuthProvider implements AuthProvider {
       final user = currentUser;
       await updateDisplayName(username);
       // todo hardcoded profile pic
-      await updatePhotoUrl(
+      await updatePhotoURL(
           "https://pngimg.com/uploads/github/github_PNG80.png");
-      print(user!.photoUrl);
-      print(user.photoUrl.toString());
+      print(user!.photoURL);
+      print(user.photoURL.toString());
       // todo fix photoUrl not updating shown as null
       if (user != null) {
         return user;
@@ -126,11 +126,11 @@ class FirebaseAuthProvider implements AuthProvider {
       await FirebaseAuth.instance.signInAnonymously();
       final user = currentUser;
       await updateDisplayName(username);
-      await updatePhotoUrl(
+      await updatePhotoURL(
           "https://pngimg.com/uploads/github/github_PNG80.png");
       print(user!.username);
-      print(user.photoUrl);
-      print(user.photoUrl.toString());
+      print(user.photoURL);
+      print(user.photoURL.toString());
 
       if (user != null) {
         return user;
@@ -161,10 +161,10 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<void> updatePhotoUrl(String photoUrl) async {
+  Future<void> updatePhotoURL(String photoURL) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await user.updatePhotoURL(photoUrl);
+      await user.updatePhotoURL(photoURL);
     } else {
       throw PhotoNotUpdatedException();
     }

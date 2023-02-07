@@ -7,14 +7,14 @@ class AuthUser {
   final String? username;
   final String? email;
   final bool isEmailVerified;
-  final String? photoUrl;
+  final String? photoURL;
 
   const AuthUser({
     required this.uid,
     required this.username,
     required this.email,
     required this.isEmailVerified,
-    required this.photoUrl,
+    required this.photoURL,
   });
 
   factory AuthUser.fromFirebase(User user) => AuthUser(
@@ -22,6 +22,6 @@ class AuthUser {
         username: user.displayName,
         email: user.email,
         isEmailVerified: user.emailVerified,
-        photoUrl: user.photoURL,
+        photoURL: user.photoURL,
       );
 }

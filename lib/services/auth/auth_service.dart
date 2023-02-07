@@ -56,7 +56,7 @@ class AuthService implements AuthProvider {
   }
 
   @override
-  Future<void> updatePhotoUrl(String photoUrl) async {
-    return await provider.updatePhotoUrl(photoUrl);
+  Future<void> updatePhotoURL(String photoURL) async {
+    return await provider.updatePhotoURL(photoURL);
   }
 }
