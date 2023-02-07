@@ -11,6 +11,10 @@ class EmailAlreadyInUseAuthException implements Exception {}
 
 class InvalidEmailAuthException implements Exception {}
 
+class PhotoNotUpdatedException implements Exception {}
+
+class DisplayNameNotUpdatedException implements Exception {}
+
 // generic exceptions
 
 class GenericAuthException implements Exception {}

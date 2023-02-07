@@ -24,5 +24,7 @@ abstract class AuthProvider {
     required String username,
   });
 
-  // Future<void> updateDisplayName(String username);
+  Future<void> updateDisplayName(String username);
+
+  Future<void> updatePhotoUrl(String photoUrl);
 }

@@ -41,6 +41,7 @@ dependencies:
   cloud_firestore: ^4.3.1
   firebase_database: ^10.0.9 # Realtime Database
   firebase_analytics: ^10.1.0
+  firebase_storage: ^11.0.10
 
   # Map
   geolocator: ^9.0.2
@@ -49,6 +50,10 @@ dependencies:
   dio: ^4.0.6
   provider: ^6.0.5
   geoflutterfire2: ^2.3.14
+
+  # Misc
+  image_picker: ^0.8.6+1
+  multi_select_flutter: ^4.1.3
 
 dev_dependencies:
   flutter_test:

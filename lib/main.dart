@@ -11,6 +11,7 @@ import 'package:sweatpals/views/home_view.dart';
 import 'package:sweatpals/views/map_view.dart';
 import 'package:sweatpals/views/profile_view.dart';
 import 'package:sweatpals/views/settings_view.dart';
+import 'package:sweatpals/views/edit_profile_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +42,7 @@ void main() async {
         homeRoute: (context) => const HomeView(),
         mapRoute: (context) => const MapView(),
         profileRoute: (context) => const ProfileView(),
+        editProfileRoute: (context) => const EditProfileView(),
         settingsRoute: (context) => const SettingsView(),
       },
     ),
@@ -59,12 +61,8 @@ class MainPage extends StatelessWidget {
           case ConnectionState.done:
             final user = AuthService.firebase().currentUser;
             if (user != null) {
-              if (user.isEmailVerified) {
-                // app
-                return const NaviBar();
-              } else {
-                return const VerifyEmailView();
-              }
+              // main
+              return const NaviBar();
             } else {
               return const LoginView();
             }

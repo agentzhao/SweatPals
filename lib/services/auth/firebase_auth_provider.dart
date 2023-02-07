@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:sweatpals/firebase_options.dart';
 import 'package:sweatpals/services/auth/auth_user.dart';
@@ -8,6 +9,10 @@ import 'package:sweatpals/services/auth/auth_provider.dart';
 import 'package:sweatpals/services/auth/auth_exceptions.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
+  // final storage = FirebaseStorage.instance;
+  // final storageRef = FirebaseStorage.instance.ref();
+  // final imagesRef = storageRef.child("profileImg");
+
   @override
   Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -27,7 +32,13 @@ class FirebaseAuthProvider implements AuthProvider {
         password: password,
       );
       final user = currentUser;
-      updateDisplayName(username);
+      await updateDisplayName(username);
+      // todo hardcoded profile pic
+      await updatePhotoUrl(
+          "https://pngimg.com/uploads/github/github_PNG80.png");
+      print(user!.photoUrl);
+      print(user.photoUrl.toString());
+      // todo fix photoUrl not updating shown as null
       if (user != null) {
         return user;
       } else {
@@ -114,7 +125,13 @@ class FirebaseAuthProvider implements AuthProvider {
     try {
       await FirebaseAuth.instance.signInAnonymously();
       final user = currentUser;
-      updateDisplayName(username);
+      await updateDisplayName(username);
+      await updatePhotoUrl(
+          "https://pngimg.com/uploads/github/github_PNG80.png");
+      print(user!.username);
+      print(user.photoUrl);
+      print(user.photoUrl.toString());
+
       if (user != null) {
         return user;
       } else {
@@ -139,7 +156,17 @@ class FirebaseAuthProvider implements AuthProvider {
     if (user != null) {
       await user.updateDisplayName(username);
     } else {
-      throw UserNotLoggedInAuthException();
+      throw DisplayNameNotUpdatedException();
+    }
+  }
+
+  @override
+  Future<void> updatePhotoUrl(String photoUrl) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.updatePhotoURL(photoUrl);
+    } else {
+      throw PhotoNotUpdatedException();
     }
   }
 }

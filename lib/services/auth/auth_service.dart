@@ -49,4 +49,14 @@ class AuthService implements AuthProvider {
       provider.logInAnon(
         username: username,
       );
+
+  @override
+  Future<void> updateDisplayName(String username) async {
+    return await provider.updateDisplayName(username);
+  }
+
+  @override
+  Future<void> updatePhotoUrl(String photoUrl) async {
+    return await provider.updatePhotoUrl(photoUrl);
+  }
 }

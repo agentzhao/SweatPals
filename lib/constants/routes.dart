@@ -7,4 +7,5 @@ const naviBarRoute = '/navi-bar/';
 const homeRoute = '/home/';
 const mapRoute = '/map/';
 const profileRoute = '/profile/';
+const editProfileRoute = '/edit-profile/';
 const settingsRoute = '/settings/';

@@ -4,6 +4,7 @@ import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/auth/auth_exceptions.dart';
 import 'package:sweatpals/utilities/show_error_dialog.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
+    _getLocationPermission();
     super.initState();
   }
 
@@ -37,6 +39,7 @@ class _LoginViewState extends State<LoginView> {
         title: const Text('Login'),
       ),
       body: Column(
+        // todo: add app logo
         children: [
           Container(
             padding: const EdgeInsets.only(left: 12.0, right: 12.0),
@@ -120,5 +123,29 @@ class _LoginViewState extends State<LoginView> {
         ],
       ),
     );
+  }
+
+  Future<void> _getLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
   }
 }

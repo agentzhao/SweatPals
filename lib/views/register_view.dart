@@ -3,6 +3,8 @@ import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/services/auth/auth_exceptions.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/utilities/show_error_dialog.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:sweatpals/constants/activities.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -15,6 +17,10 @@ class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _username;
   late final TextEditingController _email;
   late final TextEditingController _password;
+
+  final _activities =
+      activities.map((a) => MultiSelectItem<Activity>(a, a.name)).toList();
+  List<Activity> _selectedActivities = [];
 
   @override
   void initState() {
@@ -35,12 +41,55 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // todo: add app logo
       appBar: AppBar(
         title: const Text('Register'),
       ),
       body: Column(
         children: [
+          Container(
+            decoration: BoxDecoration(
+                // color: Theme.of(context).primaryColor.withOpacity(.4),
+                // border: Border.all(
+                //   color: Theme.of(context).primaryColor,
+                //   width: 2,
+                // ),
+                ),
+            child: Column(
+              children: <Widget>[
+                MultiSelectBottomSheetField(
+                  initialChildSize: 0.4,
+                  listType: MultiSelectListType.CHIP,
+                  searchable: true,
+                  buttonText: Text("Favorite Activities (Select at least 3)"),
+                  title: Text("Activities"),
+                  items: _activities,
+                  onConfirm: (values) {
+                    setState(() {
+                      _selectedActivities = values.cast<Activity>();
+                    });
+                  },
+                  chipDisplay: MultiSelectChipDisplay(
+                    onTap: (value) {
+                      setState(() {
+                        _selectedActivities.remove(value);
+                      });
+                    },
+                  ),
+                ),
+                _selectedActivities.length < 3
+                    ? Container(
+                        padding: EdgeInsets.all(10),
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Please select at least 3 activities",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.only(left: 12.0, right: 12.0),
             child: TextField(
@@ -52,6 +101,38 @@ class _RegisterViewState extends State<RegisterView> {
                 hintText: 'Username',
               ),
             ),
+          ),
+          TextButton(
+            onPressed: () async {
+              // new anon user
+              if (_username.text.isEmpty) {
+                await showErrorDialog(
+                  context,
+                  'Please enter a username',
+                );
+                return;
+              }
+              try {
+                dynamic result = await AuthService.firebase().logInAnon(
+                  username: _username.text,
+                );
+                if (result == null) {
+                  print("Error signing in as guest");
+                } else {
+                  print("Signed in as guest");
+                }
+              } on GenericAuthException {
+                await showErrorDialog(
+                  context,
+                  'Authentication error',
+                );
+              }
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                naviBarRoute,
+                (route) => false,
+              );
+            },
+            child: const Text('Continue as guest'),
           ),
           Container(
             padding: const EdgeInsets.only(left: 12.0, right: 12.0),
@@ -131,41 +212,25 @@ class _RegisterViewState extends State<RegisterView> {
             },
             child: const Text('Already registered? Login here!'),
           ),
-          TextButton(
-            onPressed: () async {
-              // new anon user
-              if (_username.text.isEmpty) {
-                await showErrorDialog(
-                  context,
-                  'Please enter a username',
-                );
-                return;
-              }
-              try {
-                dynamic result = await AuthService.firebase().logInAnon(
-                  username: _username.text,
-                );
-                if (result == null) {
-                  print("Error signing in as guest");
-                } else {
-                  print("Signed in as guest");
-                  print(result);
-                }
-              } on GenericAuthException {
-                await showErrorDialog(
-                  context,
-                  'Authentication error',
-                );
-              }
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                naviBarRoute,
-                (route) => false,
-              );
-            },
-            child: const Text('Continue as guest'),
-          )
         ],
       ),
+    );
+  }
+
+  void _showMultiSelect(BuildContext context) async {
+    await showModalBottomSheet(
+      isScrollControlled: true, // required for min/max child size
+      context: context,
+      builder: (ctx) {
+        return MultiSelectBottomSheet(
+          items: activities.map((e) => MultiSelectItem(e, e.name)).toList(),
+          initialValue: _selectedActivities,
+          onConfirm: (values) {
+            _selectedActivities = values;
+          },
+          maxChildSize: 0.8,
+        );
+      },
     );
   }
 }
