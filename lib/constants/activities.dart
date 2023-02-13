@@ -30,3 +30,33 @@ final List<Activity> activities = [
   Activity(id: 19, name: 'Rock Climbing'),
   Activity(id: 20, name: 'Golf'),
 ];
+
+List<String> intToString(List<dynamic> ids) {
+  List<String> names = [];
+  for (int id in ids) {
+    names.add(activities[id - 1].name);
+  }
+  return names;
+}
+
+List<int> activityToIds(List<Activity> activities) {
+  List<int> ids = [];
+  for (Activity activity in activities) {
+    ids.add(activity.id);
+  }
+  return ids;
+}
+
+List<Activity> idsToActivity(List<dynamic> ids) {
+  List<Activity> ans = [];
+  for (int id in ids) {
+    ans.add(activities[id - 1]);
+  }
+  return ans;
+}
+
+void printActivities(List<Activity> activities) {
+  for (Activity activity in activities) {
+    print(activity.name);
+  }
+}

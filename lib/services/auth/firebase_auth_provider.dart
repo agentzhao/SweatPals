@@ -1,17 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
-import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:sweatpals/firebase_options.dart';
 import 'package:sweatpals/services/auth/auth_user.dart';
 import 'package:sweatpals/services/auth/auth_provider.dart';
 import 'package:sweatpals/services/auth/auth_exceptions.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
-  // final storage = FirebaseStorage.instance;
-  // final storageRef = FirebaseStorage.instance.ref();
-  // final imagesRef = storageRef.child("profileImg");
+  String defaultProfileImg =
+      "https://pngimg.com/uploads/github/github_PNG80.png";
 
   @override
   Future<void> initialize() async {
@@ -33,12 +30,8 @@ class FirebaseAuthProvider implements AuthProvider {
       );
       final user = currentUser;
       await updateDisplayName(username);
-      // todo hardcoded profile pic
-      await updatePhotoURL(
-          "https://pngimg.com/uploads/github/github_PNG80.png");
-      print(user!.photoURL);
-      print(user.photoURL.toString());
-      // todo fix photoUrl not updating shown as null
+      await updatePhotoURL(defaultProfileImg);
+
       if (user != null) {
         return user;
       } else {
@@ -126,11 +119,7 @@ class FirebaseAuthProvider implements AuthProvider {
       await FirebaseAuth.instance.signInAnonymously();
       final user = currentUser;
       await updateDisplayName(username);
-      await updatePhotoURL(
-          "https://pngimg.com/uploads/github/github_PNG80.png");
-      print(user!.username);
-      print(user.photoURL);
-      print(user.photoURL.toString());
+      await updatePhotoURL(defaultProfileImg);
 
       if (user != null) {
         return user;

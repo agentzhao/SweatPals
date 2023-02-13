@@ -11,6 +11,9 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   String get username => AuthService.firebase().currentUser!.username!;
+  String get email => AuthService.firebase().currentUser!.email!;
+
+  // todo: reset password and change email
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,8 @@ class _SettingsViewState extends State<SettingsView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Logged in as $username'),
+            // if email is empty, use username
+            Text("Logged in as ${email.isEmpty ? username : email}"),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {

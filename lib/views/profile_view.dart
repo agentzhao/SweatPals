@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
+import 'package:sweatpals/services/db/db_service.dart';
+import 'package:sweatpals/services/storage/storage_service.dart';
 import 'package:sweatpals/components/profile_picture.dart';
-
-import 'package:image_picker/image_picker.dart';
-
-// import 'package:sweatpals/enums/menu_action.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:sweatpals/constants/activities.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -15,171 +15,121 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  final dbService = DbService();
+  final storageService = StorageService();
+
+  String get uid => AuthService.firebase().currentUser!.uid;
   String get username => AuthService.firebase().currentUser!.username!;
-  String get userEmail =>
-      AuthService.firebase().currentUser?.email ?? "no email (guest)";
-  String get photoURL =>
-      AuthService.firebase().currentUser?.photoURL ??
-      "https://pngimg.com/uploads/github/github_PNG80.png";
+  List<int> get activities => dbService.getActivities(uid);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              top: 10,
-              right: 10,
-              child: Container(
-                height: 40,
-                width: 40,
-                child: FloatingActionButton(
-                  heroTag: "settings",
-                  child: Icon(
-                    size: 25,
-                    Icons.settings,
-                    color: Colors.white,
-                  ),
-                  backgroundColor: Colors.green,
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      settingsRoute,
-                    );
-                  },
-                ),
-              ),
-            ),
-            //position in the center
-            Positioned(
-              top: 10,
-              right: 60,
-              child: Container(
-                height: 40,
-                width: 40,
-                child: FloatingActionButton(
-                  heroTag: "edit_profile",
-                  child: Icon(
-                    size: 25,
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  backgroundColor: Colors.green,
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      editProfileRoute,
-                    );
-                  },
-                ),
-              ),
-            ),
-            // Profile Picture
-            Positioned(
-              top: 50,
-              left: 10,
-              right: 10,
-              child: ProfilePicture(
-                imagePath: photoURL,
-                isEdit: true,
-                onClicked: () => selectImage(),
-              ),
-            ),
-
-            // Username
-            Positioned(
-              top: 180,
-              left: 10,
-              right: 10,
-              child: Text(
-                username,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            // Email
-            Positioned(
-              top: 200,
-              left: 10,
-              right: 10,
-              child: Text(
-                userEmail,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ],
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(top: 10),
+        height: 40,
+        width: 40,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              settingsRoute,
+            );
+          },
+          child: const Icon(
+            Icons.settings,
+            color: Colors.white,
+            size: 25,
+          ),
+          backgroundColor: Colors.green,
+          tooltip: 'Settings',
+          elevation: 0,
+          splashColor: Colors.grey,
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
+      body: ListView(
+        children: <Widget>[
+          const SizedBox(height: 24),
+          // Profile Picture
+          ProfilePicture(
+            imagePath: AuthService.firebase().currentUser!.photoURL!,
+            isEdit: true,
+            onClicked: editProfile,
+          ),
+          // name and username
+          Container(
+            alignment: Alignment.center,
+            child: FutureBuilder<UserInfo?>(
+              future: dbService.getUserInfo(uid),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final user = snapshot.data;
+                  return user == null
+                      ? const Center(child: Text("No data"))
+                      : buildUser(user);
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
+
+          // edit profile button
+          Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  editProfileRoute,
+                );
+              },
+              child: const Text('Edit Profile'),
+            ),
+          ),
+        ],
       ),
     );
   }
-}
 
-Future selectImage() async {
-  final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-  if (image == null) {
-    return;
-  } else {
-    // todo: update image on storage
-    print(image.path);
+  Future<void> editProfile() async {
+    String photoURL = await storageService.changeProfileImage(uid);
+
+    if (photoURL != "") {
+      await AuthService.firebase().updatePhotoURL(photoURL);
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Profile Picture Updated'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    }
   }
+
+  Widget buildUser(UserInfo user) => Column(
+        children: [
+          ListTile(
+            // leading: CircleAvatar(child: Text('1')),
+            title: Text(
+              "${user.firstName} ${user.lastName}",
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 24),
+            ),
+            subtitle: Text(
+              "@$username",
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const Text(
+            "Favourite Activities",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15),
+          ),
+          MultiSelectChipDisplay(
+            items: intToString(user.activities)
+                .map((e) => MultiSelectItem(e, e))
+                .toList(),
+          )
+        ],
+      );
 }
-
-
-
-  // appBar: AppBar(
-      //   title: const Text('Profile'),
-      //   actions: [
-      //     PopupMenuButton<MenuAction>(
-      //       onSelected: (value) async {
-      //         switch (value) {
-      //           case MenuAction.logout:
-      //             final shouldLogout = await showLogOutDialog(context);
-      //             if (shouldLogout) {
-      //               await AuthService.firebase().logOut();
-      //               Navigator.of(context).pushNamedAndRemoveUntil(
-      //                 loginRoute,
-      //                 (_) => false,
-      //               );
-      //             }
-      //         }
-      //       },
-      //       itemBuilder: (context) {
-      //         return const [
-      //           PopupMenuItem<MenuAction>(
-      //             value: MenuAction.logout,
-      //             child: Text('Log out'),
-      //           ),
-      //         ];
-      //       },
-      //     )
-      //   ],
-      // ),
-
-// Future<bool> showLogOutDialog(BuildContext context) {
-//   return showDialog<bool>(
-//     context: context,
-//     builder: (context) {
-//       return AlertDialog(
-//         title: const Text('Sign out'),
-//         content: const Text('Are you sure you want to sign out?'),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop(false);
-//             },
-//             child: const Text('Cancel'),
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop(true);
-//             },
-//             child: const Text('Log out'),
-//           ),
-//         ],
-//       );
-//     },
-//   ).then((value) => value ?? false);
-// }

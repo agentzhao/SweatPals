@@ -59,4 +59,9 @@ class AuthService implements AuthProvider {
   Future<void> updatePhotoURL(String photoURL) async {
     return await provider.updatePhotoURL(photoURL);
   }
+
+  // todo save user to database
+  // Future<void> saveUserInfo() async {
+  //   return await provider.saveUserInfo(username, email);
+  // }
 }
