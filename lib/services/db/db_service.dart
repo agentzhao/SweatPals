@@ -1,10 +1,10 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_database/firebase_database.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 
 final geo = GeoFlutterFire();
-
-final GeoPoint currentLocation = GeoPoint(0, 0);
 
 class UserInfo {
   final String firstName;
@@ -47,7 +47,7 @@ class GymInfo {
   final String NAME;
   final String PHOTOURL;
   final GeoPoint coordinates;
-  final String crowdlevel;
+  final int crowdlevel;
 
   GymInfo({
     required this.ADDRESSBLOCKHOUSENUMBER,
@@ -66,6 +66,26 @@ class GymInfo {
     required this.coordinates,
     required this.crowdlevel,
   });
+
+  factory GymInfo.fromMap(Map<String, dynamic> data) {
+    return GymInfo(
+      ADDRESSBLOCKHOUSENUMBER: data['ADDRESSBLOCKHOUSENUMBER'],
+      ADDRESSBUILDINGNAME: data['ADDRESSBUILDINGNAME'],
+      ADDRESSFLOORNUMBER: data['ADDRESSFLOORNUMBER'],
+      ADDRESSPOSTALCODE: data['ADDRESSPOSTALCODE'],
+      ADDRESSSTREETNAME: data['ADDRESSSTREETNAME'],
+      ADDRESSUNITNUMBER: data['ADDRESSUNITNUMBER'],
+      DESCRIPTION: data['DESCRIPTION'],
+      HYPERLINK: data['HYPERLINK'],
+      INC_CRC: data['INC_CRC'],
+      LANDXADDRESSPOINT: data['LANDXADDRESSPOINT'],
+      LANDYADDRESSPOINT: data['LANDYADDRESSPOINT'],
+      NAME: data['NAME'],
+      PHOTOURL: data['PHOTOURL'],
+      coordinates: data['coordinates'],
+      crowdlevel: data['crowdlevel'],
+    );
+  }
 }
 
 class DbService {
@@ -143,6 +163,7 @@ class DbService {
     });
   }
 
+  // Users
   Stream<QuerySnapshot> usersLocationStream(double lat, double lng) {
     final Stream<QuerySnapshot> users =
         firestore.collection('users').snapshots();
@@ -187,52 +208,75 @@ class DbService {
     }
   }
 
-  // Gyms
+  // get stream of users in List<UserInfo>
+  Stream<List<UserInfo>> usersStream() {
+    return firestore
+        .collection('users')
+        .snapshots()
+        .map((QuerySnapshot query) => query.docs
+            .map((DocumentSnapshot doc) => UserInfo.fromMap(
+                  doc.data() as Map<String, dynamic>,
+                ))
+            .toList());
+  }
 
-  // query firestore for gyms near user
-  Future<List<GymInfo>> gymsNearYou(GeoPoint point) async {
-    final CollectionReference gyms = firestore.collection('gyms');
-    // 10km radius around point
-    double radius = 10 / 111.12;
+  Future<List<UserInfo>> getAllUsers(uid) {
+    final CollectionReference users = firestore.collection('users');
+    return users.get().then((QuerySnapshot querySnapshot) {
+      List<UserInfo> usersList = [];
+      querySnapshot.docs.forEach((doc) {
+        if (doc.id == uid) return;
+        final data = doc.data() as Map<String, dynamic>;
+        usersList.add(UserInfo.fromMap(data));
+      });
 
-    // get gyms within radius
-    final query = gyms
-        .where('coordinates',
-            isGreaterThanOrEqualTo: GeoPoint(
-              point.latitude - radius,
-              point.longitude - radius,
-            ))
-        .where('coordinates',
-            isLessThanOrEqualTo: GeoPoint(
-              point.latitude + radius,
-              point.longitude + radius,
-            ));
-    var gymsSnapshot = await query.get();
-
-    // convert to GymInfo
-    List<GymInfo> gymsList = [];
-    gymsSnapshot.docs.forEach((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-      gymsList.add(
-        GymInfo(
-          ADDRESSBLOCKHOUSENUMBER: data['ADDRESSBLOCKHOUSENUMBER'],
-          ADDRESSBUILDINGNAME: data['ADDRESSBUILDINGNAME'],
-          ADDRESSFLOORNUMBER: data['ADDRESSFLOORNUMBER'],
-          ADDRESSPOSTALCODE: data['ADDRESSPOSTALCODE'],
-          ADDRESSSTREETNAME: data['ADDRESSSTREETNAME'],
-          ADDRESSUNITNUMBER: data['ADDRESSUNITNUMBER'],
-          DESCRIPTION: data['DESCRIPTION'],
-          HYPERLINK: data['HYPERLINK'],
-          INC_CRC: data['INC_CRC'],
-          LANDXADDRESSPOINT: data['LANDXADDRESSPOINT'],
-          LANDYADDRESSPOINT: data['LANDYADDRESSPOINT'],
-          NAME: data['NAME'],
-          PHOTOURL: data['PHOTOURL'],
-          coordinates: data['coordinates'],
-          crowdlevel: data['crowdlevel'],
-        ),
-      );
+      // remove current user
+      // usersList.removeWhere((element) => element.uid == uid);
+      return usersList;
     });
-    return gymsList;
+  }
+
+  // Gyms
+  Future<List<GymInfo>> getAllGyms() async {
+    final CollectionReference gyms = firestore.collection('gyms');
+    return gyms.get().then((QuerySnapshot querySnapshot) {
+      List<GymInfo> gymsList = [];
+      querySnapshot.docs.forEach((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        gymsList.add(GymInfo.fromMap(data));
+      });
+      return gymsList;
+    });
+  }
+
+  Future<List<GymInfo>> sortByDistance(GeoPoint point) async {
+    List<GymInfo> gymsList = await getAllGyms();
+
+    gymsList.sort((a, b) {
+      double distanceToA = double.parse(
+        distanceBetween(point, a.coordinates),
+      );
+      double distanceToB = double.parse(
+        distanceBetween(point, b.coordinates),
+      );
+      return distanceToA.compareTo(distanceToB);
+    });
+
+    return gymsList.take(6).toList();
+  }
+
+  String distanceBetween(GeoPoint point1, GeoPoint point2) {
+    int decimalPlaces = 2;
+    double lat1 = point1.latitude;
+    double lon1 = point1.longitude;
+    double lat2 = point2.latitude;
+    double lon2 = point2.longitude;
+
+    double p = 0.017453292519943295; // Math.PI / 180
+    double a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    double result = 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
+    return result.toStringAsFixed(decimalPlaces);
   }
 }

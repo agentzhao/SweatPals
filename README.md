@@ -2,7 +2,8 @@
 
 ### Setup Environment
 
-Use an emulator or mirror your android phone using [scrcpy](https://github.com/Genymobile/scrcpy)
+- Make sure you have [flutter](https://docs.flutter.dev/get-started/install) installed
+- Use an [emulator](https://developer.android.com/studio/index.html#command-tools) or mirror your android phone using [scrcpy](https://github.com/Genymobile/scrcpy)
 
 ```
 git clone https://github.com/agentzhao/SweatPals.git

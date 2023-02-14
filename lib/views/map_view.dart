@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-// import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'dart:async';
 import 'package:sweatpals/services/auth/auth_service.dart';
+import 'package:sweatpals/services/db/db_service.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:sweatpals/services/map/location.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MapView extends StatefulWidget {
   const MapView({Key? key}) : super(key: key);
@@ -18,18 +18,48 @@ class MapView extends StatefulWidget {
 
 class _MapViewState extends State<MapView> {
   late GoogleMapController mapController;
-
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  FirebaseDatabase database = FirebaseDatabase.instance;
   final geo = GeoFlutterFire();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-  String get userEmail => AuthService.firebase().currentUser!.email!;
+
+  String get uid => AuthService.firebase().currentUser!.uid;
+  final DbService dbService = DbService();
+
+  GeoPoint currentLocation = const GeoPoint(0, 0);
+  UserInfo? currentUser;
+  List<GymInfo> gymsList = [];
+  List<UserInfo> usersList = [];
 
   // Singapore
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(1.3521, 103.8198),
     zoom: 10,
   );
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    getCurrentLocation().then((value) {
+      setState(() {
+        currentLocation = value;
+      });
+    });
+    await dbService.getUserInfo(uid).then((value) {
+      setState(() {
+        currentUser = value;
+      });
+    });
+    await dbService.getAllGyms().then((value) {
+      setState(() {
+        gymsList = value;
+        loadMarkers();
+      });
+    });
+    await dbService.getAllUsers(uid).then((value) {
+      setState(() {
+        usersList = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +73,7 @@ class _MapViewState extends State<MapView> {
         myLocationButtonEnabled: false,
         zoomControlsEnabled: false,
         mapType: MapType.normal,
+        markers: Set<Marker>.of(markers.values),
         compassEnabled: true,
         onCameraMove: (CameraPosition position) {
           _updateBasedOnPosition(position);
@@ -52,12 +83,12 @@ class _MapViewState extends State<MapView> {
         bottom: 10,
         right: 10,
         child: FloatingActionButton(
-          child: Icon(
+          backgroundColor: Colors.green,
+          onPressed: getUserLocation,
+          child: const Icon(
             Icons.location_searching,
             color: Colors.white,
           ),
-          backgroundColor: Colors.green,
-          onPressed: _getUserLocation,
         ),
       )
     ]);
@@ -68,15 +99,14 @@ class _MapViewState extends State<MapView> {
     setState(() {
       mapController = controller;
       // move map to current user location
-      _getUserLocation();
-      _addUserToDatabase();
+      getUserLocation();
     });
   }
 
   // Getting user location using geolocator
-  _getUserLocation() {
-    // testing
-    _addUserToDatabase();
+  getUserLocation() {
+    getLocationPermission();
+
     Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
       setState(() {
@@ -90,6 +120,8 @@ class _MapViewState extends State<MapView> {
           ),
         );
       });
+      // update user location in database
+      dbService.updateUserLocation(uid, position.latitude, position.longitude);
     }).catchError((e) {
       print(e);
     });
@@ -128,36 +160,65 @@ class _MapViewState extends State<MapView> {
 
   void _updateBasedOnPosition(CameraPosition position) async {
     // get the new position
-    GeoFirePoint center = geo.point(
-        latitude: position.target.latitude,
-        longitude: position.target.longitude);
+    double lat = position.target.latitude;
+    double lng = position.target.longitude;
 
-    // 10km radius
-    double radius = 10;
-
-    // get the new query
-    Stream<List<DocumentSnapshot>> stream = geo
-        .collection(collectionRef: firestore.collection('users'))
-        .within(center: center, radius: radius, field: 'position');
-
-    // update the markers
-    stream.listen((List<DocumentSnapshot> documentList) {
-      // _updateMarkers(documentList);
-    });
+    // dbService.usersLocationStream(lat, lng).listen((List<DocumentSnapshot> documentList) {
+    //   // _updateMarkers(documentList);
+    // });
   }
 
-  Future<DocumentReference> _addUserToDatabase() async {
-    // get current user location
+  Future<GeoPoint> getCurrentLocation() async {
+    await getLocationPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+    return GeoPoint(position.latitude, position.longitude);
+  }
 
-    // create a new document for the user with the uid
-    await firestore.collection('users').doc('100').set({
-      'position':
-          geo.point(latitude: position.latitude, longitude: position.longitude),
-      'user': userEmail,
-      'address': 'Singapore',
-    });
-    return firestore.collection('users').doc('100');
+// convert gymsList to markers
+  void loadMarkers() {
+    for (int i = 0; i < gymsList.length; i++) {
+      var markerIdVal = i.toString();
+      final MarkerId markerId = MarkerId(markerIdVal);
+
+      GeoPoint pos = gymsList[i].coordinates;
+      double distance = double.parse(dbService.distanceBetween(
+        currentLocation,
+        pos,
+      ));
+      String name = gymsList[i].NAME;
+      String address = gymsList[i].ADDRESSSTREETNAME;
+
+      final Marker marker = Marker(
+        markerId: markerId,
+        position: LatLng(pos.latitude, pos.longitude),
+        icon: BitmapDescriptor.defaultMarker,
+        infoWindow: InfoWindow(title: name, snippet: '$distance km'),
+      );
+      markers[markerId] = marker;
+    }
+  }
+
+  void loadUsers() {
+    for (int i = 0; i < gymsList.length; i++) {
+      var markerIdVal = i.toString();
+      final MarkerId markerId = MarkerId(markerIdVal);
+
+      GeoPoint pos = gymsList[i].coordinates;
+      double distance = double.parse(dbService.distanceBetween(
+        currentLocation,
+        pos,
+      ));
+      String name = gymsList[i].NAME;
+      String address = gymsList[i].ADDRESSSTREETNAME;
+
+      final Marker marker = Marker(
+        markerId: markerId,
+        position: LatLng(pos.latitude, pos.longitude),
+        icon: BitmapDescriptor.defaultMarker,
+        infoWindow: InfoWindow(title: name, snippet: '$distance km'),
+      );
+      markers[markerId] = marker;
+    }
   }
 }

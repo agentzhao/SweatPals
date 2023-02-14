@@ -46,10 +46,10 @@ dependencies:
   # Map
   geolocator: ^9.0.2
   google_maps_flutter: ^2.2.3
-  flutter_polyline_points: ^1.0.0
   dio: ^4.0.6
   provider: ^6.0.5
   geoflutterfire2: ^2.3.14
+  # flutter_polyline_points: ^1.0.0
 
   # Misc
   image_picker: ^0.8.6+1
