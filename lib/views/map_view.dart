@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'package:sweatpals/constants/routes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sweatpals/services/map/location.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:sweatpals/views/user_view.dart';
+import 'package:sweatpals/views/gym_view.dart';
 
 class MapView extends StatefulWidget {
   const MapView({Key? key}) : super(key: key);
@@ -26,8 +29,14 @@ class _MapViewState extends State<MapView> {
 
   GeoPoint currentLocation = const GeoPoint(0, 0);
   UserInfo? currentUser;
+
+  final List<bool> _selected = <bool>[true, false];
   List<GymInfo> gymsList = [];
+  Map<MarkerId, Marker> gymMarkers = <MarkerId, Marker>{};
   List<UserInfo> usersList = [];
+  Map<MarkerId, Marker> userMarkers = <MarkerId, Marker>{};
+
+  Stream<List<UserInfo>> usersStream = const Stream.empty();
 
   // Singapore
   static const _initialCameraPosition = CameraPosition(
@@ -51,47 +60,93 @@ class _MapViewState extends State<MapView> {
     await dbService.getAllGyms().then((value) {
       setState(() {
         gymsList = value;
-        loadMarkers();
+        loadGyms();
       });
     });
     await dbService.getAllUsers(uid).then((value) {
       setState(() {
         usersList = value;
+        loadUsers();
       });
     });
+    markers.addAll(gymMarkers);
+    // todo: userstream
+    // usersStream = dbService.usersStream();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      GoogleMap(
-        // set initial camera state to current user location
-        initialCameraPosition: _initialCameraPosition,
-        // lifecycle hook
-        onMapCreated: _onMapCreated,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: false,
-        zoomControlsEnabled: false,
-        mapType: MapType.normal,
-        markers: Set<Marker>.of(markers.values),
-        compassEnabled: true,
-        onCameraMove: (CameraPosition position) {
-          _updateBasedOnPosition(position);
-        },
-      ),
-      Positioned(
-        bottom: 10,
-        right: 10,
-        child: FloatingActionButton(
-          backgroundColor: Colors.green,
-          onPressed: getUserLocation,
-          child: const Icon(
-            Icons.location_searching,
-            color: Colors.white,
+    return SafeArea(
+      child: Stack(children: <Widget>[
+        GoogleMap(
+          // set initial camera state to current user location
+          initialCameraPosition: _initialCameraPosition,
+          // lifecycle hook
+          onMapCreated: _onMapCreated,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          zoomControlsEnabled: false,
+          mapType: MapType.normal,
+          markers: Set<Marker>.of(markers.values),
+          compassEnabled: true,
+          onCameraMove: (CameraPosition position) {
+            _updateBasedOnPosition(position);
+          },
+        ),
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: FloatingActionButton(
+            backgroundColor: Colors.green,
+            onPressed: getUserLocation,
+            child: const Icon(
+              Icons.location_searching,
+              color: Colors.white,
+            ),
           ),
         ),
-      )
-    ]);
+        Positioned(
+          top: 10,
+          right: 10,
+          child: ToggleButtons(
+            onPressed: (int index) {
+              setState(() {
+                // _selected[index] = !_selected[index];
+                // The button that is tapped is set to true, and the others to false.
+                for (int i = 0; i < _selected.length; i++) {
+                  _selected[i] = i == index;
+                }
+                if (_selected[0]) {
+                  markers = gymMarkers;
+                } else if (_selected[1]) {
+                  markers = userMarkers;
+                } else if (_selected[0] && _selected[1]) {
+                  // both user and gym
+                  markers = {};
+                  markers.addAll(gymMarkers);
+                  markers.addAll(userMarkers);
+                } else {
+                  markers = {};
+                }
+              });
+            },
+            borderRadius: const BorderRadius.all(
+              Radius.circular(8),
+            ),
+            selectedBorderColor: Colors.green[700],
+            selectedColor: Colors.white,
+            fillColor: Colors.green[400],
+            borderColor: Colors.green[700],
+            color: Colors.green[700],
+            isSelected: _selected,
+            children: const <Widget>[
+              Icon(Icons.fitness_center),
+              Icon(Icons.person),
+            ],
+          ),
+        ),
+      ]),
+    );
   }
 
   // Getting the current user location
@@ -104,7 +159,7 @@ class _MapViewState extends State<MapView> {
   }
 
   // Getting user location using geolocator
-  getUserLocation() {
+  getUserLocation() async {
     getLocationPermission();
 
     Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -124,6 +179,20 @@ class _MapViewState extends State<MapView> {
       dbService.updateUserLocation(uid, position.latitude, position.longitude);
     }).catchError((e) {
       print(e);
+    });
+
+    // refresh markers
+    await dbService.getAllGyms().then((value) {
+      setState(() {
+        gymsList = value;
+        loadGyms();
+      });
+    });
+    await dbService.getAllUsers(uid).then((value) {
+      setState(() {
+        usersList = value;
+        loadUsers();
+      });
     });
   }
 
@@ -176,49 +245,72 @@ class _MapViewState extends State<MapView> {
   }
 
 // convert gymsList to markers
-  void loadMarkers() {
+  void loadGyms() {
     for (int i = 0; i < gymsList.length; i++) {
       var markerIdVal = i.toString();
       final MarkerId markerId = MarkerId(markerIdVal);
 
       GeoPoint pos = gymsList[i].coordinates;
-      double distance = double.parse(dbService.distanceBetween(
-        currentLocation,
-        pos,
-      ));
+      // double distance = double.parse(dbService.distanceBetween(
+      //   currentLocation,
+      //   pos,
+      // ));
       String name = gymsList[i].NAME;
-      String address = gymsList[i].ADDRESSSTREETNAME;
+      int crowdlevel = gymsList[i].crowdlevel;
 
       final Marker marker = Marker(
         markerId: markerId,
         position: LatLng(pos.latitude, pos.longitude),
-        icon: BitmapDescriptor.defaultMarker,
-        infoWindow: InfoWindow(title: name, snippet: '$distance km'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueGreen,
+        ),
+        infoWindow: InfoWindow(
+          title: name,
+          snippet: 'Crowd Level: $crowdlevel',
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              Routes.gymRoute,
+              arguments: gymsList[i],
+            );
+          },
+        ),
       );
-      markers[markerId] = marker;
+      gymMarkers[markerId] = marker;
     }
   }
 
-  void loadUsers() {
-    for (int i = 0; i < gymsList.length; i++) {
-      var markerIdVal = i.toString();
+  void loadUsers() async {
+    for (int i = 0; i < usersList.length; i++) {
+      var markerIdVal = usersList[i].uid;
       final MarkerId markerId = MarkerId(markerIdVal);
 
-      GeoPoint pos = gymsList[i].coordinates;
+      GeoPoint pos = usersList[i].location;
       double distance = double.parse(dbService.distanceBetween(
         currentLocation,
         pos,
       ));
-      String name = gymsList[i].NAME;
-      String address = gymsList[i].ADDRESSSTREETNAME;
+      String name = '${usersList[i].firstName} ${usersList[i].lastName}';
+      bool isFriend = currentUser!.friends.contains(usersList[i].uid);
 
+      // users are azure, friends are yellow
       final Marker marker = Marker(
         markerId: markerId,
         position: LatLng(pos.latitude, pos.longitude),
-        icon: BitmapDescriptor.defaultMarker,
-        infoWindow: InfoWindow(title: name, snippet: '$distance km'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          isFriend ? BitmapDescriptor.hueYellow : BitmapDescriptor.hueAzure,
+        ),
+        infoWindow: InfoWindow(
+          title: name,
+          snippet: '$distance km',
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              Routes.userRoute,
+              arguments: usersList[i],
+            );
+          },
+        ),
       );
-      markers[markerId] = marker;
+      userMarkers[markerId] = marker;
     }
   }
 }

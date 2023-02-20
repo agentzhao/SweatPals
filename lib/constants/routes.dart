@@ -1,11 +1,16 @@
-const mainRoute = '/main/';
-const loginRoute = '/login/';
-const registerRoute = '/register/';
-const verifyEmailRoute = '/verify-email/';
+class Routes {
+  static const mainRoute = '/main';
+  static const loginRoute = '/login';
+  static const registerRoute = '/register';
+  static const verifyEmailRoute = '/verify-email';
 
-const naviBarRoute = '/navi-bar/';
-const homeRoute = '/home/';
-const mapRoute = '/map/';
-const profileRoute = '/profile/';
-const editProfileRoute = '/edit-profile/';
-const settingsRoute = '/settings/';
+  static const naviBarRoute = '/navi-bar';
+  static const homeRoute = '/home';
+  static const mapRoute = '/map';
+  static const profileRoute = '/profile';
+  static const editProfileRoute = '/edit-profile';
+  static const settingsRoute = '/settings';
+
+  static const userRoute = '/user';
+  static const gymRoute = '/gym';
+}

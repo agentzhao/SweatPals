@@ -7,27 +7,42 @@ import 'package:geoflutterfire2/geoflutterfire2.dart';
 final geo = GeoFlutterFire();
 
 class UserInfo {
+  final String uid;
+  final String username;
   final String firstName;
   final String lastName;
+  final String photoURL;
   final List<dynamic> activities;
   final GeoPoint location;
+  final Timestamp lastUpdated;
   final List<dynamic> friends;
+  final List<dynamic> favourites;
 
   UserInfo({
+    required this.uid,
+    required this.username,
     required this.firstName,
     required this.lastName,
+    required this.photoURL,
     required this.activities,
     required this.location,
+    required this.lastUpdated,
     required this.friends,
+    required this.favourites,
   });
 
   factory UserInfo.fromMap(Map<String, dynamic> data) {
     return UserInfo(
+      uid: data['uid'],
+      username: data['username'],
       firstName: data['firstName'],
       lastName: data['lastName'],
+      photoURL: data['photoURL'],
       activities: data['activities'],
       location: data['location'],
+      lastUpdated: data['lastUpdated'],
       friends: data['friends'],
+      favourites: data['favourites'],
     );
   }
 }
@@ -94,6 +109,7 @@ class DbService {
   // create data for new user
   Future<void> generateNewUser(
     String uid,
+    String username,
     String firstName,
     String lastName,
     List<int> activityIds,
@@ -101,11 +117,16 @@ class DbService {
     final CollectionReference users = firestore.collection('users');
 
     return users.doc(uid).set({
+      'uid': uid,
+      'username': username,
       'firstName': firstName,
       'lastName': lastName,
+      'photoURL': "https://pngimg.com/uploads/github/github_PNG80.png",
       'activities': activityIds,
       'location': const GeoPoint(0, 0),
+      'lastUpdated': DateTime.now(),
       'friends': [],
+      'favourites': [],
     });
   }
 
@@ -160,6 +181,7 @@ class DbService {
     final CollectionReference users = firestore.collection('users');
     return users.doc(uid).update({
       'location': GeoPoint(lat, lng),
+      'lastUpdated': DateTime.now(),
     });
   }
 
@@ -208,24 +230,30 @@ class DbService {
     }
   }
 
-  // get stream of users in List<UserInfo>
-  Stream<List<UserInfo>> usersStream() {
-    return firestore
-        .collection('users')
-        .snapshots()
-        .map((QuerySnapshot query) => query.docs
-            .map((DocumentSnapshot doc) => UserInfo.fromMap(
-                  doc.data() as Map<String, dynamic>,
-                ))
-            .toList());
+  Future<void> addFavourite(String uid, String favouriteUid) {
+    final CollectionReference users = firestore.collection('users');
+
+    return users.doc(uid).update({
+      'favourites': FieldValue.arrayUnion([favouriteUid]),
+    });
   }
 
-  Future<List<UserInfo>> getAllUsers(uid) {
+  Future<void> removeFavourite(String uid, String favouriteUid) {
     final CollectionReference users = firestore.collection('users');
-    return users.get().then((QuerySnapshot querySnapshot) {
+
+    return users.doc(uid).update({
+      'favourites': FieldValue.arrayRemove([favouriteUid]),
+    });
+  }
+
+  // get stream of users in List<UserInfo> except current user
+  Stream<List<UserInfo>> usersStream() {
+    final Stream<QuerySnapshot> users =
+        firestore.collection('users').snapshots();
+
+    return users.map((QuerySnapshot querySnapshot) {
       List<UserInfo> usersList = [];
       querySnapshot.docs.forEach((doc) {
-        if (doc.id == uid) return;
         final data = doc.data() as Map<String, dynamic>;
         usersList.add(UserInfo.fromMap(data));
       });
@@ -236,20 +264,36 @@ class DbService {
     });
   }
 
+  Future<List<UserInfo>> getAllUsers(uid) async {
+    final CollectionReference users = firestore.collection('users');
+    return users.get().then((QuerySnapshot querySnapshot) {
+      List<UserInfo> usersList = [];
+      for (var doc in querySnapshot.docs) {
+        if (doc.id == uid) continue;
+        final data = doc.data() as Map<String, dynamic>;
+        usersList.add(UserInfo.fromMap(data));
+      }
+
+      // remove current user
+      usersList.removeWhere((element) => element.uid == uid);
+      return usersList;
+    });
+  }
+
   // Gyms
   Future<List<GymInfo>> getAllGyms() async {
     final CollectionReference gyms = firestore.collection('gyms');
     return gyms.get().then((QuerySnapshot querySnapshot) {
       List<GymInfo> gymsList = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         final data = doc.data() as Map<String, dynamic>;
         gymsList.add(GymInfo.fromMap(data));
-      });
+      }
       return gymsList;
     });
   }
 
-  Future<List<GymInfo>> sortByDistance(GeoPoint point) async {
+  Future<List<GymInfo>> nearestGyms(GeoPoint point) async {
     List<GymInfo> gymsList = await getAllGyms();
 
     gymsList.sort((a, b) {

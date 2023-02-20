@@ -32,7 +32,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).pushNamed(
-              settingsRoute,
+              Routes.settingsRoute,
             );
           },
           child: const Icon(
@@ -53,8 +53,8 @@ class _ProfileViewState extends State<ProfileView> {
           // Profile Picture
           ProfilePicture(
             imagePath: AuthService.firebase().currentUser!.photoURL!,
-            isEdit: true,
             onClicked: editProfile,
+            isEdit: true,
           ),
           // name and username
           Container(
@@ -80,7 +80,7 @@ class _ProfileViewState extends State<ProfileView> {
             child: ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(
-                  editProfileRoute,
+                  Routes.editProfileRoute,
                 );
               },
               child: const Text('Edit Profile'),

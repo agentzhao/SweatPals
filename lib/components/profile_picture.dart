@@ -9,7 +9,7 @@ class ProfilePicture extends StatelessWidget {
     Key? key,
     required this.imagePath,
     required this.onClicked,
-    this.isEdit = true,
+    required this.isEdit,
   }) : super(key: key);
 
   @override
@@ -23,8 +23,8 @@ class ProfilePicture extends StatelessWidget {
           Positioned(
             bottom: 0,
             right: 2,
-            child: buildEditIcon(color),
-          ),
+            child: isEdit ? buildEditIcon(color) : Container(),
+          )
         ],
       ),
     );
@@ -56,7 +56,6 @@ class ProfilePicture extends StatelessWidget {
           child: IconButton(
             iconSize: 0,
             icon: Icon(
-              // isEdit ? Icons.add_a_photo : Icons.edit,
               Icons.add_a_photo,
               color: Colors.white,
               size: 25,

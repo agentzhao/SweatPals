@@ -109,7 +109,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   ),
                 );
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  profileRoute,
+                  Routes.profileRoute,
                   (route) => false,
                 );
               } catch (e) {

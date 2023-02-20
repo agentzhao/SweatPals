@@ -6,12 +6,15 @@ import 'package:sweatpals/views/login_view.dart';
 import 'package:sweatpals/views/register_view.dart';
 import 'package:sweatpals/views/verify_email_view.dart';
 import 'package:sweatpals/views/navi_bar.dart';
+import 'package:sweatpals/services/db/db_service.dart';
 
 import 'package:sweatpals/views/home_view.dart';
 import 'package:sweatpals/views/map_view.dart';
 import 'package:sweatpals/views/profile_view.dart';
 import 'package:sweatpals/views/settings_view.dart';
 import 'package:sweatpals/views/edit_profile_view.dart';
+import 'package:sweatpals/views/user_view.dart';
+import 'package:sweatpals/views/gym_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,15 +38,42 @@ void main() async {
       debugShowCheckedModeBanner: false,
       home: const MainPage(),
       routes: {
-        loginRoute: (context) => const LoginView(),
-        registerRoute: (context) => const RegisterView(),
-        verifyEmailRoute: (context) => const VerifyEmailView(),
-        naviBarRoute: (context) => const NaviBar(),
-        homeRoute: (context) => const HomeView(),
-        mapRoute: (context) => const MapView(),
-        profileRoute: (context) => const ProfileView(),
-        editProfileRoute: (context) => const EditProfileView(),
-        settingsRoute: (context) => const SettingsView(),
+        Routes.loginRoute: (context) => const LoginView(),
+        Routes.registerRoute: (context) => const RegisterView(),
+        Routes.verifyEmailRoute: (context) => const VerifyEmailView(),
+        Routes.naviBarRoute: (context) => const NaviBar(),
+        Routes.homeRoute: (context) => const HomeView(),
+        Routes.mapRoute: (context) => const MapView(),
+        Routes.profileRoute: (context) => const ProfileView(),
+        Routes.editProfileRoute: (context) => const EditProfileView(),
+        Routes.settingsRoute: (context) => const SettingsView(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == Routes.userRoute) {
+          final args = settings.arguments as UserInfo;
+          return MaterialPageRoute(
+            builder: (context) => UserView(
+              user: args,
+            ),
+          );
+        }
+        if (settings.name == Routes.gymRoute) {
+          final args = settings.arguments as GymInfo;
+          return MaterialPageRoute(
+            builder: (context) => GymView(
+              gym: args,
+            ),
+          );
+        }
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: Center(
+              child: Text('Page not found'),
+            ),
+          ),
+        );
       },
     ),
   );

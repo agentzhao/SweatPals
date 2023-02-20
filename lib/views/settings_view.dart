@@ -11,7 +11,9 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   String get username => AuthService.firebase().currentUser!.username!;
-  String get email => AuthService.firebase().currentUser!.email!;
+  // email might be null
+  String get email =>
+      AuthService.firebase().currentUser!.email ?? 'guest (no email)';
 
   // todo: reset password and change email
 
@@ -32,7 +34,7 @@ class _SettingsViewState extends State<SettingsView> {
               onPressed: () async {
                 await AuthService.firebase().logOut();
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  loginRoute,
+                  Routes.loginRoute,
                   (_) => false,
                 );
               },

@@ -4,6 +4,7 @@ import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sweatpals/services/map/location.dart';
+import 'package:sweatpals/constants/routes.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -24,10 +25,19 @@ class _HomeViewState extends State<HomeView> {
   GeoPoint currentLocation = const GeoPoint(0, 0);
   UserInfo? currentUser;
   List<GymInfo> gymsList = [];
+  bool _isMounted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isMounted = true;
+    // rest of initState code...
+  }
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
+    if (_isMounted == false) return;
     getCurrentLocation().then((value) {
       setState(() {
         currentLocation = value;
@@ -38,7 +48,7 @@ class _HomeViewState extends State<HomeView> {
         currentUser = value;
       });
     });
-    await dbService.sortByDistance(currentLocation).then((value) {
+    await dbService.nearestGyms(currentLocation).then((value) {
       setState(() {
         gymsList = value;
       });
@@ -71,8 +81,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
             ),
-            // if no gyms, show no gyms
-            // else show list of gyms
+            // if no gyms near you, show "No gyms near you"
             ListView.builder(
               itemCount: gymsList.length,
               shrinkWrap: true,
@@ -108,7 +117,12 @@ class _HomeViewState extends State<HomeView> {
         currentLocation = value;
       });
     });
-    await dbService.sortByDistance(currentLocation).then((value) {
+    await dbService.getUserInfo(uid).then((value) {
+      setState(() {
+        currentUser = value;
+      });
+    });
+    await dbService.nearestGyms(currentLocation).then((value) {
       setState(() {
         gymsList = value;
       });
@@ -116,15 +130,12 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget welcomeText(UserInfo user) {
-    if (user == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
     return Column(
       children: [
         Container(
             alignment: Alignment.centerLeft,
             child: Text("    Time to get sweaty, \n    ${user.firstName}",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 )))
@@ -138,15 +149,20 @@ class _HomeViewState extends State<HomeView> {
           horizontal: 16,
         ),
         child: ListTile(
-          leading: CircleAvatar(
-            child: Text(gym.NAME[0]),
-          ),
-          title: Text(gym.NAME),
-          subtitle: Text("Distance: ${dbService.distanceBetween(
-            currentLocation,
-            gym.coordinates,
-          )} km"),
-        ),
+            leading: CircleAvatar(
+              child: Text(gym.NAME[0]),
+            ),
+            title: Text(gym.NAME),
+            subtitle: Text("Distance: ${dbService.distanceBetween(
+              currentLocation,
+              gym.coordinates,
+            )} km"),
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                Routes.gymRoute,
+                arguments: gym,
+              );
+            }),
       );
 
   Future<GeoPoint> getCurrentLocation() async {

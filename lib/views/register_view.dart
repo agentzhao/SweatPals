@@ -168,9 +168,27 @@ class _RegisterViewState extends State<RegisterView> {
                   username: _username.text,
                 );
                 if (result == null) {
-                  print("Error signing in as guest");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error signing in as guest'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
                 } else {
-                  print("Signed in as guest");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Signed in as guest'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+
+                  dbService.generateNewUser(
+                    AuthService.firebase().currentUser!.uid,
+                    _username.text,
+                    _firstName.text,
+                    _lastName.text,
+                    activityToIds(_selectedActivities),
+                  );
                 }
               } on GenericAuthException {
                 await showErrorDialog(
@@ -179,7 +197,7 @@ class _RegisterViewState extends State<RegisterView> {
                 );
               }
               Navigator.of(context).pushNamedAndRemoveUntil(
-                naviBarRoute,
+                Routes.naviBarRoute,
                 (route) => false,
               );
             },
@@ -235,13 +253,23 @@ class _RegisterViewState extends State<RegisterView> {
                     password: _password.text,
                   );
                   AuthService.firebase().sendEmailVerification();
-                  Navigator.of(context).pushNamed(verifyEmailRoute);
+                  Navigator.of(context).pushNamed(
+                    Routes.verifyEmailRoute,
+                  );
                   // todo save user to database
                   dbService.generateNewUser(
                     AuthService.firebase().currentUser!.uid,
+                    _username.text,
                     _firstName.text,
                     _lastName.text,
                     activityToIds(_selectedActivities),
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Registration successful'),
+                      duration: Duration(seconds: 1),
+                    ),
                   );
                 } on WeakPasswordAuthException {
                   await showErrorDialog(
@@ -271,7 +299,7 @@ class _RegisterViewState extends State<RegisterView> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                loginRoute,
+                Routes.loginRoute,
                 (route) => false,
               );
             },

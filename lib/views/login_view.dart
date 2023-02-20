@@ -19,17 +19,17 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void initState() {
+    super.initState();
     _email = TextEditingController();
     _password = TextEditingController();
     getLocationPermission();
-    super.initState();
   }
 
   @override
   void dispose() {
+    super.dispose();
     _email.dispose();
     _password.dispose();
-    super.dispose();
   }
 
   @override
@@ -82,13 +82,13 @@ class _LoginViewState extends State<LoginView> {
                 if (user?.isEmailVerified ?? false) {
                   // user's email is verified
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                    naviBarRoute,
+                    Routes.naviBarRoute,
                     (route) => false,
                   );
                 } else {
                   // user's email is NOT verified
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                    verifyEmailRoute,
+                    Routes.verifyEmailRoute,
                     (route) => false,
                   );
                 }
@@ -114,7 +114,7 @@ class _LoginViewState extends State<LoginView> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                registerRoute,
+                Routes.registerRoute,
                 (route) => false,
               );
             },

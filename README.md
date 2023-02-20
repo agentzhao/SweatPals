@@ -16,7 +16,12 @@ Create project on firebase and use [flutterfire](https://firebase.flutter.dev/do
 
 - [ ] Favicons and splash screen
 
-### Debugging
+### Building for production
+
+```
+flutter build web
+firebase deploy
+```
 
 ### Research
 
