@@ -13,4 +13,5 @@ class Routes {
 
   static const userRoute = '/user';
   static const gymRoute = '/gym';
+  static const friendFinderRoute = '/friend-finder';
 }

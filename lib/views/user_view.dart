@@ -44,7 +44,9 @@ class _UserViewState extends State<UserView> {
         title: const Text('User Profile'),
       ),
       floatingActionButton: Container(
-        margin: const EdgeInsets.only(top: 60),
+        margin: const EdgeInsets.only(
+          top: 60,
+        ),
         height: 40,
         width: 40,
         child: FloatingActionButton(
@@ -108,6 +110,10 @@ class _UserViewState extends State<UserView> {
           ),
           // name and username
           Container(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
             alignment: Alignment.center,
             child: buildUser(widget.user),
           ),

@@ -1,5 +1,7 @@
 # SweatPals
 
+- google_maps_flutter does not support web yet, there is google_maps_flutter_web but too many limitations to work around
+
 ### Setup Environment
 
 - Make sure you have [flutter](https://docs.flutter.dev/get-started/install) installed

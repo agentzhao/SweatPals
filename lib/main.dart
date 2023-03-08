@@ -1,3 +1,4 @@
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:sweatpals/constants/routes.dart';
 
@@ -15,11 +16,15 @@ import 'package:sweatpals/views/settings_view.dart';
 import 'package:sweatpals/views/edit_profile_view.dart';
 import 'package:sweatpals/views/user_view.dart';
 import 'package:sweatpals/views/gym_view.dart';
+import 'package:sweatpals/views/friend_finder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // have to initialize firebase before running the app
+  // loading env vars
+  // await dotenv.load(fileName: ".env");
+  // initialize firebase
   await AuthService.firebase().initialize();
+
   runApp(
     MaterialApp(
       title: 'SweatPals',
@@ -47,6 +52,7 @@ void main() async {
         Routes.profileRoute: (context) => const ProfileView(),
         Routes.editProfileRoute: (context) => const EditProfileView(),
         Routes.settingsRoute: (context) => const SettingsView(),
+        Routes.friendFinderRoute: (context) => const FriendFinderView(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == Routes.userRoute) {

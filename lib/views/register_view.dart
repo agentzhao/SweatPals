@@ -29,22 +29,22 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   void initState() {
+    super.initState();
     _firstName = TextEditingController();
     _lastName = TextEditingController();
     _username = TextEditingController();
     _email = TextEditingController();
     _password = TextEditingController();
-    super.initState();
   }
 
   @override
   void dispose() {
+    super.dispose();
     _firstName.dispose();
     _lastName.dispose();
     _username.dispose();
     _email.dispose();
     _password.dispose();
-    super.dispose();
   }
 
   @override
@@ -70,8 +70,9 @@ class _RegisterViewState extends State<RegisterView> {
                   initialChildSize: 0.4,
                   listType: MultiSelectListType.CHIP,
                   searchable: true,
-                  buttonText:
-                      const Text("Favorite Activities (Select at least 3)"),
+                  buttonText: const Text(
+                    "Favorite Activities (Select at least 3)",
+                  ),
                   title: const Text("Activities"),
                   items: _activities,
                   onConfirm: (values) {
@@ -307,23 +308,6 @@ class _RegisterViewState extends State<RegisterView> {
           ),
         ],
       ),
-    );
-  }
-
-  void _showMultiSelect(BuildContext context) async {
-    await showModalBottomSheet(
-      isScrollControlled: true, // required for min/max child size
-      context: context,
-      builder: (ctx) {
-        return MultiSelectBottomSheet(
-          items: activities.map((e) => MultiSelectItem(e, e.name)).toList(),
-          initialValue: _selectedActivities,
-          onConfirm: (values) {
-            _selectedActivities = values;
-          },
-          maxChildSize: 0.8,
-        );
-      },
     );
   }
 }

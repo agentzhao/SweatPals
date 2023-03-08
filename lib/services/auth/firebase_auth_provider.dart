@@ -13,6 +13,7 @@ class FirebaseAuthProvider implements AuthProvider {
   @override
   Future<void> initialize() async {
     await Firebase.initializeApp(
+      name: "dev project",
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }

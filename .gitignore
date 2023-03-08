@@ -4,6 +4,7 @@ data
 .ipynb_checkpoints
 sweatpal-firebase-adminsdk-zsjgc-b6db2851b2.json
 firebase_options.dart
+*.env
 
 # Miscellaneous
 *.class

@@ -30,10 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # https://pub.dev/packages/font_awesome_flutter
-  font_awesome_flutter: ^10.3.0
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  # flutter_dotenv: ^5.0.2
 
   # Firebase
   firebase_core: ^2.4.1
@@ -54,6 +51,10 @@ dependencies:
   # Misc
   image_picker: ^0.8.6+1
   multi_select_flutter: ^4.1.3
+  font_awesome_flutter: ^10.3.0
+  cupertino_icons: ^1.0.2
+  appinio_swiper: ^1.1.1
+  fluttertoast: ^8.2.1
 
 dev_dependencies:
   flutter_test:
@@ -102,3 +103,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+assets:
+  - .env

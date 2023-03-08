@@ -1,3 +1,4 @@
+import 'package:sweatpals/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
@@ -20,6 +21,28 @@ class _ChatsViewState extends State<ChatsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(top: 10),
+        height: 40,
+        width: 40,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              Routes.friendFinderRoute,
+            );
+          },
+          backgroundColor: Colors.green,
+          tooltip: 'Find Friends',
+          elevation: 0,
+          splashColor: Colors.grey,
+          child: const Icon(
+            Icons.person_add,
+            color: Colors.white,
+            size: 25,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       body: ListView(
         children: [
           const SizedBox(height: 24),

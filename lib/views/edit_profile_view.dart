@@ -5,6 +5,7 @@ import 'package:sweatpals/services/db/db_service.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sweatpals/constants/activities.dart';
 import 'package:sweatpals/constants/routes.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({Key? key}) : super(key: key);
@@ -25,28 +26,45 @@ class _EditProfileViewState extends State<EditProfileView> {
   final dbService = DbService();
   List<Activity> _selectedActivities = [];
 
+  UserInfo? user;
+  // late UserInfo user;
   String get uid => AuthService.firebase().currentUser!.uid;
   String get username => AuthService.firebase().currentUser!.username!;
   bool get isUserVerified =>
       AuthService.firebase().currentUser!.isEmailVerified;
+  bool _isMounted = false;
 
   @override
   void initState() {
+    super.initState();
+    _isMounted = true;
     _uid = uid;
     _firstName = TextEditingController();
     _lastName = TextEditingController();
     _username = TextEditingController(text: username);
     _isUserVerified = isUserVerified;
-    // _selectedActivities = [];
-    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    if (_isMounted == false) return;
+    await dbService.getUserInfo(uid).then((value) {
+      setState(() {
+        user = value;
+        _firstName.text = user!.firstName;
+        _lastName.text = user!.lastName;
+        _selectedActivities = idsToActivity(user!.activities);
+      });
+    });
   }
 
   @override
   void dispose() {
+    super.dispose();
     _firstName.dispose();
     _lastName.dispose();
     _username.dispose();
-    super.dispose();
   }
 
   @override
@@ -70,82 +88,6 @@ class _EditProfileViewState extends State<EditProfileView> {
             ),
           ),
           const SizedBox(height: 24),
-          Container(
-            alignment: Alignment.center,
-            child: FutureBuilder<UserInfo?>(
-              future: dbService.getUserInfo(uid),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final user = snapshot.data;
-                  _selectedActivities = idsToActivity(user!.activities);
-                  _firstName.text = user.firstName;
-                  _lastName.text = user.lastName;
-                  return buildActivity(user);
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                await AuthService.firebase().updateDisplayName(
-                  _username.text,
-                );
-                await dbService.updateName(
-                  uid,
-                  _firstName.text,
-                  _lastName.text,
-                );
-                await dbService.updateActivities(
-                  uid,
-                  activityToIds(_selectedActivities),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Profile updated'),
-                  ),
-                );
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  Routes.profileRoute,
-                  (route) => false,
-                );
-              } catch (e) {
-                print(e);
-              }
-            },
-            child: const Text('Update'),
-          ),
-          const SizedBox(height: 24),
-          Container(
-            padding: const EdgeInsets.only(
-              left: 12.0,
-              right: 12.0,
-              bottom: 12.0,
-            ),
-            child: Text(
-              _isUserVerified ? 'Email Verified' : 'Email Not Verified',
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(
-              left: 12.0,
-              right: 12.0,
-              bottom: 12.0,
-            ),
-            child: Text(
-              'UID: $_uid',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildActivity(UserInfo user) => Column(
-        children: <Widget>[
           Row(
             children: [
               Expanded(
@@ -180,6 +122,7 @@ class _EditProfileViewState extends State<EditProfileView> {
             'Favourite Activity Types',
             style: Theme.of(context).textTheme.titleLarge,
           ),
+          // todo: fix activity not being removed
           MultiSelectBottomSheetField(
             initialChildSize: 0.4,
             listType: MultiSelectListType.CHIP,
@@ -217,6 +160,67 @@ class _EditProfileViewState extends State<EditProfileView> {
                   ),
                 )
               : Container(),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                await AuthService.firebase().updateDisplayName(
+                  _username.text,
+                );
+                await dbService.updateName(
+                  uid,
+                  _firstName.text,
+                  _lastName.text,
+                );
+                await dbService.updateActivities(
+                  uid,
+                  activityToIds(_selectedActivities),
+                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   const SnackBar(
+                //     content: Text('Profile updated'),
+                //   ),
+                // );
+                Fluttertoast.showToast(
+                  msg: 'Profile updated!',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.grey,
+                  textColor: Colors.white,
+                  fontSize: 16.0,
+                );
+                // Back to profile page
+                Navigator.of(context).pop('/edit-profile');
+              } catch (e) {
+                print(e);
+              }
+            },
+            child: const Text('Update'),
+          ),
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.only(
+              left: 12.0,
+              right: 12.0,
+              bottom: 12.0,
+            ),
+            child: Text(
+              _isUserVerified ? 'Email Verified' : 'Email Not Verified',
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+              left: 12.0,
+              right: 12.0,
+              bottom: 12.0,
+            ),
+            child: Text(
+              'UID: $_uid',
+            ),
+          ),
         ],
-      );
+      ),
+    );
+  }
 }

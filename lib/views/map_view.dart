@@ -9,8 +9,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:sweatpals/services/map/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:sweatpals/views/user_view.dart';
-import 'package:sweatpals/views/gym_view.dart';
+// import 'package:sweatpals/views/user_view.dart';
+// import 'package:sweatpals/views/gym_view.dart';
 
 class MapView extends StatefulWidget {
   const MapView({Key? key}) : super(key: key);

@@ -6,6 +6,7 @@ import 'package:sweatpals/services/storage/storage_service.dart';
 import 'package:sweatpals/components/profile_picture.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sweatpals/constants/activities.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -97,11 +98,14 @@ class _ProfileViewState extends State<ProfileView> {
     if (photoURL != "") {
       await AuthService.firebase().updatePhotoURL(photoURL);
       setState(() {});
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Profile Picture Updated'),
-          duration: Duration(seconds: 1),
-        ),
+      Fluttertoast.showToast(
+        msg: 'Profile Picture Updated',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
     }
   }

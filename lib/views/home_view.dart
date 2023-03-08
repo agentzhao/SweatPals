@@ -22,7 +22,7 @@ class _HomeViewState extends State<HomeView> {
   String get uid => AuthService.firebase().currentUser!.uid;
   String get username => AuthService.firebase().currentUser!.username!;
 
-  GeoPoint currentLocation = const GeoPoint(0, 0);
+  GeoPoint? currentLocation;
   UserInfo? currentUser;
   List<GymInfo> gymsList = [];
   bool _isMounted = false;
@@ -38,7 +38,7 @@ class _HomeViewState extends State<HomeView> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (_isMounted == false) return;
-    getCurrentLocation().then((value) {
+    await getCurrentLocation().then((value) {
       setState(() {
         currentLocation = value;
       });
@@ -48,11 +48,17 @@ class _HomeViewState extends State<HomeView> {
         currentUser = value;
       });
     });
-    await dbService.nearestGyms(currentLocation).then((value) {
+    await dbService.nearestGyms(currentLocation!).then((value) {
       setState(() {
         gymsList = value;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    // _isMounted = false;
+    super.dispose();
   }
 
   @override
@@ -97,12 +103,16 @@ class _HomeViewState extends State<HomeView> {
             // show current user location at bottom of screen
             Container(
               alignment: Alignment.bottomCenter,
-              child: Text(
-                "Current Location: ${currentLocation.latitude}, ${currentLocation.longitude}",
-                style: const TextStyle(
-                  fontSize: 12,
-                ),
-              ),
+              child: currentLocation != null
+                  ? Text(
+                      "Current Location: ${currentLocation!.latitude}, ${currentLocation!.longitude}",
+                      style: const TextStyle(
+                        fontSize: 12,
+                      ),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
             ),
           ],
         ),
@@ -122,7 +132,7 @@ class _HomeViewState extends State<HomeView> {
         currentUser = value;
       });
     });
-    await dbService.nearestGyms(currentLocation).then((value) {
+    await dbService.nearestGyms(currentLocation!).then((value) {
       setState(() {
         gymsList = value;
       });
@@ -154,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
             ),
             title: Text(gym.NAME),
             subtitle: Text("Distance: ${dbService.distanceBetween(
-              currentLocation,
+              currentLocation!,
               gym.coordinates,
             )} km"),
             onTap: () {

@@ -117,6 +117,10 @@ class _GymViewState extends State<GymView> {
           // name and username
           Container(
             alignment: Alignment.center,
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
             child: buildGym(widget.gym),
           ),
         ],
