@@ -17,6 +17,7 @@ import 'package:sweatpals/views/edit_profile_view.dart';
 import 'package:sweatpals/views/user_view.dart';
 import 'package:sweatpals/views/gym_view.dart';
 import 'package:sweatpals/views/friend_finder.dart';
+import 'package:sweatpals/views/chat_box_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,6 +54,7 @@ void main() async {
         Routes.editProfileRoute: (context) => const EditProfileView(),
         Routes.settingsRoute: (context) => const SettingsView(),
         Routes.friendFinderRoute: (context) => const FriendFinderView(),
+        Routes.chatboxRoute: (context) => const ChatBoxView(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == Routes.userRoute) {

@@ -17,6 +17,10 @@ class _ChatsViewState extends State<ChatsView> {
 
   String get uid => AuthService.firebase().currentUser!.uid;
   String get username => AuthService.firebase().currentUser!.username!;
+  UserInfo? friendInfo;
+  UserInfo? currentUser;
+  List<dynamic> friendsList = [];
+  List<UserInfo> friendsInfo = [];
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,9 @@ class _ChatsViewState extends State<ChatsView> {
           ),
         ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
+
       body: ListView(
         children: [
           const SizedBox(height: 24),
@@ -61,13 +67,32 @@ class _ChatsViewState extends State<ChatsView> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final user = snapshot.data;
-                  List<dynamic> friendsList = user!.friends;
-
+                  friendsList = user!.friends;
                   // tile for each friend
                   for (int i = 0; i < friendsList.length; i++) {
                     print(friendsList[i]);
+                    String ff = friendsList[i] as String;
+                    dbService.getUserInfo(ff).then((result){
+                      print(result!.firstName);
+                      friendInfo = result;
+                      friendsInfo.add(result);
+                    });
                   }
-                  return buildTile(user);
+                  //return buildTile(user);
+
+                  // if no friend, show "You have no friend"
+                  return ListView.builder(
+                  itemCount: friendsInfo.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    if (friendsInfo.isEmpty)
+                      return const Text("You have no friend");
+                    else
+                      return buildTile(friendsInfo[index]);
+                  },
+                );
+
                 } else {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -76,8 +101,14 @@ class _ChatsViewState extends State<ChatsView> {
               },
             ),
           ),
+
+          
+
+            
         ],
+        
       ),
+      
     );
   }
 
@@ -86,6 +117,25 @@ class _ChatsViewState extends State<ChatsView> {
           child: Text(user.firstName[0]),
         ),
         title: Text("${user.firstName} ${user.lastName}"),
-        subtitle: Text("@$username"),
+        subtitle: Text("@${user.username}"),
+        onTap: () {
+              Navigator.of(context).pushNamed(
+              Routes.chatboxRoute,
+            );
+            }
       );
+
+
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    await dbService.getUserInfo(uid).then((value) {
+      setState(() {
+        currentUser = value;
+      });
+    });
+  }
+
 }
