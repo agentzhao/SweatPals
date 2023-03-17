@@ -87,6 +87,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
                                 ));
                             setState(() {
                               ListViewItemNumber += 1;
+                              print(ListViewItemNumber);
                               // Update The List Item number
                               listitem.add([
                                 result["taskname"],
@@ -112,13 +113,13 @@ class _WorkoutPageState extends State<WorkoutPage> {
                       if (boolstartbutton == false)
                         ElevatedButton(
                             onPressed: () {
-                              setState(() {
-                                if (ListViewItemNumber != 0) {
+                              if (ListViewItemNumber != 0) {
+                                setState(() {
                                   listitem.removeAt(ListViewItemNumber - 1);
                                   copiedList.removeAt(ListViewItemNumber - 1);
                                   ListViewItemNumber--;
-                                }
-                              });
+                                });
+                              }
                             },
                             child: Text("Delete"),
                             style: ElevatedButton.styleFrom(
@@ -128,61 +129,61 @@ class _WorkoutPageState extends State<WorkoutPage> {
                               primary: Colors.green,
                             )),
                       // Start Button
-
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (count == 0) {
-                            count++;
-                            boolstartbutton = true;
-                            // Count Down timer
-                            for (int i = 0; i < ListViewItemNumber;) {
-                              while (listitem[i][2] != 0) {
-                                setState(() {
-                                  if (boolstartbutton == true) listitem[i][2]--;
-                                });
-                                await Future.delayed(Duration(
-                                    milliseconds:
-                                        1000)); // putting delay on every count
-                              }
-                              if (listitem[i][1] != 0) {
-                                listitem[i][2] = 59;
-                                listitem[i][1]--;
-                              } else if (listitem[i][2] == 0) i++;
-                            }
-                            //Reset timer
-                            for (int k = 0; k < ListViewItemNumber; k++) {
-                              setState(() {
-                                listitem[k][1] = copiedList[k][1];
-                                listitem[k][2] = copiedList[k][2];
-                                boolstartbutton = false;
-                                count = 0;
-                              });
-                            }
-                          } else {
-                             
-                            boolstartbutton = false;
-                            count = 0;
-                            setState(() {
-                              //Reset timer
-                              for (int k = 0; k < ListViewItemNumber; k++) {
-                                setState(() {
-                                  listitem[k][1] = copiedList[k][1];
-                                  listitem[k][2] = copiedList[k][2];
+                      ListViewItemNumber >= 1
+                          ? ElevatedButton(
+                              onPressed: () async {
+                                if (count == 0) {
+                                  count++;
+                                  boolstartbutton = true;
+                                  // Count Down timer
+                                  for (int i = 0; i < ListViewItemNumber;) {
+                                    while (listitem[i][2] != 0) {
+                                      setState(() {
+                                        if (boolstartbutton == true)
+                                          listitem[i][2]--;
+                                      });
+                                      await Future.delayed(Duration(
+                                          milliseconds:
+                                              1000)); // putting delay on every count
+                                    }
+                                    if (count == 1 && listitem[i][1] != 0) {
+                                      listitem[i][2] = 59;
+                                      listitem[i][1]--;
+                                    } else if (listitem[i][2] == 0) i++;
+                                  }
+                                  //Reset timer
+                                  for (int k = 0; k < ListViewItemNumber; k++) {
+                                    setState(() {
+                                      listitem[k][1] = copiedList[k][1];
+                                      listitem[k][2] = copiedList[k][2];
+                                      boolstartbutton = false;
+                                      count = 0;
+                                    });
+                                  }
+                                } else {
                                   boolstartbutton = false;
                                   count = 0;
-                                });
-                              }
-                            });
-                          }
-                        },
-                        child: boolstartbutton ? Text("End") : Text("Start"),
-                        style: ElevatedButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 24),
-                          shape: CircleBorder(),
-                          padding: EdgeInsets.all(24),
-                          primary: Colors.green,
-                        ),
-                      )
+                                  //Reset timer
+                                  for (int k = 0; k < ListViewItemNumber; k++) {
+                                    setState(() {
+                                      listitem[k][1] = copiedList[k][1];
+                                      listitem[k][2] = copiedList[k][2];
+                                      boolstartbutton = false;
+                                      count = 0;
+                                    });
+                                  }
+                                }
+                              },
+                              child:
+                                  boolstartbutton ? Text("End") : Text("Start"),
+                              style: ElevatedButton.styleFrom(
+                                textStyle: TextStyle(fontSize: 24),
+                                shape: CircleBorder(),
+                                padding: EdgeInsets.all(24),
+                                primary: Colors.green,
+                              ),
+                            )
+                          : Text("")
                     ],
                   ),
                 )
