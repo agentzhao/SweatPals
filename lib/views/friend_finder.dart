@@ -136,7 +136,6 @@ class _FriendFinderViewState extends State<FriendFinderView> {
   }
 
   void _swipe(int index, AppinioSwiperDirection direction) {
-    print("the card was swiped to the: ${direction.name}");
     // swipe right
     if (direction.name == "right") {
       // add to friends
