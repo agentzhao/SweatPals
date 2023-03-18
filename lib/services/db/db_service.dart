@@ -224,7 +224,7 @@ class DbService {
     final snapshot = await docRef.get();
     if (snapshot.exists) {
       final data = snapshot.data() as Map<String, dynamic>;
-      return data['friends'];
+      return List<String>.from(data['friends']);
     } else {
       return [];
     }

@@ -169,14 +169,21 @@ class _MapViewState extends State<MapView> {
         mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
-              target: LatLng(position.latitude, position.longitude),
+              target: LatLng(
+                position.latitude,
+                position.longitude,
+              ),
               zoom: 15,
             ),
           ),
         );
       });
       // update user location in database
-      dbService.updateUserLocation(uid, position.latitude, position.longitude);
+      dbService.updateUserLocation(
+        uid,
+        position.latitude,
+        position.longitude,
+      );
     }).catchError((e) {
       print(e);
     });

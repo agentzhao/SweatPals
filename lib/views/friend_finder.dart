@@ -2,12 +2,12 @@ import "package:flutter/material.dart";
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
-import 'package:sweatpals/components/profile_picture.dart';
 import 'package:sweatpals/constants/activities.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sweatpals/components/swiper_buttons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sweatpals/constants/routes.dart';
 
 class FriendFinderView extends StatefulWidget {
   const FriendFinderView({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _FriendFinderViewState extends State<FriendFinderView> {
 
   UserInfo? currentUser;
   List<UserInfo> usersList = [];
-
+  List<String> friendsList = [];
   List<Container> cards = [];
 
   @override
@@ -35,9 +35,39 @@ class _FriendFinderViewState extends State<FriendFinderView> {
         });
       },
     );
+    await dbService.getFriends(currentUser!.uid).then((value) {
+      setState(() {
+        friendsList = value;
+      });
+    });
     await dbService.getAllUsers(currentUser!.uid).then((value) {
       setState(() {
+        for (int i = 0; i < friendsList.length; i++) {
+          value.removeWhere(
+            (element) => element.uid == friendsList[i],
+          );
+        }
         usersList = value;
+        if (usersList.isEmpty) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('No more users to show'),
+                content: const Text('You have added all users'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => {
+                      Navigator.pop(context, 'OK'),
+                      Navigator.of(context).pop(),
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       });
     });
 
@@ -49,8 +79,10 @@ class _FriendFinderViewState extends State<FriendFinderView> {
               border: Border.all(
                 color: Colors.white,
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
-              color: Colors.white,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(20),
+              ),
+              color: Colors.grey[700],
             ),
             alignment: Alignment.center,
             child: Column(
@@ -60,25 +92,49 @@ class _FriendFinderViewState extends State<FriendFinderView> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  '${user.firstName} ${user.lastName}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                Material(
+                  type: MaterialType.transparency,
+                  child: Text(
+                    '${user.firstName} ${user.lastName}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
+                Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    child: Text(
+                      '@${user.username}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        Routes.userRoute,
+                        arguments: user,
+                      );
+                    },
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    intToString(user.activities).join(', '),
-                    style: const TextStyle(
-                      fontSize: 15,
+                Material(
+                  type: MaterialType.transparency,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      intToString(user.activities).join(', '),
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 ),
@@ -95,10 +151,10 @@ class _FriendFinderViewState extends State<FriendFinderView> {
       child: Column(
         children: [
           const SizedBox(
-            height: 50,
+            height: 80,
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.82,
+            height: MediaQuery.of(context).size.height * 0.75,
             child: AppinioSwiper(
               unlimitedUnswipe: true,
               controller: controller,
@@ -159,12 +215,9 @@ class _FriendFinderViewState extends State<FriendFinderView> {
 
   void _unswipe(bool unswiped) {
     if (unswiped) {
-      print("SUCCESS: card was unswiped");
       // add back to cards
       cards.add(cards.removeAt(0));
-    } else {
-      print("FAIL: no card left to unswipe");
-    }
+    } else {}
   }
 
   Widget profileImage(String imagePath) {
@@ -172,13 +225,13 @@ class _FriendFinderViewState extends State<FriendFinderView> {
 
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white,
-        ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(20),
-        ),
-      ),
+          // border: Border.all(
+          //   color: Colors.white,
+          // ),
+          // borderRadius: const BorderRadius.all(
+          //   Radius.circular(20),
+          // ),
+          ),
       child: Material(
         color: Colors.transparent,
         child: Ink.image(
