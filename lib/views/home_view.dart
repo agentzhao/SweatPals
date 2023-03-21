@@ -114,6 +114,36 @@ class _HomeViewState extends State<HomeView> {
                       child: CircularProgressIndicator(),
                     ),
             ),
+
+            const SizedBox(height: 10),
+
+            // Workout and Route Track buttons
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.workoutRoute,
+                      );
+                    },
+                    child: const Text("Workout"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.routeTrackRoute,
+                      );
+                    },
+                    child: const Text("Route Tracker"),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -15,4 +15,7 @@ class Routes {
   static const gymRoute = '/gym';
   static const friendFinderRoute = '/friend-finder';
   static const chatboxRoute = '/chat-box';
+
+  static const workoutRoute = '/workout';
+  static const routeTrackRoute = '/route-track';
 }

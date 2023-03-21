@@ -47,6 +47,8 @@ dependencies:
   provider: ^6.0.5
   geoflutterfire2: ^2.3.14
   # flutter_polyline_points: ^1.0.0
+  path_provider: ^2.0.13
+  image_gallery_saver: ^1.7.1
 
   # Misc
   image_picker: ^0.8.6+1
