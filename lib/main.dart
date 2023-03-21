@@ -54,7 +54,6 @@ void main() async {
         Routes.editProfileRoute: (context) => const EditProfileView(),
         Routes.settingsRoute: (context) => const SettingsView(),
         Routes.friendFinderRoute: (context) => const FriendFinderView(),
-        Routes.chatboxRoute: (context) => const ChatBoxView(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == Routes.userRoute) {
@@ -70,6 +69,14 @@ void main() async {
           return MaterialPageRoute(
             builder: (context) => GymView(
               gym: args,
+            ),
+          );
+        }
+        if (settings.name == Routes.chatboxRoute) {
+          final args = settings.arguments as UserInfo;
+          return MaterialPageRoute(
+            builder: (context) => ChatBoxView(
+              otherUser: args,
             ),
           );
         }
