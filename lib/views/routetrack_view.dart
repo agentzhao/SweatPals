@@ -8,20 +8,19 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 
 // do on Pixel 4 as it have google service
 // Done by Chin poh
 // Bug is when first start, marker never put
-class MapTrackPage extends StatefulWidget {
-  const MapTrackPage({super.key});
+class RouteTrackView extends StatefulWidget {
+  const RouteTrackView({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _MapTrackPageState createState() => _MapTrackPageState();
+  _RouteTrackViewState createState() => _RouteTrackViewState();
 }
 
-class _MapTrackPageState extends State<MapTrackPage> {
+class _RouteTrackViewState extends State<RouteTrackView> {
   // Check GPS when Enter the Page
   bool _isGpsEnabled = false;
   Set<Marker> _markers = {};

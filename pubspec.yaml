@@ -33,7 +33,7 @@ dependencies:
   # flutter_dotenv: ^5.0.2
 
   # Firebase
-  firebase_core: ^2.7.1
+  firebase_core: ^2.4.1
   firebase_auth: ^4.2.5
   cloud_firestore: ^4.3.1
   firebase_database: ^10.0.9 # Realtime Database
@@ -43,7 +43,6 @@ dependencies:
   # Map
   geolocator: ^9.0.2
   google_maps_flutter: ^2.2.3
-  google_maps_flutter_web: ^0.4.0+7
   dio: ^4.0.6
   provider: ^6.0.5
   geoflutterfire2: ^2.3.14
