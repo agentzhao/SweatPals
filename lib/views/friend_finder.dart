@@ -6,8 +6,8 @@ import 'package:sweatpals/constants/activities.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sweatpals/components/swiper_buttons.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sweatpals/constants/routes.dart';
+import 'package:sweatpals/utilities/toast.dart';
 
 class FriendFinderView extends StatefulWidget {
   const FriendFinderView({Key? key}) : super(key: key);
@@ -197,15 +197,7 @@ class _FriendFinderViewState extends State<FriendFinderView> {
       // add to friends
       dbService.addFriend(currentUser!.uid, usersList[index].uid);
       // Toast message
-      Fluttertoast.showToast(
-        msg: "Added ${usersList[index].firstName} to your friends list!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      showToast("Added ${usersList[index].firstName} to your friends list!");
     } else {
       // swipe left
       // add back to cards list

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
-import 'package:sweatpals/components/text_field_widget.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sweatpals/constants/activities.dart';
-import 'package:sweatpals/constants/routes.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sweatpals/utilities/toast.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({Key? key}) : super(key: key);
@@ -181,15 +179,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 //     content: Text('Profile updated'),
                 //   ),
                 // );
-                Fluttertoast.showToast(
-                  msg: 'Profile updated!',
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.grey,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
+                showToast("Profile updated!");
                 // Back to profile page
                 Navigator.of(context).pop('/edit-profile');
               } catch (e) {

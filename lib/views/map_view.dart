@@ -8,6 +8,7 @@ import 'package:sweatpals/services/db/db_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sweatpals/services/map/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sweatpals/utilities/toast.dart';
 
 // import 'package:sweatpals/views/user_view.dart';
 // import 'package:sweatpals/views/gym_view.dart';
@@ -110,6 +111,15 @@ class _MapViewState extends State<MapView> {
           right: 10,
           child: ToggleButtons(
             onPressed: (int index) {
+              // toast message if no gyms
+              if (gymMarkers.isEmpty) {
+                showToast('No gyms found in your area');
+              }
+              // toast message if no users
+              if (userMarkers.isEmpty) {
+                showToast('No users found in your area');
+              }
+
               setState(() {
                 // _selected[index] = !_selected[index];
                 // The button that is tapped is set to true, and the others to false.

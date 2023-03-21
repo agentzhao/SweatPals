@@ -6,7 +6,7 @@ import 'package:sweatpals/services/storage/storage_service.dart';
 import 'package:sweatpals/components/profile_picture.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sweatpals/constants/activities.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sweatpals/utilities/toast.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -36,15 +36,15 @@ class _ProfileViewState extends State<ProfileView> {
               Routes.settingsRoute,
             );
           },
+          backgroundColor: Colors.green,
+          tooltip: 'Settings',
+          elevation: 0,
+          splashColor: Colors.grey,
           child: const Icon(
             Icons.settings,
             color: Colors.white,
             size: 25,
           ),
-          backgroundColor: Colors.green,
-          tooltip: 'Settings',
-          elevation: 0,
-          splashColor: Colors.grey,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
@@ -98,15 +98,7 @@ class _ProfileViewState extends State<ProfileView> {
     if (photoURL != "") {
       await AuthService.firebase().updatePhotoURL(photoURL);
       setState(() {});
-      Fluttertoast.showToast(
-        msg: 'Profile Picture Updated',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      showToast("Profile Picture Updated");
     }
   }
 
