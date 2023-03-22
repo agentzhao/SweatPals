@@ -6,10 +6,10 @@ class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
 
   @override
-  _VerifyEmailViewState createState() => _VerifyEmailViewState();
+  VerifyEmailViewState createState() => VerifyEmailViewState();
 }
 
-class _VerifyEmailViewState extends State<VerifyEmailView> {
+class VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,19 +25,25 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
           ElevatedButton(
             onPressed: () async {
               await AuthService.firebase().sendEmailVerification();
-              Navigator.of(context).pushNamed(
-                Routes.verifyEmailRoute,
-              );
+
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  Routes.verifyEmailRoute,
+                  (route) => false,
+                );
+              }
             },
             child: const Text('Send email verification'),
           ),
           ElevatedButton(
             onPressed: () async {
               await AuthService.firebase().logOut();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                Routes.loginRoute,
-                (route) => false,
-              );
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  Routes.loginRoute,
+                  (route) => false,
+                );
+              }
             },
             child: const Text('Login'),
           )

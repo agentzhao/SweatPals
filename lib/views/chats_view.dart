@@ -8,10 +8,10 @@ class ChatsView extends StatefulWidget {
   const ChatsView({Key? key}) : super(key: key);
 
   @override
-  _ChatsViewState createState() => _ChatsViewState();
+  ChatsViewState createState() => ChatsViewState();
 }
 
-class _ChatsViewState extends State<ChatsView> {
+class ChatsViewState extends State<ChatsView> {
   final DbService dbService = DbService();
   final storageService = StorageService();
 
@@ -117,10 +117,7 @@ class _ChatsViewState extends State<ChatsView> {
             arguments: user,
           );
         },
-        child: CircleAvatar(
-          // child: Text(user.firstName[0]),
-          backgroundImage: NetworkImage(user.photoURL),
-        ),
+        child: Image.network(user.photoURL),
       ),
       title: Text("${user.firstName} ${user.lastName}"),
       subtitle: Text("@${user.username}"),

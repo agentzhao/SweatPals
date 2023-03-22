@@ -12,10 +12,10 @@ class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
-  _HomeViewState createState() => _HomeViewState();
+  HomeViewState createState() => HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class HomeViewState extends State<HomeView> {
   final DbService dbService = DbService();
   final storageService = StorageService();
 
@@ -96,10 +96,11 @@ class _HomeViewState extends State<HomeView> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                if (gymsList.isEmpty)
+                if (gymsList.isEmpty) {
                   return const Text("No gyms near you");
-                else
+                } else {
                   return buildTile(gymsList[index]);
+                }
               },
             ),
 
@@ -193,9 +194,9 @@ class _HomeViewState extends State<HomeView> {
         ),
         child: ListTile(
             leading: CircleAvatar(
-              child: Text(gym.NAME[0]),
+              child: Text(gym.name[0]),
             ),
-            title: Text(gym.NAME),
+            title: Text(gym.name),
             subtitle: Text("Distance: ${dbService.distanceBetween(
               currentLocation!,
               gym.coordinates,

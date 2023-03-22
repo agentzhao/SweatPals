@@ -1,11 +1,8 @@
 import "package:flutter/material.dart";
-import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
 import 'package:sweatpals/components/profile_picture.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:sweatpals/constants/activities.dart';
 
 class GymView extends StatefulWidget {
   final GymInfo gym;
@@ -16,10 +13,10 @@ class GymView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _GymViewState createState() => _GymViewState();
+  GymViewState createState() => GymViewState();
 }
 
-class _GymViewState extends State<GymView> {
+class GymViewState extends State<GymView> {
   final dbService = DbService();
   final storageService = StorageService();
   UserInfo? currentUser;
@@ -33,7 +30,7 @@ class _GymViewState extends State<GymView> {
         .then((value) {
       setState(() {
         currentUser = value;
-        isFavourite = currentUser!.favourites.contains(widget.gym.INC_CRC);
+        isFavourite = currentUser!.favourites.contains(widget.gym.incCrc);
       });
     });
 
@@ -58,7 +55,7 @@ class _GymViewState extends State<GymView> {
             if (isFavourite) {
               dbService.removeFavourite(
                 AuthService.firebase().currentUser!.uid,
-                widget.gym.INC_CRC,
+                widget.gym.incCrc,
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -72,7 +69,7 @@ class _GymViewState extends State<GymView> {
             } else {
               dbService.addFavourite(
                 AuthService.firebase().currentUser!.uid,
-                widget.gym.INC_CRC,
+                widget.gym.incCrc,
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -108,8 +105,8 @@ class _GymViewState extends State<GymView> {
           const SizedBox(height: 24),
           // Profile Picture
           ProfilePicture(
-            imagePath: widget.gym.PHOTOURL.isNotEmpty
-                ? widget.gym.PHOTOURL
+            imagePath: widget.gym.photoURL.isNotEmpty
+                ? widget.gym.photoURL
                 : 'https://i.pinimg.com/originals/6a/87/b0/6a87b06ee4f2c9ff739f1a4eaa901785.jpg',
             onClicked: () => {},
             isEdit: false,
@@ -133,12 +130,12 @@ Widget buildGym(GymInfo gym) => Column(
       children: [
         ListTile(
           title: Text(
-            gym.NAME,
+            gym.name,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 24),
           ),
           subtitle: Text(
-            gym.DESCRIPTION,
+            gym.description,
             textAlign: TextAlign.center,
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -155,7 +152,7 @@ Widget buildGym(GymInfo gym) => Column(
             const Icon(Icons.people),
             const SizedBox(width: 5),
             Text(
-              "${gym.crowdlevel}",
+              "${gym.crowdLevel}",
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 15),
             ),

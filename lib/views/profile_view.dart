@@ -12,10 +12,10 @@ class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
 
   @override
-  _ProfileViewState createState() => _ProfileViewState();
+  ProfileViewState createState() => ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class ProfileViewState extends State<ProfileView> {
   final dbService = DbService();
   final storageService = StorageService();
 

@@ -6,10 +6,10 @@ class SettingsView extends StatefulWidget {
   const SettingsView({Key? key}) : super(key: key);
 
   @override
-  _SettingsViewState createState() => _SettingsViewState();
+  SettingsViewState createState() => SettingsViewState();
 }
 
-class _SettingsViewState extends State<SettingsView> {
+class SettingsViewState extends State<SettingsView> {
   String get username => AuthService.firebase().currentUser!.username!;
   // email might be null
   String get email =>
@@ -33,10 +33,12 @@ class _SettingsViewState extends State<SettingsView> {
             ElevatedButton(
               onPressed: () async {
                 await AuthService.firebase().logOut();
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  Routes.loginRoute,
-                  (_) => false,
-                );
+                if (context.mounted) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    Routes.loginRoute,
+                    (_) => false,
+                  );
+                }
               },
               child: const Text('Log out'),
             ),

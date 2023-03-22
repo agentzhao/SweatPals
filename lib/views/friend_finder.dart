@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
-import 'package:sweatpals/services/storage/storage_service.dart';
 import 'package:sweatpals/constants/activities.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,10 +12,10 @@ class FriendFinderView extends StatefulWidget {
   const FriendFinderView({Key? key}) : super(key: key);
 
   @override
-  _FriendFinderViewState createState() => _FriendFinderViewState();
+  FriendFinderViewState createState() => FriendFinderViewState();
 }
 
-class _FriendFinderViewState extends State<FriendFinderView> {
+class FriendFinderViewState extends State<FriendFinderView> {
   final AppinioSwiperController controller = AppinioSwiperController();
   final DbService dbService = DbService();
 
@@ -216,7 +215,7 @@ class _FriendFinderViewState extends State<FriendFinderView> {
     final image = NetworkImage(imagePath);
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           // border: Border.all(
           //   color: Colors.white,
           // ),

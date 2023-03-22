@@ -257,8 +257,8 @@ class MapViewState extends State<MapView> {
       //   currentLocation,
       //   pos,
       // ));
-      String name = gymsList[i].NAME;
-      int crowdlevel = gymsList[i].crowdlevel;
+      String name = gymsList[i].name;
+      int crowdlevel = gymsList[i].crowdLevel;
 
       final Marker marker = Marker(
         markerId: markerId,

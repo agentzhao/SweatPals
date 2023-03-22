@@ -55,7 +55,7 @@ class ProfilePicture extends StatelessWidget {
           all: 0,
           child: IconButton(
             iconSize: 0,
-            icon: Icon(
+            icon: const Icon(
               Icons.add_a_photo,
               color: Colors.white,
               size: 25,

@@ -5,11 +5,11 @@ class TaskAddView extends StatefulWidget {
   const TaskAddView({super.key});
 
   @override
-  _TaskAddViewState createState() => _TaskAddViewState();
+  TaskAddViewState createState() => TaskAddViewState();
 }
 
 //Second Page
-class _TaskAddViewState extends State<TaskAddView> {
+class TaskAddViewState extends State<TaskAddView> {
   final TextEditingController _textFieldControllerAddtask =
       TextEditingController();
   String taskitemname = "";
@@ -69,9 +69,9 @@ class _TaskAddViewState extends State<TaskAddView> {
             // Label for timer
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text("Minutes"),
-                const Text("Second"),
+              children: const [
+                Text("Minutes"),
+                Text("Second"),
               ],
             ),
             Row(

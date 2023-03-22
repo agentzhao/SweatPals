@@ -15,10 +15,10 @@ class UserView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _UserViewState createState() => _UserViewState();
+  UserViewState createState() => UserViewState();
 }
 
-class _UserViewState extends State<UserView> {
+class UserViewState extends State<UserView> {
   final dbService = DbService();
   final storageService = StorageService();
 

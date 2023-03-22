@@ -11,10 +11,10 @@ class MessageWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MessageWidgetState createState() => _MessageWidgetState();
+  MessageWidgetState createState() => MessageWidgetState();
 }
 
-class _MessageWidgetState extends State<MessageWidget> {
+class MessageWidgetState extends State<MessageWidget> {
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(8),
@@ -23,7 +23,7 @@ class _MessageWidgetState extends State<MessageWidget> {
           children: [
             Text(
               widget.username,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
@@ -31,7 +31,7 @@ class _MessageWidgetState extends State<MessageWidget> {
             const SizedBox(height: 8),
             Text(
               widget.message,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
               ),
             ),

@@ -54,9 +54,3 @@ List<Activity> idsToActivity(List<dynamic> ids) {
   }
   return ans;
 }
-
-void printActivities(List<Activity> activities) {
-  for (Activity activity in activities) {
-    print(activity.name);
-  }
-}

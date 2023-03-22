@@ -10,11 +10,11 @@ class ChatBoxView extends StatefulWidget {
     required this.otherUser,
   }) : super(key: key);
 
-  //@override
-  _ChatBoxViewState createState() => _ChatBoxViewState();
+  @override
+  ChatBoxViewState createState() => ChatBoxViewState();
 }
 
-class _ChatBoxViewState extends State<ChatBoxView> {
+class ChatBoxViewState extends State<ChatBoxView> {
   final DbService dbService = DbService();
   final storageService = StorageService();
 
@@ -23,7 +23,7 @@ class _ChatBoxViewState extends State<ChatBoxView> {
   UserInfo get otherUser => widget.otherUser;
 
   final TextEditingController _textController = TextEditingController();
-  List<ChatMessage> _messages = [];
+  List<ChatMessage> messages = [];
 
   @override
   void didChangeDependencies() async {
@@ -49,8 +49,8 @@ class _ChatBoxViewState extends State<ChatBoxView> {
             child: ListView.builder(
               padding: const EdgeInsets.all(8.0),
               reverse: true,
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length,
+              itemBuilder: (_, int index) => messages[index],
+              itemCount: messages.length,
             ),
           ),
           const Divider(height: 1.0),
@@ -72,7 +72,7 @@ class _ChatBoxViewState extends State<ChatBoxView> {
       text: text,
     );
     setState(() {
-      _messages.insert(0, message);
+      messages.insert(0, message);
     });
   }
 

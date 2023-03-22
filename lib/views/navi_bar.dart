@@ -9,10 +9,10 @@ class NaviBar extends StatefulWidget {
   const NaviBar({Key? key}) : super(key: key);
 
   @override
-  _NaviBarState createState() => _NaviBarState();
+  NaviBarState createState() => NaviBarState();
 }
 
-class _NaviBarState extends State<NaviBar> {
+class NaviBarState extends State<NaviBar> {
   int currentPageIndex = 0;
 
   final screens = [

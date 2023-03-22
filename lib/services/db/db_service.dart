@@ -48,57 +48,57 @@ class UserInfo {
 }
 
 class GymInfo {
-  final String ADDRESSBLOCKHOUSENUMBER;
-  final String ADDRESSBUILDINGNAME;
-  final String ADDRESSFLOORNUMBER;
-  final String ADDRESSPOSTALCODE;
-  final String ADDRESSSTREETNAME;
-  final String ADDRESSUNITNUMBER;
-  final String DESCRIPTION;
-  final String HYPERLINK;
-  final String INC_CRC;
-  final String LANDXADDRESSPOINT;
-  final String LANDYADDRESSPOINT;
-  final String NAME;
-  final String PHOTOURL;
+  final String addressBlockHouseNumber;
+  final String addressBuildingName;
+  final String addressFloorNumber;
+  final String addressPostalCode;
+  final String addressStreetName;
+  final String addressUnitNumber;
+  final String description;
+  final String hyperlink;
+  final String incCrc;
+  final String landXAddressPoint;
+  final String landYAddressPoint;
+  final String name;
+  final String photoURL;
   final GeoPoint coordinates;
-  final int crowdlevel;
+  final int crowdLevel;
 
   GymInfo({
-    required this.ADDRESSBLOCKHOUSENUMBER,
-    required this.ADDRESSBUILDINGNAME,
-    required this.ADDRESSFLOORNUMBER,
-    required this.ADDRESSPOSTALCODE,
-    required this.ADDRESSSTREETNAME,
-    required this.ADDRESSUNITNUMBER,
-    required this.DESCRIPTION,
-    required this.HYPERLINK,
-    required this.INC_CRC,
-    required this.LANDXADDRESSPOINT,
-    required this.LANDYADDRESSPOINT,
-    required this.NAME,
-    required this.PHOTOURL,
+    required this.addressBlockHouseNumber,
+    required this.addressBuildingName,
+    required this.addressFloorNumber,
+    required this.addressPostalCode,
+    required this.addressStreetName,
+    required this.addressUnitNumber,
+    required this.description,
+    required this.hyperlink,
+    required this.incCrc,
+    required this.landXAddressPoint,
+    required this.landYAddressPoint,
+    required this.name,
+    required this.photoURL,
     required this.coordinates,
-    required this.crowdlevel,
+    required this.crowdLevel,
   });
 
   factory GymInfo.fromMap(Map<String, dynamic> data) {
     return GymInfo(
-      ADDRESSBLOCKHOUSENUMBER: data['ADDRESSBLOCKHOUSENUMBER'],
-      ADDRESSBUILDINGNAME: data['ADDRESSBUILDINGNAME'],
-      ADDRESSFLOORNUMBER: data['ADDRESSFLOORNUMBER'],
-      ADDRESSPOSTALCODE: data['ADDRESSPOSTALCODE'],
-      ADDRESSSTREETNAME: data['ADDRESSSTREETNAME'],
-      ADDRESSUNITNUMBER: data['ADDRESSUNITNUMBER'],
-      DESCRIPTION: data['DESCRIPTION'],
-      HYPERLINK: data['HYPERLINK'],
-      INC_CRC: data['INC_CRC'],
-      LANDXADDRESSPOINT: data['LANDXADDRESSPOINT'],
-      LANDYADDRESSPOINT: data['LANDYADDRESSPOINT'],
-      NAME: data['NAME'],
-      PHOTOURL: data['PHOTOURL'],
+      addressBlockHouseNumber: data['addressBlockHouseNumber'],
+      addressBuildingName: data['addressBuildingName'],
+      addressFloorNumber: data['addressFloorNumber'],
+      addressPostalCode: data['addressPostalCode'],
+      addressStreetName: data['addressStreetName'],
+      addressUnitNumber: data['addressUnitNumber'],
+      description: data['description'],
+      hyperlink: data['hyperlink'],
+      incCrc: data['incCrc'],
+      landXAddressPoint: data['landXAddressPoint'],
+      landYAddressPoint: data['landYAddressPoint'],
+      name: data['name'],
+      photoURL: data['photoURL'],
       coordinates: data['coordinates'],
-      crowdlevel: data['crowdlevel'],
+      crowdLevel: data['crowdLevel'],
     );
   }
 }
@@ -253,10 +253,10 @@ class DbService {
 
     return users.map((QuerySnapshot querySnapshot) {
       List<UserInfo> usersList = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         final data = doc.data() as Map<String, dynamic>;
         usersList.add(UserInfo.fromMap(data));
-      });
+      }
 
       // remove current user
       // usersList.removeWhere((element) => element.uid == uid);

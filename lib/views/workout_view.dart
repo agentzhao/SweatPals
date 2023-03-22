@@ -9,11 +9,11 @@ class WorkoutView extends StatefulWidget {
   const WorkoutView({super.key});
 
   @override
-  _WorkoutViewState createState() => _WorkoutViewState();
+  WorkoutViewState createState() => WorkoutViewState();
 }
 
-class _WorkoutViewState extends State<WorkoutView> {
-  int ListViewItemNumber = 0;
+class WorkoutViewState extends State<WorkoutView> {
+  int listViewItemNumber = 0;
   List<List<dynamic>> listitem = [];
   List<List<dynamic>> copiedList = [];
   bool boolstartbutton = false;
@@ -39,7 +39,7 @@ class _WorkoutViewState extends State<WorkoutView> {
                     child: ListView(
                   children: [
                     ListView.builder(
-                        itemCount: ListViewItemNumber,
+                        itemCount: listViewItemNumber,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
@@ -84,7 +84,7 @@ class _WorkoutViewState extends State<WorkoutView> {
                                 builder: (context) => const TaskAddView(),
                               ));
                           setState(() {
-                            ListViewItemNumber += 1;
+                            listViewItemNumber += 1;
                             // Update The List Item number
                             listitem.add([
                               result["taskname"],
@@ -110,34 +110,35 @@ class _WorkoutViewState extends State<WorkoutView> {
                     if (boolstartbutton == false)
                       ElevatedButton(
                           onPressed: () {
-                            if (ListViewItemNumber != 0) {
+                            if (listViewItemNumber != 0) {
                               setState(() {
-                                listitem.removeAt(ListViewItemNumber - 1);
-                                copiedList.removeAt(ListViewItemNumber - 1);
-                                ListViewItemNumber--;
+                                listitem.removeAt(listViewItemNumber - 1);
+                                copiedList.removeAt(listViewItemNumber - 1);
+                                listViewItemNumber--;
                               });
                             }
                           },
-                          child: const Text("Delete"),
                           style: ElevatedButton.styleFrom(
                             textStyle: const TextStyle(fontSize: 24),
+                            backgroundColor: Colors.green,
                             shape: const CircleBorder(),
                             padding: const EdgeInsets.all(24),
-                            primary: Colors.green,
-                          )),
+                          ),
+                          child: const Text("Delete")),
                     // Start Button
-                    ListViewItemNumber >= 1
+                    listViewItemNumber >= 1
                         ? ElevatedButton(
                             onPressed: () async {
                               if (count == 0) {
                                 count++;
                                 boolstartbutton = true;
                                 // Count Down timer
-                                for (int i = 0; i < ListViewItemNumber;) {
+                                for (int i = 0; i < listViewItemNumber;) {
                                   while (listitem[i][2] != 0) {
                                     setState(() {
-                                      if (boolstartbutton == true)
+                                      if (boolstartbutton == true) {
                                         listitem[i][2]--;
+                                      }
                                     });
                                     await Future.delayed(const Duration(
                                         milliseconds:
@@ -146,10 +147,12 @@ class _WorkoutViewState extends State<WorkoutView> {
                                   if (count == 1 && listitem[i][1] != 0) {
                                     listitem[i][2] = 59;
                                     listitem[i][1]--;
-                                  } else if (listitem[i][2] == 0) i++;
+                                  } else if (listitem[i][2] == 0) {
+                                    i++;
+                                  }
                                 }
                                 //Reset timer
-                                for (int k = 0; k < ListViewItemNumber; k++) {
+                                for (int k = 0; k < listViewItemNumber; k++) {
                                   setState(() {
                                     listitem[k][1] = copiedList[k][1];
                                     listitem[k][2] = copiedList[k][2];
@@ -161,7 +164,7 @@ class _WorkoutViewState extends State<WorkoutView> {
                                 boolstartbutton = false;
                                 count = 0;
                                 //Reset timer
-                                for (int k = 0; k < ListViewItemNumber; k++) {
+                                for (int k = 0; k < listViewItemNumber; k++) {
                                   setState(() {
                                     listitem[k][1] = copiedList[k][1];
                                     listitem[k][2] = copiedList[k][2];
@@ -171,15 +174,15 @@ class _WorkoutViewState extends State<WorkoutView> {
                                 }
                               }
                             },
-                            child: boolstartbutton
-                                ? const Text("End")
-                                : const Text("Start"),
                             style: ElevatedButton.styleFrom(
                               textStyle: const TextStyle(fontSize: 24),
                               backgroundColor: Colors.green,
                               shape: const CircleBorder(),
                               padding: const EdgeInsets.all(24),
                             ),
+                            child: boolstartbutton
+                                ? const Text("End")
+                                : const Text("Start"),
                           )
                         : const Text("")
                   ],
@@ -190,7 +193,7 @@ class _WorkoutViewState extends State<WorkoutView> {
 }
 
 //Second Page
-class _TaskAddViewState extends State<TaskAddView> {
+class TaskAddViewState extends State<TaskAddView> {
   final TextEditingController _textFieldControllerAddtask =
       TextEditingController();
   String taskitemname = "";
@@ -250,9 +253,9 @@ class _TaskAddViewState extends State<TaskAddView> {
             // Label for timer
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text("Minutes"),
-                const Text("Second"),
+              children: const [
+                Text("Minutes"),
+                Text("Second"),
               ],
             ),
             Row(

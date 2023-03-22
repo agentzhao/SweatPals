@@ -9,12 +9,12 @@ class EditProfileView extends StatefulWidget {
   const EditProfileView({Key? key}) : super(key: key);
 
   @override
-  _EditProfileViewState createState() => _EditProfileViewState();
+  EditProfileViewState createState() => EditProfileViewState();
 }
 
 // todo: _selectedActivities keeps getting resetted
 
-class _EditProfileViewState extends State<EditProfileView> {
+class EditProfileViewState extends State<EditProfileView> {
   late final String _uid;
   late final TextEditingController _firstName;
   late final TextEditingController _lastName;
@@ -136,14 +136,12 @@ class _EditProfileViewState extends State<EditProfileView> {
             onConfirm: (values) {
               setState(() {
                 _selectedActivities = values.cast<Activity>();
-                printActivities(_selectedActivities);
               });
             },
             chipDisplay: MultiSelectChipDisplay(
               onTap: (value) {
                 setState(() {
                   _selectedActivities.remove(value);
-                  printActivities(_selectedActivities);
                 });
               },
             ),
@@ -181,9 +179,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                 // );
                 showToast("Profile updated!");
                 // Back to profile page
-                Navigator.of(context).pop('/edit-profile');
+                if (context.mounted) {
+                  Navigator.of(context).pop('/edit-profile');
+                }
               } catch (e) {
-                print(e);
+                // catch e
               }
             },
             child: const Text('Update'),

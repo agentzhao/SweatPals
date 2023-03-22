@@ -133,7 +133,7 @@ class _RouteTrackViewState extends State<RouteTrackView> {
       ));
       // End
     } catch (e) {
-      print('Could not get location: $e');
+      // catch e
     }
   }
 
@@ -163,7 +163,6 @@ class _RouteTrackViewState extends State<RouteTrackView> {
             double distance =
                 distanceBetween(_points[_points.length - 2], curt);
             totaldistance = totaldistance + (distance + 0.0005);
-            print(totaldistance);
           }
         }
       });
@@ -394,13 +393,13 @@ class _RouteTrackViewState extends State<RouteTrackView> {
 
 class MyTimer {
   int _seconds = 0;
-  int _Minutes = 0;
+  int _minutes = 0;
   int _hour = 0;
-  var _timer;
+  var _timer = Timer.periodic(const Duration(seconds: 1), (timer) {});
 
   void start() {
     _seconds = 0;
-    _Minutes = 0;
+    _minutes = 0;
     _hour = 0;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _seconds++;
@@ -410,24 +409,24 @@ class MyTimer {
   }
 
   void stop() {
-    _timer?.cancel();
+    _timer.cancel();
     // print("Timer stopped");
   }
 
   void calculatetime() {
     if (_seconds >= 60) {
-      _Minutes++;
+      _minutes++;
       _seconds = 0;
     }
-    if (_Minutes >= 60) {
+    if (_minutes >= 60) {
       _hour++;
-      _Minutes = 0;
+      _minutes = 0;
       _seconds = 0;
     }
   }
 
   String displaytime() {
-    return "${_hour.toString().padLeft(2, "0")}:${_Minutes.toString().padLeft(2, "0")}:${_seconds.toString().padLeft(2, "0")}";
+    return "${_hour.toString().padLeft(2, "0")}:${_minutes.toString().padLeft(2, "0")}:${_seconds.toString().padLeft(2, "0")}";
   }
 }
 
@@ -472,17 +471,14 @@ class ScreshotSaveOpen {
         file = File('$path/$fileName');
         exist = await file.exists();
       } while (exist);
-      print(file);
       await file.writeAsBytes(
           imageBytes!); // save to android.data -> some android does not allow access
       await ImageGallerySaver.saveImage(imageBytes,
           name: fileName); // savve to gallery
 
       // 5. Show a message indicating where the screenshot was saved
-
-      print('Screenshot saved to $path/$fileName');
     } catch (e) {
-      print('Error capturing screenshot: $e');
+      // catch e
     }
   }
 }
