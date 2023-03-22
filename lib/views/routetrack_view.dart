@@ -57,7 +57,7 @@ class _RouteTrackViewState extends State<RouteTrackView> {
     });
 
     // Hide the SnackBar after 2 seconds
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       setState(() {
         _isSnackBarVisible = false;
       });
@@ -125,8 +125,8 @@ class _RouteTrackViewState extends State<RouteTrackView> {
       _mapController!.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(
-            currentloc.latitude!,
-            currentloc.longitude!,
+            currentloc.latitude,
+            currentloc.longitude,
           ),
           zoom: 15,
         ),
@@ -144,20 +144,20 @@ class _RouteTrackViewState extends State<RouteTrackView> {
         currentloc = locationData;
         if (_isTracking) {
           _points.add(LatLng(
-            currentloc.latitude!,
-            currentloc.longitude!,
+            currentloc.latitude,
+            currentloc.longitude,
           ));
         }
         if (_isTracking && _mapController != null) {
           _mapController?.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(
-              target: LatLng(currentloc.latitude!, currentloc.longitude!),
+              target: LatLng(currentloc.latitude, currentloc.longitude),
               zoom: 18,
             ),
           ));
         }
         if (_isTracking) {
-          LatLng curt = LatLng(currentloc.latitude!, currentloc.longitude!);
+          LatLng curt = LatLng(currentloc.latitude, currentloc.longitude);
           _points.add(curt);
           if (_points.length >= 2) {
             double distance =
@@ -193,7 +193,7 @@ class _RouteTrackViewState extends State<RouteTrackView> {
       if (_mapController != null) {
         _mapController?.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(
-            target: LatLng(currentloc.latitude!, currentloc.longitude!),
+            target: LatLng(currentloc.latitude, currentloc.longitude),
             zoom: 14, // Set the zoom level to a default value
           ),
         ));
@@ -213,7 +213,7 @@ class _RouteTrackViewState extends State<RouteTrackView> {
   void _updatePolyline() {
     setState(() {
       _polylines.add(Polyline(
-        polylineId: PolylineId('route'),
+        polylineId: const PolylineId('route'),
         points: _points,
         color: Colors.green,
         width: 7,
@@ -282,7 +282,7 @@ class _RouteTrackViewState extends State<RouteTrackView> {
                                     // StartButton
                                     checkStartbtn
                                         ? FloatingActionButton(
-                                            child: Icon(Icons.start),
+                                            child: const Icon(Icons.start),
                                             onPressed: () {
                                               if (count == 1) _clearTracking();
                                               setState(() {
@@ -296,14 +296,14 @@ class _RouteTrackViewState extends State<RouteTrackView> {
                                               checkGps();
                                               _getLocation();
                                               _addMarker(
-                                                  LatLng(currentloc.latitude!,
-                                                      currentloc.longitude!),
+                                                  LatLng(currentloc.latitude,
+                                                      currentloc.longitude),
                                                   "Start point");
                                               _startTracking();
                                               _updatePolyline();
                                               timer.start();
                                             })
-                                        : Text(""),
+                                        : const Text(""),
                                     // Stop Button
                                     checkStopbtn
                                         ? FloatingActionButton(
@@ -319,8 +319,8 @@ class _RouteTrackViewState extends State<RouteTrackView> {
                                                     timer.displaytime());
                                               });
                                               _addMarker(
-                                                  LatLng(currentloc.latitude!,
-                                                      currentloc.longitude!),
+                                                  LatLng(currentloc.latitude,
+                                                      currentloc.longitude),
                                                   "End Point");
                                               _stopTracking();
                                               sS0.captureAndSaveScreenshot();
@@ -378,7 +378,7 @@ class _RouteTrackViewState extends State<RouteTrackView> {
                       child: Container(
                         alignment: Alignment.center,
                         color: Colors.green,
-                        child: Text("File Saved to gallery"),
+                        child: const Text("File Saved to gallery"),
                       ),
                     ),
                   ),
@@ -404,14 +404,14 @@ class MyTimer {
     _hour = 0;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _seconds++;
-      print("Elapsed time: $_seconds seconds");
+      // print("Elapsed time: $_seconds seconds");
       calculatetime();
     });
   }
 
   void stop() {
     _timer?.cancel();
-    print("Timer stopped");
+    // print("Timer stopped");
   }
 
   void calculatetime() {

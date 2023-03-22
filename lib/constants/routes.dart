@@ -18,4 +18,5 @@ class Routes {
 
   static const workoutRoute = '/workout';
   static const routeTrackRoute = '/route-track';
+  static const taskAddRoute = '/task-add';
 }

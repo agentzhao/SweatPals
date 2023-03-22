@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sweatpals/views/taskadd_view.dart';
 
 // Done by Chinpoh
 // Bug issue
@@ -9,14 +10,6 @@ class WorkoutView extends StatefulWidget {
 
   @override
   _WorkoutViewState createState() => _WorkoutViewState();
-}
-
-//Second page
-class TaskAddPage extends StatefulWidget {
-  const TaskAddPage({super.key});
-
-  @override
-  _TaskAddPageState createState() => _TaskAddPageState();
 }
 
 class _WorkoutViewState extends State<WorkoutView> {
@@ -36,7 +29,7 @@ class _WorkoutViewState extends State<WorkoutView> {
             appBar: AppBar(
                 backgroundColor: Colors.green,
                 centerTitle: true, // set title to middle
-                title: const Text("Listview")),
+                title: const Text("Workouts")),
             //top container
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,121 +71,118 @@ class _WorkoutViewState extends State<WorkoutView> {
                   ],
                 )),
                 //btm container
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Add Button
-                      if (boolstartbutton == false)
-                        ElevatedButton(
-                          onPressed: () async {
-                            final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const TaskAddPage(),
-                                ));
-                            setState(() {
-                              ListViewItemNumber += 1;
-                              print(ListViewItemNumber);
-                              // Update The List Item number
-                              listitem.add([
-                                result["taskname"],
-                                result["min"],
-                                result["sec"]
-                              ]);
-                              copiedList.add([
-                                result["taskname"],
-                                result["min"],
-                                result["sec"]
-                              ]);
-                            });
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Add Button
+                    if (boolstartbutton == false)
+                      ElevatedButton(
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const TaskAddView(),
+                              ));
+                          setState(() {
+                            ListViewItemNumber += 1;
+                            // Update The List Item number
+                            listitem.add([
+                              result["taskname"],
+                              result["min"],
+                              result["sec"]
+                            ]);
+                            copiedList.add([
+                              result["taskname"],
+                              result["min"],
+                              result["sec"]
+                            ]);
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 24),
+                          backgroundColor: Colors.green,
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(24),
+                        ),
+                        child: const Text("Add"),
+                      ),
+                    // Delete button
+                    if (boolstartbutton == false)
+                      ElevatedButton(
+                          onPressed: () {
+                            if (ListViewItemNumber != 0) {
+                              setState(() {
+                                listitem.removeAt(ListViewItemNumber - 1);
+                                copiedList.removeAt(ListViewItemNumber - 1);
+                                ListViewItemNumber--;
+                              });
+                            }
                           },
+                          child: const Text("Delete"),
                           style: ElevatedButton.styleFrom(
                             textStyle: const TextStyle(fontSize: 24),
-                            backgroundColor: Colors.green,
                             shape: const CircleBorder(),
                             padding: const EdgeInsets.all(24),
-                          ),
-                          child: const Text("Add"),
-                        ),
-                      // Delete button
-                      if (boolstartbutton == false)
-                        ElevatedButton(
-                            onPressed: () {
-                              if (ListViewItemNumber != 0) {
-                                setState(() {
-                                  listitem.removeAt(ListViewItemNumber - 1);
-                                  copiedList.removeAt(ListViewItemNumber - 1);
-                                  ListViewItemNumber--;
-                                });
+                            primary: Colors.green,
+                          )),
+                    // Start Button
+                    ListViewItemNumber >= 1
+                        ? ElevatedButton(
+                            onPressed: () async {
+                              if (count == 0) {
+                                count++;
+                                boolstartbutton = true;
+                                // Count Down timer
+                                for (int i = 0; i < ListViewItemNumber;) {
+                                  while (listitem[i][2] != 0) {
+                                    setState(() {
+                                      if (boolstartbutton == true)
+                                        listitem[i][2]--;
+                                    });
+                                    await Future.delayed(const Duration(
+                                        milliseconds:
+                                            1000)); // putting delay on every count
+                                  }
+                                  if (count == 1 && listitem[i][1] != 0) {
+                                    listitem[i][2] = 59;
+                                    listitem[i][1]--;
+                                  } else if (listitem[i][2] == 0) i++;
+                                }
+                                //Reset timer
+                                for (int k = 0; k < ListViewItemNumber; k++) {
+                                  setState(() {
+                                    listitem[k][1] = copiedList[k][1];
+                                    listitem[k][2] = copiedList[k][2];
+                                    boolstartbutton = false;
+                                    count = 0;
+                                  });
+                                }
+                              } else {
+                                boolstartbutton = false;
+                                count = 0;
+                                //Reset timer
+                                for (int k = 0; k < ListViewItemNumber; k++) {
+                                  setState(() {
+                                    listitem[k][1] = copiedList[k][1];
+                                    listitem[k][2] = copiedList[k][2];
+                                    boolstartbutton = false;
+                                    count = 0;
+                                  });
+                                }
                               }
                             },
-                            child: const Text("Delete"),
+                            child: boolstartbutton
+                                ? const Text("End")
+                                : const Text("Start"),
                             style: ElevatedButton.styleFrom(
                               textStyle: const TextStyle(fontSize: 24),
+                              backgroundColor: Colors.green,
                               shape: const CircleBorder(),
                               padding: const EdgeInsets.all(24),
-                              primary: Colors.green,
-                            )),
-                      // Start Button
-                      ListViewItemNumber >= 1
-                          ? ElevatedButton(
-                              onPressed: () async {
-                                if (count == 0) {
-                                  count++;
-                                  boolstartbutton = true;
-                                  // Count Down timer
-                                  for (int i = 0; i < ListViewItemNumber;) {
-                                    while (listitem[i][2] != 0) {
-                                      setState(() {
-                                        if (boolstartbutton == true)
-                                          listitem[i][2]--;
-                                      });
-                                      await Future.delayed(const Duration(
-                                          milliseconds:
-                                              1000)); // putting delay on every count
-                                    }
-                                    if (count == 1 && listitem[i][1] != 0) {
-                                      listitem[i][2] = 59;
-                                      listitem[i][1]--;
-                                    } else if (listitem[i][2] == 0) i++;
-                                  }
-                                  //Reset timer
-                                  for (int k = 0; k < ListViewItemNumber; k++) {
-                                    setState(() {
-                                      listitem[k][1] = copiedList[k][1];
-                                      listitem[k][2] = copiedList[k][2];
-                                      boolstartbutton = false;
-                                      count = 0;
-                                    });
-                                  }
-                                } else {
-                                  boolstartbutton = false;
-                                  count = 0;
-                                  //Reset timer
-                                  for (int k = 0; k < ListViewItemNumber; k++) {
-                                    setState(() {
-                                      listitem[k][1] = copiedList[k][1];
-                                      listitem[k][2] = copiedList[k][2];
-                                      boolstartbutton = false;
-                                      count = 0;
-                                    });
-                                  }
-                                }
-                              },
-                              child: boolstartbutton
-                                  ? const Text("End")
-                                  : const Text("Start"),
-                              style: ElevatedButton.styleFrom(
-                                textStyle: const TextStyle(fontSize: 24),
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(24),
-                                primary: Colors.green,
-                              ),
-                            )
-                          : const Text("")
-                    ],
-                  ),
+                            ),
+                          )
+                        : const Text("")
+                  ],
                 )
               ],
             )));
@@ -200,7 +190,7 @@ class _WorkoutViewState extends State<WorkoutView> {
 }
 
 //Second Page
-class _TaskAddPageState extends State<TaskAddPage> {
+class _TaskAddViewState extends State<TaskAddView> {
   final TextEditingController _textFieldControllerAddtask =
       TextEditingController();
   String taskitemname = "";
@@ -258,81 +248,77 @@ class _TaskAddPageState extends State<TaskAddPage> {
 
             const Text("    "),
             // Label for timer
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text("Minutes"),
-                  const Text("Second"),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text("Minutes"),
+                const Text("Second"),
+              ],
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // For Minute ListView
-                  Container(
-                    alignment: Alignment.center,
-                    height: 300,
-                    width: 80,
-                    child: ListView(
-                      children: [
-                        ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 60,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                title: Text(
-                                  '$index',
-                                  textAlign: TextAlign.center,
-                                ),
-                                tileColor: intminselectedindex == index
-                                    ? Colors.black12
-                                    : null,
-                                onTap: () {
-                                  setState(() {
-                                    intminselectedindex = index;
-                                  });
-                                },
-                              );
-                            })
-                      ],
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // For Minute ListView
+                Container(
+                  alignment: Alignment.center,
+                  height: 300,
+                  width: 80,
+                  child: ListView(
+                    children: [
+                      ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: 60,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              title: Text(
+                                '$index',
+                                textAlign: TextAlign.center,
+                              ),
+                              tileColor: intminselectedindex == index
+                                  ? Colors.black12
+                                  : null,
+                              onTap: () {
+                                setState(() {
+                                  intminselectedindex = index;
+                                });
+                              },
+                            );
+                          })
+                    ],
                   ),
-                  // For Second ListView
-                  Container(
-                    alignment: Alignment.center,
-                    height: 300,
-                    width: 80,
-                    child: ListView(
-                      children: [
-                        ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 60,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                title: Text(
-                                  '$index',
-                                  textAlign: TextAlign.center,
-                                ),
-                                tileColor: intsecselectedindex == index
-                                    ? Colors.black12
-                                    : null,
-                                onTap: () {
-                                  setState(() {
-                                    intsecselectedindex = index;
-                                  });
-                                },
-                              );
-                            })
-                      ],
-                    ),
+                ),
+                // For Second ListView
+                Container(
+                  alignment: Alignment.center,
+                  height: 300,
+                  width: 80,
+                  child: ListView(
+                    children: [
+                      ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: 60,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              title: Text(
+                                '$index',
+                                textAlign: TextAlign.center,
+                              ),
+                              tileColor: intsecselectedindex == index
+                                  ? Colors.black12
+                                  : null,
+                              onTap: () {
+                                setState(() {
+                                  intsecselectedindex = index;
+                                });
+                              },
+                            );
+                          })
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
 
             const Text("    "),
