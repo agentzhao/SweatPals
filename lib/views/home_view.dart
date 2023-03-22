@@ -25,7 +25,7 @@ class _HomeViewState extends State<HomeView> {
   GeoPoint? currentLocation;
   UserInfo? currentUser;
   List<GymInfo> gymsList = [];
-  bool _isMounted = false;
+  bool _isMounted = true;
 
   @override
   void initState() {
@@ -37,17 +37,20 @@ class _HomeViewState extends State<HomeView> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    if (_isMounted == false) return;
+
+    if (!_isMounted) return;
     await getCurrentLocation().then((value) {
       setState(() {
         currentLocation = value;
       });
     });
+    if (!_isMounted) return;
     await dbService.getUserInfo(uid).then((value) {
       setState(() {
         currentUser = value;
       });
     });
+    if (!_isMounted) return;
     await dbService.nearestGyms(currentLocation!).then((value) {
       setState(() {
         gymsList = value;
@@ -57,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void dispose() {
-    // _isMounted = false;
+    _isMounted = false;
     super.dispose();
   }
 

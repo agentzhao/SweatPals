@@ -10,17 +10,14 @@ import 'package:sweatpals/services/map/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sweatpals/utilities/toast.dart';
 
-// import 'package:sweatpals/views/user_view.dart';
-// import 'package:sweatpals/views/gym_view.dart';
-
 class MapView extends StatefulWidget {
   const MapView({Key? key}) : super(key: key);
 
   @override
-  _MapViewState createState() => _MapViewState();
+  MapViewState createState() => MapViewState();
 }
 
-class _MapViewState extends State<MapView> {
+class MapViewState extends State<MapView> {
   late GoogleMapController mapController;
   final geo = GeoFlutterFire();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
@@ -91,7 +88,7 @@ class _MapViewState extends State<MapView> {
           markers: Set<Marker>.of(markers.values),
           compassEnabled: true,
           onCameraMove: (CameraPosition position) {
-            _updateBasedOnPosition(position);
+            // update based on stream
           },
         ),
         Positioned(
@@ -194,9 +191,7 @@ class _MapViewState extends State<MapView> {
         position.latitude,
         position.longitude,
       );
-    }).catchError((e) {
-      print(e);
-    });
+    }).catchError((e) {});
 
     // refresh markers
     await dbService.getAllGyms().then((value) {
@@ -243,16 +238,6 @@ class _MapViewState extends State<MapView> {
   //     });
   //   });
   // }
-
-  void _updateBasedOnPosition(CameraPosition position) async {
-    // get the new position
-    double lat = position.target.latitude;
-    double lng = position.target.longitude;
-
-    // dbService.usersLocationStream(lat, lng).listen((List<DocumentSnapshot> documentList) {
-    //   // _updateMarkers(documentList);
-    // });
-  }
 
   Future<GeoPoint> getCurrentLocation() async {
     await getLocationPermission();

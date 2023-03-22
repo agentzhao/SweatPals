@@ -21,12 +21,14 @@ class UserView extends StatefulWidget {
 class _UserViewState extends State<UserView> {
   final dbService = DbService();
   final storageService = StorageService();
+
   UserInfo? currentUser;
   bool isFriend = false;
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
+
     dbService
         .getUserInfo(AuthService.firebase().currentUser!.uid)
         .then((value) {

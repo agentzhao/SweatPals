@@ -19,7 +19,7 @@ class _ChatsViewState extends State<ChatsView> {
   UserInfo? friendInfo;
   UserInfo? currentUser;
   List<dynamic> friendsList = [];
-  List<UserInfo> friendsInfo = [];
+  List<UserInfo>? friendsInfo = [];
 
   @override
   void didChangeDependencies() async {
@@ -28,6 +28,7 @@ class _ChatsViewState extends State<ChatsView> {
     await dbService.getUserInfo(uid).then((value) {
       setState(() {
         currentUser = value;
+        friendsList = value!.friends;
       });
     });
   }
@@ -57,62 +58,69 @@ class _ChatsViewState extends State<ChatsView> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
-      body: ListView(
-        children: [
-          const SizedBox(height: 24),
-          const Text(
-            "   Messages",
-            style: TextStyle(
-              fontSize: 24,
-              // fontWeight: FontWeight.bold,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          friendsList = currentUser!.friends;
+        },
+        child: ListView(
+          children: [
+            const SizedBox(height: 24),
+            const Text(
+              "   Messages",
+              style: TextStyle(
+                fontSize: 24,
+                // fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            alignment: Alignment.center,
-            child: FutureBuilder<UserInfo?>(
-              future: dbService.getUserInfo(uid),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final user = snapshot.data;
-                  friendsList = user!.friends;
+            const SizedBox(height: 10),
+            Container(
+              alignment: Alignment.center,
+              child: Builder(
+                builder: (BuildContext builder) {
                   // tile for each friend
-                  for (int i = 0; i < friendsList.length; i++) {
-                    String ff = friendsList[i] as String;
-                    dbService.getUserInfo(ff).then((result) {
-                      friendInfo = result;
-                      friendsInfo.add(result!);
-                    });
-                  }
-
-                  // if no friend, show "You have no friend"
                   return ListView.builder(
-                    itemCount: friendsInfo.length,
+                    itemCount: friendsList.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      if (friendsInfo.isEmpty)
-                        return const Text("You have no friends");
-                      else
-                        return buildTile(friendsInfo[index]);
+                      if (friendsList.isEmpty) {
+                        return const Text("You have no friends at the moment\n"
+                            "Click the button on the top right to find friends");
+                      } else {
+                        return FutureBuilder(
+                          future: dbService.getUserInfo(friendsList[index]),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return buildTile(snapshot.data as UserInfo);
+                            } else {
+                              return const Text("Loading...");
+                            }
+                          },
+                        );
+                      }
                     },
                   );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget buildTile(UserInfo user) => ListTile(
-      leading: CircleAvatar(
-        child: Text(user.firstName[0]),
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            Routes.userRoute,
+            arguments: user,
+          );
+        },
+        child: CircleAvatar(
+          // child: Text(user.firstName[0]),
+          backgroundImage: NetworkImage(user.photoURL),
+        ),
       ),
       title: Text("${user.firstName} ${user.lastName}"),
       subtitle: Text("@${user.username}"),
