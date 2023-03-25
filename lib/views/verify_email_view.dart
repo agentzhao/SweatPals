@@ -1,15 +1,20 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
+
 import 'package:flutter/material.dart';
 import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 
+/// Verification Page
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
 
   @override
   VerifyEmailViewState createState() => VerifyEmailViewState();
 }
-
+/// Verification Background task
 class VerifyEmailViewState extends State<VerifyEmailView> {
+  /// Process of Verification Page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
