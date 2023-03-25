@@ -1,3 +1,5 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import "package:flutter/material.dart";
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
@@ -6,7 +8,9 @@ import 'package:sweatpals/components/profile_picture.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sweatpals/constants/activities.dart';
 
+/// User Profile Page
 class UserView extends StatefulWidget {
+  /// instialise UserInfo Class
   final UserInfo user;
 
   const UserView({
@@ -18,13 +22,19 @@ class UserView extends StatefulWidget {
   UserViewState createState() => UserViewState();
 }
 
+/// User Profile background
 class UserViewState extends State<UserView> {
+  /// initialise Firebase Database service Class
   final dbService = DbService();
-  final storageService = StorageService();
 
+  /// initialise Firebase Storage service Clsss
+  final storageService = StorageService();
+  /// initialise UserInfo Class
   UserInfo? currentUser;
+  /// Check Friend Status
   bool isFriend = false;
 
+  //Fetch Info from Firebase Database
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
@@ -38,7 +48,7 @@ class UserViewState extends State<UserView> {
       });
     });
   }
-
+  /// Process for User Profile
   @override
   Widget build(BuildContext context) {
     return Scaffold(
