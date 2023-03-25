@@ -1,6 +1,8 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
 
-//Second page
+/// Add Task Pages 
 class TaskAddView extends StatefulWidget {
   const TaskAddView({super.key});
 
@@ -8,28 +10,33 @@ class TaskAddView extends StatefulWidget {
   TaskAddViewState createState() => TaskAddViewState();
 }
 
-//Second Page
+/// Add Task Page Background 
 class TaskAddViewState extends State<TaskAddView> {
+  /// TextBox Controoler initialise
   final TextEditingController _textFieldControllerAddtask =
       TextEditingController();
+  /// Task Item Name
   String taskitemname = "";
+  /// Minutes Number
   int intminselectedindex = -1;
+  /// Second Number
   int intsecselectedindex = -1;
+  /// Check Add Button Status
   bool boolTextinputed = false;
-
+  /// Throw Always When left the app
   @override
   void dispose() {
     _textFieldControllerAddtask.dispose();
     super.dispose();
   }
-
+  /// Inital State
   @override
   void initState() {
     super.initState();
     // See Text change
     _textFieldControllerAddtask.addListener(_onTextChanged);
   }
-
+  /// Trim excesses Text
   void _onTextChanged() {
     final String text = _textFieldControllerAddtask.text;
     if ((text.trim()) != "") {
@@ -42,7 +49,7 @@ class TaskAddViewState extends State<TaskAddView> {
       });
     }
   }
-
+  /// Process for Add Task
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,3 +174,4 @@ class TaskAddViewState extends State<TaskAddView> {
     );
   }
 }
+v
