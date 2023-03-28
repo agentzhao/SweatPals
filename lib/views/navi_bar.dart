@@ -1,27 +1,29 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
-
 import 'package:sweatpals/views/home_view.dart';
 import 'package:sweatpals/views/map_view.dart';
 import 'package:sweatpals/views/chats_view.dart';
 import 'package:sweatpals/views/profile_view.dart';
-
+/// Navigation Menu 
 class NaviBar extends StatefulWidget {
   const NaviBar({Key? key}) : super(key: key);
 
   @override
   NaviBarState createState() => NaviBarState();
 }
-
+/// Navigation Background Task
 class NaviBarState extends State<NaviBar> {
+  /// For Tracking Index of Screen
   int currentPageIndex = 0;
-
+ /// List of Screen/Pages
   final screens = [
     const HomeView(),
     const MapView(),
     const ChatsView(),
     const ProfileView(),
   ];
-
+  /// Process of Navigation
   @override
   Widget build(BuildContext context) => Scaffold(
       body: screens[currentPageIndex],
