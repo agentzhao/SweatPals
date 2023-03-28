@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
+import 'package:sweatpals/views/singlemessage.dart';
+import 'package:sweatpals/views/message_textfield.dart';
+
+
 
 class ChatBoxView extends StatefulWidget {
   final UserInfo otherUser;
@@ -22,8 +27,6 @@ class ChatBoxViewState extends State<ChatBoxView> {
   UserInfo? currentUser;
   UserInfo get otherUser => widget.otherUser;
 
-  final TextEditingController _textController = TextEditingController();
-  List<ChatMessage> messages = [];
 
   @override
   void didChangeDependencies() async {
@@ -45,108 +48,50 @@ class ChatBoxViewState extends State<ChatBoxView> {
       ),
       body: Column(
         children: [
-          Flexible(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8.0),
-              reverse: true,
-              itemBuilder: (_, int index) => messages[index],
-              itemCount: messages.length,
-            ),
-          ),
-          const Divider(height: 1.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-            ),
-            child: _buildTextComposer(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _handleSubmitted(String text) {
-    _textController.clear();
-    ChatMessage message = ChatMessage(
-      user: currentUser!.username,
-      text: text,
-    );
-    setState(() {
-      messages.insert(0, message);
-    });
-  }
-
-  Widget _buildTextComposer() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        children: [
+          // Show chat Message list
           Expanded(
-            child: TextField(
-              controller: _textController,
-              onSubmitted: _handleSubmitted,
-              decoration: const InputDecoration.collapsed(
-                hintText: "Send a message",
-              ),
+              child: Container(
+            padding: EdgeInsets.all(10),
+            color: Colors.grey.shade800,
+            child: StreamBuilder(
+            
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(currentUser!.uid)
+                  .collection('messages')
+                  .doc(otherUser.uid)
+                  .collection('chats')
+                  .orderBy("date", descending: false)
+                  .snapshots()
+                  .asBroadcastStream(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+                if (snapshot.hasData) {
+                  if (snapshot.data.docs.length < 1) {
+                    return const Center(
+                      child: Text("Say Hi"),
+                    );
+                  }
+                  ScrollController sc = ScrollController();
+                  return ListView.builder(
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      bool isMe = snapshot.data.docs[index]['senderId'] ==
+                          currentUser!.uid;
+                      return SingleMessage(
+                          Message: snapshot.data.docs[index]['message'],
+                          isMe: isMe);
+                    },
+                  );
+                }
+                return Center(child: CircularProgressIndicator());
+              },
             ),
-          ),
-          // todo: resize this
-          FloatingActionButton(
-            onPressed: () => _handleSubmitted(
-              _textController.text,
-            ),
-            backgroundColor: Colors.green,
-            child: const Icon(
-              Icons.send,
-              color: Colors.white,
-              size: 25,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class ChatMessage extends StatelessWidget {
-  final String user;
-  final String text;
-
-  const ChatMessage({
-    super.key,
-    required this.user,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 16.0),
-            child: const CircleAvatar(
-              // use first letter of user variable
-              child: Text("A"),
-            ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 5.0),
-                  child: Text(text),
-                )
-              ],
-            ),
-          ),
+          )),
+          // Message button
+          MessageTextField(currentUser!.uid, otherUser.uid),
         ],
       ),
     );
