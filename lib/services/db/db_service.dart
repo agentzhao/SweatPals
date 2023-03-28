@@ -1,6 +1,10 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:firebase_database/firebase_database.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 
@@ -99,6 +103,31 @@ class GymInfo {
       photoURL: data['photoURL'],
       coordinates: data['coordinates'],
       crowdLevel: data['crowdLevel'],
+    );
+  }
+}
+
+class MessageInfo {
+  String date;
+  String message;
+  String receiverId;
+  String senderId;
+  String type;
+
+  MessageInfo(
+      {required this.date,
+      required this.message,
+      required this.receiverId,
+      required this.senderId,
+      required this.type,});
+
+  factory MessageInfo.fromMap(Map<String, dynamic> data) {
+    return MessageInfo(
+      date: data['date'].toString(),
+      message: data['message'],
+      receiverId: data['receiverId'],
+      senderId: data['senderId'],
+      type: data['type'],
     );
   }
 }
