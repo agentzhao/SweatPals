@@ -1,3 +1,5 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
 import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
@@ -7,22 +9,26 @@ import 'package:sweatpals/components/profile_picture.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sweatpals/constants/activities.dart';
 import 'package:sweatpals/utilities/toast.dart';
-
+/// User Profile Page
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
 
   @override
   ProfileViewState createState() => ProfileViewState();
 }
-
+/// User Profile Page Background 
 class ProfileViewState extends State<ProfileView> {
+  ///initialise Firebase Database Class
   final dbService = DbService();
+  ///initialise Storage Service Class
   final storageService = StorageService();
-
+  /// Get Current User UID
   String get uid => AuthService.firebase().currentUser!.uid;
+  /// Get Current User UserName
   String get username => AuthService.firebase().currentUser!.username!;
+  /// Get the List of activites from Database
   List<int> get activities => dbService.getActivities(uid);
-
+  /// Process for User Profile
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +98,8 @@ class ProfileViewState extends State<ProfileView> {
     );
   }
 
+
+  /// To Edit User Profile
   Future<void> editProfile() async {
     String photoURL = await storageService.changeProfileImage(uid);
 
