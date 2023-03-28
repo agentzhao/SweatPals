@@ -1,3 +1,5 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
 import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/services/auth/auth_exceptions.dart';
@@ -7,27 +9,33 @@ import 'package:sweatpals/utilities/show_error_dialog.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sweatpals/constants/activities.dart';
 import 'package:sweatpals/utilities/toast.dart';
-
+/// Registration Page
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
 
   @override
   RegisterViewState createState() => RegisterViewState();
 }
-
+/// Registration Page Background
 class RegisterViewState extends State<RegisterView> {
+  /// First Name TextBox Controller
   late final TextEditingController _firstName;
+  /// Last Name TextBox Controller
   late final TextEditingController _lastName;
+  /// User Name TextBox Controller
   late final TextEditingController _username;
+  /// Email Address TextBox Controller
   late final TextEditingController _email;
+  /// Password TextBox Controller
   late final TextEditingController _password;
-
+  /// initialise Firebase DataBase Class
   final dbService = DbService();
-
+  /// Show list of Activity
   final _activities =
       activities.map((a) => MultiSelectItem<Activity>(a, a.name)).toList();
+  /// List of Selected Activites
   List<Activity> _selectedActivities = [];
-
+  /// inital State
   @override
   void initState() {
     super.initState();
@@ -37,7 +45,7 @@ class RegisterViewState extends State<RegisterView> {
     _email = TextEditingController();
     _password = TextEditingController();
   }
-
+  /// Ending State
   @override
   void dispose() {
     super.dispose();
@@ -47,7 +55,7 @@ class RegisterViewState extends State<RegisterView> {
     _email.dispose();
     _password.dispose();
   }
-
+  ///Process of Registration Page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
