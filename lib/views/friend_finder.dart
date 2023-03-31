@@ -1,3 +1,5 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import "package:flutter/material.dart";
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
@@ -8,6 +10,7 @@ import 'package:sweatpals/components/swiper_buttons.dart';
 import 'package:sweatpals/constants/routes.dart';
 import 'package:sweatpals/utilities/toast.dart';
 
+/// FriendFinder Page 
 class FriendFinderView extends StatefulWidget {
   const FriendFinderView({Key? key}) : super(key: key);
 
@@ -15,15 +18,21 @@ class FriendFinderView extends StatefulWidget {
   FriendFinderViewState createState() => FriendFinderViewState();
 }
 
+/// FriendFinder Page Background
 class FriendFinderViewState extends State<FriendFinderView> {
+  /// Initalise Swiper Controller for Find Friend
   final AppinioSwiperController controller = AppinioSwiperController();
+  /// Initliase FireBase DataBase Class
   final DbService dbService = DbService();
-
+  /// Initliase Current User Info
   UserInfo? currentUser;
+  /// List of UserInfo
   List<UserInfo> usersList = [];
+  /// List of Friend Name
   List<String> friendsList = [];
+  /// List of Container Widget
   List<Container> cards = [];
-
+  /// State Change
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
@@ -143,7 +152,7 @@ class FriendFinderViewState extends State<FriendFinderView> {
         )
         .toList();
   }
-
+  /// Process for Friend Finder Page
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -189,7 +198,7 @@ class FriendFinderViewState extends State<FriendFinderView> {
       ),
     );
   }
-
+  /// Check For User Swipe Left or Right
   void _swipe(int index, AppinioSwiperDirection direction) {
     // swipe right
     if (direction.name == "right") {
@@ -203,14 +212,14 @@ class FriendFinderViewState extends State<FriendFinderView> {
       cards.add(cards.removeAt(0));
     }
   }
-
+  /// Check for User Unswipe
   void _unswipe(bool unswiped) {
     if (unswiped) {
       // add back to cards
       cards.add(cards.removeAt(0));
     } else {}
   }
-
+  /// Display Friend Profile Image
   Widget profileImage(String imagePath) {
     final image = NetworkImage(imagePath);
 
