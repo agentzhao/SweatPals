@@ -1,3 +1,5 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
@@ -6,10 +8,13 @@ import 'package:sweatpals/services/auth/auth_user.dart';
 import 'package:sweatpals/services/auth/auth_provider.dart';
 import 'package:sweatpals/services/auth/auth_exceptions.dart';
 
+/// Firebase Authenticator Provider class
 class FirebaseAuthProvider implements AuthProvider {
+  /// Default Profile Img URL
   String defaultProfileImg =
       "https://pngimg.com/uploads/github/github_PNG80.png";
 
+  /// Initalise Firebase app
   @override
   Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -17,7 +22,7 @@ class FirebaseAuthProvider implements AuthProvider {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-
+  /// Create Users
   @override
   Future<AuthUser> createUser({
     required String username,
@@ -52,7 +57,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw GenericAuthException();
     }
   }
-
+  /// Retrieve Current User Authenticate Status
   @override
   AuthUser? get currentUser {
     final user = FirebaseAuth.instance.currentUser;
@@ -62,7 +67,7 @@ class FirebaseAuthProvider implements AuthProvider {
       return null;
     }
   }
-
+  /// Login 
   @override
   Future<AuthUser> logIn({
     required String email,
@@ -91,7 +96,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw GenericAuthException();
     }
   }
-
+  /// Logout
   @override
   Future<void> logOut() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -101,7 +106,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw UserNotLoggedInAuthException();
     }
   }
-
+  /// Send Email Verification 
   @override
   Future<void> sendEmailVerification() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -111,7 +116,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw UserNotLoggedInAuthException();
     }
   }
-
+  /// Login Annonymously
   @override
   Future<AuthUser> logInAnon({
     required String username,
@@ -139,7 +144,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw GenericAuthException();
     }
   }
-
+  /// Update Display Name
   @override
   Future<void> updateDisplayName(String username) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -149,7 +154,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw DisplayNameNotUpdatedException();
     }
   }
-
+  /// Update User Photo URL
   @override
   Future<void> updatePhotoURL(String photoURL) async {
     final user = FirebaseAuth.instance.currentUser;
