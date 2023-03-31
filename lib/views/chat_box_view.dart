@@ -1,3 +1,5 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:sweatpals/services/auth/auth_service.dart';
@@ -7,9 +9,11 @@ import 'package:sweatpals/views/singlemessage.dart';
 import 'package:sweatpals/views/message_textfield.dart';
 
 
-
+/// Chat Message Page
 class ChatBoxView extends StatefulWidget {
+  /// Initialise UserInfo Class
   final UserInfo otherUser;
+  /// Contrustor
   const ChatBoxView({
     Key? key,
     required this.otherUser,
@@ -18,16 +22,20 @@ class ChatBoxView extends StatefulWidget {
   @override
   ChatBoxViewState createState() => ChatBoxViewState();
 }
-
+/// Chat Message Page Background
 class ChatBoxViewState extends State<ChatBoxView> {
+  /// Initialise Firebase Database Class
   final DbService dbService = DbService();
+  /// Initliase Storage Service Class
   final storageService = StorageService();
-
+  /// Retrieve Current User UID
   String get uid => AuthService.firebase().currentUser!.uid;
+  /// Initialise UserInfo Class
   UserInfo? currentUser;
+  /// Retrieve Other User UID
   UserInfo get otherUser => widget.otherUser;
 
-
+  ///States Changes
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
@@ -38,7 +46,7 @@ class ChatBoxViewState extends State<ChatBoxView> {
       });
     });
   }
-
+  /// Process for Chat Message page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
