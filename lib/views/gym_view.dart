@@ -1,12 +1,16 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import "package:flutter/material.dart";
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
 import 'package:sweatpals/components/profile_picture.dart';
 
+/// Gym Info Page 
 class GymView extends StatefulWidget {
+  /// Initialise GymInfo Class
   final GymInfo gym;
-
+  /// Constructor
   const GymView({
     Key? key,
     required this.gym,
@@ -15,13 +19,17 @@ class GymView extends StatefulWidget {
   @override
   GymViewState createState() => GymViewState();
 }
-
+/// Gym Info Page Background
 class GymViewState extends State<GymView> {
+  /// Initialise Firebase Database Class
   final dbService = DbService();
+  /// Initialise Storage Service Class
   final storageService = StorageService();
+  /// Initliase User Info Class
   UserInfo? currentUser;
+  /// Check Favourite Status
   bool isFavourite = false;
-
+  /// State Changes
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
@@ -39,7 +47,7 @@ class GymViewState extends State<GymView> {
     //   widget.gym.PHOTOURL = 'assets/images/gym.png';
     // }
   }
-
+  /// Process for Gym Info Page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,7 +133,7 @@ class GymViewState extends State<GymView> {
     );
   }
 }
-
+/// Display Gym info
 Widget buildGym(GymInfo gym) => Column(
       children: [
         ListTile(
