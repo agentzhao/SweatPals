@@ -1,22 +1,26 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
 import 'package:sweatpals/constants/routes.dart';
-
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/auth/auth_exceptions.dart';
 import 'package:sweatpals/utilities/show_error_dialog.dart';
 import 'package:sweatpals/services/map/location.dart';
 
+/// Login Page
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
   State<LoginView> createState() => _LoginViewState();
 }
-
+/// Login Page Background
 class _LoginViewState extends State<LoginView> {
+  /// Text Box Controller for Email Address
   late final TextEditingController _email;
+  /// Text Box Controller for Password
   late final TextEditingController _password;
-
+  /// Inital State
   @override
   void initState() {
     super.initState();
@@ -24,14 +28,14 @@ class _LoginViewState extends State<LoginView> {
     _password = TextEditingController();
     getLocationPermission();
   }
-
+  /// Exit State
   @override
   void dispose() {
     super.dispose();
     _email.dispose();
     _password.dispose();
   }
-
+  /// Process for Login Page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
