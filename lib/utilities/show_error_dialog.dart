@@ -1,5 +1,7 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
-
+/// Display Error Message 
 Future<void> showErrorDialog(
   BuildContext context,
   String text,
