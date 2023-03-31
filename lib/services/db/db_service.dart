@@ -1,5 +1,6 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,20 +9,31 @@ import 'package:flutter/services.dart';
 // import 'package:firebase_database/firebase_database.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 
+///Initliase GeoFlutterFire Class
 final geo = GeoFlutterFire();
-
+/// UserInfo Class
 class UserInfo {
+  /// Text for UID
   final String uid;
+  /// Text for Username
   final String username;
+  /// Text for Firstname
   final String firstName;
+  /// Text for Lastname
   final String lastName;
+  /// Text for PhotoURL
   final String photoURL;
+  /// List of Activities
   final List<dynamic> activities;
+  /// User Cordinates
   final GeoPoint location;
+  /// Time Update
   final Timestamp lastUpdated;
+  /// List of Firends
   final List<dynamic> friends;
+  /// List of Favourites
   final List<dynamic> favourites;
-
+  /// Contrustor
   UserInfo({
     required this.uid,
     required this.username,
@@ -34,7 +46,7 @@ class UserInfo {
     required this.friends,
     required this.favourites,
   });
-
+  /// Create Userinfo Linked Hash Map 
   factory UserInfo.fromMap(Map<String, dynamic> data) {
     return UserInfo(
       uid: data['uid'],
@@ -50,24 +62,39 @@ class UserInfo {
     );
   }
 }
-
+/// Gym Info Class
 class GymInfo {
+  /// Text for address block House Number
   final String addressBlockHouseNumber;
+  /// Text for address Building Name
   final String addressBuildingName;
+  /// Text for address Floor Number
   final String addressFloorNumber;
+  /// Text for address Postal Code
   final String addressPostalCode;
+  /// Text for address Street Name
   final String addressStreetName;
+  /// Text for address Unit Number
   final String addressUnitNumber;
+  /// Text for Description
   final String description;
+  /// Text for Weblink
   final String hyperlink;
+  /// Text for Increment
   final String incCrc;
+  /// Text for x Position 
   final String landXAddressPoint;
+  /// Text for Y Position
   final String landYAddressPoint;
+  /// Text for Name
   final String name;
+  /// Text for Photo URL
   final String photoURL;
+  /// Gym Cordinates
   final GeoPoint coordinates;
+  /// Gym Crowl Level Value
   final int crowdLevel;
-
+  /// Contrustor
   GymInfo({
     required this.addressBlockHouseNumber,
     required this.addressBuildingName,
@@ -85,7 +112,7 @@ class GymInfo {
     required this.coordinates,
     required this.crowdLevel,
   });
-
+  /// Create GymInfo Linked Hash Map 
   factory GymInfo.fromMap(Map<String, dynamic> data) {
     return GymInfo(
       addressBlockHouseNumber: data['addressBlockHouseNumber'],
@@ -106,36 +133,12 @@ class GymInfo {
     );
   }
 }
-
-class MessageInfo {
-  String date;
-  String message;
-  String receiverId;
-  String senderId;
-  String type;
-
-  MessageInfo(
-      {required this.date,
-      required this.message,
-      required this.receiverId,
-      required this.senderId,
-      required this.type,});
-
-  factory MessageInfo.fromMap(Map<String, dynamic> data) {
-    return MessageInfo(
-      date: data['date'].toString(),
-      message: data['message'],
-      receiverId: data['receiverId'],
-      senderId: data['senderId'],
-      type: data['type'],
-    );
-  }
-}
-
+/// Firebase Database Class
 class DbService {
+  ///Initialse FirebaseFirestore Class
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  // create data for new user
+  /// Create data for new user
   Future<void> generateNewUser(
     String uid,
     String username,
@@ -158,7 +161,7 @@ class DbService {
       'favourites': [],
     });
   }
-
+  /// Retrieve User info
   Future<UserInfo?> getUserInfo(String uid) async {
     // List name = [];
     final docRef = firestore.collection("users").doc(uid);
@@ -170,7 +173,7 @@ class DbService {
       return null;
     }
   }
-
+  /// Update Name
   Future<void> updateName(String uid, String firstName, String lastName) {
     final CollectionReference users = firestore.collection('users');
 
@@ -179,7 +182,7 @@ class DbService {
       'lastName': lastName,
     });
   }
-
+  /// Update Activites
   Future<void> updateActivities(
     String uid,
     List<int> favouriteActivities,
@@ -190,7 +193,7 @@ class DbService {
       'activities': favouriteActivities,
     });
   }
-
+  /// Retrieve Activites
   List<int> getActivities(String uid) {
     final docRef = firestore.collection("users").doc(uid);
     docRef.get().then(
@@ -201,7 +204,7 @@ class DbService {
     );
     return [];
   }
-
+  /// Update User Location
   Future<void> updateUserLocation(
     String uid,
     double lat,
@@ -214,7 +217,7 @@ class DbService {
     });
   }
 
-  // Users
+  /// Users Collections from Firebase
   Stream<QuerySnapshot> usersLocationStream(double lat, double lng) {
     final Stream<QuerySnapshot> users =
         firestore.collection('users').snapshots();
@@ -231,7 +234,7 @@ class DbService {
 
     return users;
   }
-
+  /// add Friend
   Future<void> addFriend(String uid, String friendUid) {
     final CollectionReference users = firestore.collection('users');
 
@@ -239,7 +242,7 @@ class DbService {
       'friends': FieldValue.arrayUnion([friendUid]),
     });
   }
-
+  /// Remove Friend
   Future<void> removeFriend(String uid, String friendUid) {
     final CollectionReference users = firestore.collection('users');
 
@@ -247,7 +250,7 @@ class DbService {
       'friends': FieldValue.arrayRemove([friendUid]),
     });
   }
-
+/// Retrieve Firend
   Future<List<String>> getFriends(String uid) async {
     final docRef = firestore.collection("users").doc(uid);
     final snapshot = await docRef.get();
@@ -258,7 +261,7 @@ class DbService {
       return [];
     }
   }
-
+  /// Add Favourite
   Future<void> addFavourite(String uid, String favouriteUid) {
     final CollectionReference users = firestore.collection('users');
 
@@ -266,7 +269,7 @@ class DbService {
       'favourites': FieldValue.arrayUnion([favouriteUid]),
     });
   }
-
+  /// Remove Favourite
   Future<void> removeFavourite(String uid, String favouriteUid) {
     final CollectionReference users = firestore.collection('users');
 
@@ -275,7 +278,7 @@ class DbService {
     });
   }
 
-  // get stream of users in List<UserInfo> except current user
+  ///Retrieve stream of users in List<UserInfo> except current user
   Stream<List<UserInfo>> usersStream() {
     final Stream<QuerySnapshot> users =
         firestore.collection('users').snapshots();
@@ -292,7 +295,7 @@ class DbService {
       return usersList;
     });
   }
-
+  /// Retrieve All Users Info from Firebase Database
   Future<List<UserInfo>> getAllUsers(uid) async {
     final CollectionReference users = firestore.collection('users');
     return users.get().then((QuerySnapshot querySnapshot) {
@@ -309,7 +312,7 @@ class DbService {
     });
   }
 
-  // Gyms
+  /// Retireve All Gyms Info From FireBase Database
   Future<List<GymInfo>> getAllGyms() async {
     final CollectionReference gyms = firestore.collection('gyms');
     return gyms.get().then((QuerySnapshot querySnapshot) {
@@ -321,7 +324,7 @@ class DbService {
       return gymsList;
     });
   }
-
+  /// Scan Nearby Gyms
   Future<List<GymInfo>> nearestGyms(GeoPoint point) async {
     List<GymInfo> gymsList = await getAllGyms();
 
@@ -337,7 +340,7 @@ class DbService {
 
     return gymsList.take(6).toList();
   }
-
+  /// Calculate Distance between Each Cordinates
   String distanceBetween(GeoPoint point1, GeoPoint point2) {
     int decimalPlaces = 2;
     double lat1 = point1.latitude;
