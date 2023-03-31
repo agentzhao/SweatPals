@@ -1,11 +1,17 @@
+  /// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+  /// Version 1.1.5
 import 'package:flutter/material.dart';
-
+/// Text Field Widget
 class TextFieldWidget extends StatefulWidget {
+  /// Number of Maximum Lines
   final int maxLines;
+  /// Label Text
   final String label;
+  /// Label Message
   final String text;
+  /// Detect Value Changes
   final ValueChanged<String> onChanged;
-
+  /// Constructor
   const TextFieldWidget({
     Key? key,
     this.maxLines = 1,
@@ -17,22 +23,23 @@ class TextFieldWidget extends StatefulWidget {
   @override
   TextFieldWidgetState createState() => TextFieldWidgetState();
 }
-
+/// Text Field Widget Background
 class TextFieldWidgetState extends State<TextFieldWidget> {
+  /// TextBox Controller
   late final TextEditingController controller;
-
+  /// Initial State
   @override
   void initState() {
     super.initState();
     controller = TextEditingController(text: widget.text);
   }
-
+  /// Exit State
   @override
   void dispose() {
     super.dispose();
     controller.dispose();
   }
-
+  /// Process for Text Field Widget
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
