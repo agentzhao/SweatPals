@@ -1,10 +1,14 @@
+  /// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+  /// Version 1.1.5
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
-
+/// Example button widget
 class ExampleButton extends StatelessWidget {
+  /// Function On Tap
   final Function onTap;
+  /// Widget child
   final Widget child;
 
   const ExampleButton({
@@ -12,7 +16,7 @@ class ExampleButton extends StatelessWidget {
     required this.child,
     Key? key,
   }) : super(key: key);
-
+  ///Process for Example button
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -22,7 +26,7 @@ class ExampleButton extends StatelessWidget {
   }
 }
 
-//swipe card to the right side
+/// Swipe card to the right side
 Widget swipeRightButton(AppinioSwiperController controller) {
   return ExampleButton(
     onTap: () => controller.swipeRight(),
@@ -51,7 +55,7 @@ Widget swipeRightButton(AppinioSwiperController controller) {
   );
 }
 
-//swipe card to the left side
+/// Swipe card to the left side
 Widget swipeLeftButton(AppinioSwiperController controller) {
   return ExampleButton(
     onTap: () => controller.swipeLeft(),
@@ -80,7 +84,7 @@ Widget swipeLeftButton(AppinioSwiperController controller) {
   );
 }
 
-//unswipe card
+///Unswipe card
 Widget unswipeButton(AppinioSwiperController controller) {
   return ExampleButton(
     onTap: () => controller.unswipe(),
