@@ -1,151 +1,115 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
+import 'package:sweatpals/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:sweatpals/services/map/location.dart';
-import 'package:sweatpals/constants/routes.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+/// Friend List Page 
+class ChatsView extends StatefulWidget {
+  const ChatsView({Key? key}) : super(key: key);
 
   @override
-  HomeViewState createState() => HomeViewState();
+  ChatsViewState createState() => ChatsViewState();
 }
-
-class HomeViewState extends State<HomeView> {
+/// Friend List Page Background
+class ChatsViewState extends State<ChatsView> {
+  /// Initalise Firebase DataBase Class
   final DbService dbService = DbService();
+  /// Initliase Storage Service Class
   final storageService = StorageService();
-
+  /// Retrieve Current User UID
   String get uid => AuthService.firebase().currentUser!.uid;
-  String get username => AuthService.firebase().currentUser!.username!;
-
-  GeoPoint? currentLocation;
+  /// Initialise UserInfo Class
+  UserInfo? friendInfo;
+  /// Initialise UserInfo Class
   UserInfo? currentUser;
-  List<GymInfo> gymsList = [];
-  bool _isMounted = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _isMounted = true;
-    // rest of initState code...
-  }
-
+  /// List of Friend 
+  List<dynamic> friendsList = [];
+  /// List of Friend Info
+  List<UserInfo>? friendsInfo = [];
+  /// State Changes
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    if (!_isMounted) return;
-    await getCurrentLocation().then((value) {
-      setState(() {
-        currentLocation = value;
-      });
-    });
-    if (!_isMounted) return;
     await dbService.getUserInfo(uid).then((value) {
       setState(() {
         currentUser = value;
-      });
-    });
-    if (!_isMounted) return;
-    await dbService.nearestGyms(currentLocation!).then((value) {
-      setState(() {
-        gymsList = value;
+        friendsList = value!.friends;
       });
     });
   }
-
-  @override
-  void dispose() {
-    _isMounted = false;
-    super.dispose();
-  }
-
+  /// Process for Friend List Page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(top: 10),
+        height: 40,
+        width: 40,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              Routes.friendFinderRoute,
+            );
+          },
+          backgroundColor: Colors.green,
+          tooltip: 'Find Friends',
+          elevation: 0,
+          splashColor: Colors.grey,
+          child: const Icon(
+            Icons.person_add,
+            color: Colors.white,
+            size: 25,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       body: RefreshIndicator(
-        onRefresh: _refreshData,
+        onRefresh: () async {
+          friendsList = currentUser!.friends;
+        },
         child: ListView(
           children: [
             const SizedBox(height: 24),
-            Container(
-              child: currentUser != null
-                  ? welcomeText(currentUser!)
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-            ),
-            const SizedBox(height: 24),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                "     Facilities Near You",
-                style: TextStyle(
-                  fontSize: 24,
-                  // fontWeight: FontWeight.bold,
-                ),
+            const Text(
+              "   Messages",
+              style: TextStyle(
+                fontSize: 24,
+                // fontWeight: FontWeight.bold,
               ),
             ),
-            // if no gyms near you, show "No gyms near you"
-            ListView.builder(
-              itemCount: gymsList.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                if (gymsList.isEmpty) {
-                  return const Text("No gyms near you");
-                } else {
-                  return buildTile(gymsList[index]);
-                }
-              },
-            ),
-
-            // show current user location at bottom of screen
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: currentLocation != null
-                  ? Text(
-                      "Current Location: ${currentLocation!.latitude}, ${currentLocation!.longitude}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                      ),
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-            ),
-
             const SizedBox(height: 10),
-
-            // Workout and Route Track buttons
             Container(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.workoutRoute,
-                      );
+              alignment: Alignment.center,
+              child: Builder(
+                builder: (BuildContext builder) {
+                  // tile for each friend
+                  return ListView.builder(
+                    itemCount: friendsList.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      if (friendsList.isEmpty) {
+                        return const Text("You have no friends at the moment\n"
+                            "Click the button on the top right to find friends");
+                      } else {
+                        return FutureBuilder(
+                          future: dbService.getUserInfo(friendsList[index]),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return buildTile(snapshot.data as UserInfo);
+                            } else {
+                              return const Text("Loading...");
+                            }
+                          },
+                        );
+                      }
                     },
-                    child: const Text("Workout"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.routeTrackRoute,
-                      );
-                    },
-                    child: const Text("Route Tracker"),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ],
@@ -153,66 +117,23 @@ class HomeViewState extends State<HomeView> {
       ),
     );
   }
-
-  Future<void> _refreshData() async {
-    // Perform any asynchronous operation to refresh data.
-    getCurrentLocation().then((value) {
-      setState(() {
-        currentLocation = value;
+/// Display Account Information
+  Widget buildTile(UserInfo user) => ListTile(
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            Routes.userRoute,
+            arguments: user,
+          );
+        },
+        child: Image.network(user.photoURL),
+      ),
+      title: Text("${user.firstName} ${user.lastName}"),
+      subtitle: Text("@${user.username}"),
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          Routes.chatboxRoute,
+          arguments: user,
+        );
       });
-    });
-    await dbService.getUserInfo(uid).then((value) {
-      setState(() {
-        currentUser = value;
-      });
-    });
-    await dbService.nearestGyms(currentLocation!).then((value) {
-      setState(() {
-        gymsList = value;
-      });
-    });
-  }
-
-  Widget welcomeText(UserInfo user) {
-    return Column(
-      children: [
-        Container(
-            alignment: Alignment.centerLeft,
-            child: Text("    Time to get sweaty, \n    ${user.firstName}",
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                )))
-      ],
-    );
-  }
-
-  Widget buildTile(GymInfo gym) => Container(
-        margin: const EdgeInsets.symmetric(
-          vertical: 0,
-          horizontal: 16,
-        ),
-        child: ListTile(
-            leading: CircleAvatar(
-              child: Text(gym.name[0]),
-            ),
-            title: Text(gym.name),
-            subtitle: Text("Distance: ${dbService.distanceBetween(
-              currentLocation!,
-              gym.coordinates,
-            )} km"),
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                Routes.gymRoute,
-                arguments: gym,
-              );
-            }),
-      );
-
-  Future<GeoPoint> getCurrentLocation() async {
-    await getLocationPermission();
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    return GeoPoint(position.latitude, position.longitude);
-  }
 }
