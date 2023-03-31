@@ -1,8 +1,13 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
-
+/// Profile Picture widget
 class ProfilePicture extends StatelessWidget {
+  /// Text for Image Path 
   final String imagePath;
+  /// Check Edit Status
   final bool isEdit;
+  /// Check Callback from click Status
   final VoidCallback onClicked;
 
   const ProfilePicture({
@@ -11,7 +16,7 @@ class ProfilePicture extends StatelessWidget {
     required this.onClicked,
     required this.isEdit,
   }) : super(key: key);
-
+  /// Process for Profile Picture widget
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.primary;
@@ -29,7 +34,7 @@ class ProfilePicture extends StatelessWidget {
       ),
     );
   }
-
+/// Build Images
   Widget buildImage() {
     final image = NetworkImage(imagePath);
 
@@ -46,7 +51,7 @@ class ProfilePicture extends StatelessWidget {
       ),
     );
   }
-
+/// Build Edit Icon
   Widget buildEditIcon(Color color) => buildCircle(
         color: Colors.white,
         all: 1,
@@ -64,7 +69,7 @@ class ProfilePicture extends StatelessWidget {
           ),
         ),
       );
-
+/// Build Circle
   Widget buildCircle({
     required Widget child,
     required double all,
