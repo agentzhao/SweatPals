@@ -1,5 +1,6 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
-
 import 'package:sweatpals/constants/routes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
@@ -10,38 +11,50 @@ import 'package:sweatpals/services/map/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sweatpals/utilities/toast.dart';
 
+/// Mapping Page
 class MapView extends StatefulWidget {
   const MapView({Key? key}) : super(key: key);
 
   @override
   MapViewState createState() => MapViewState();
 }
-
+/// Mapping Page Background
 class MapViewState extends State<MapView> {
+  /// Google Map Controller
   late GoogleMapController mapController;
+  /// Initialise GeoFlutter Fire Class
   final geo = GeoFlutterFire();
+
+  /// List of Markers
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-
+  /// Retrieve Current User UID
   String get uid => AuthService.firebase().currentUser!.uid;
+  /// Initalise Firebase DataBase Class
   final DbService dbService = DbService();
-
+  /// Initalise GeoPoint and Set location to 0,0
   GeoPoint currentLocation = const GeoPoint(0, 0);
+  /// Initalise UserInfo Class
   UserInfo? currentUser;
-
+  /// List of Button Selected Status
   final List<bool> _selected = <bool>[true, false];
+  /// List of Gym Info
   List<GymInfo> gymsList = [];
+  /// List of Markers for Gym
   Map<MarkerId, Marker> gymMarkers = <MarkerId, Marker>{};
+  /// List  of User Info
   List<UserInfo> usersList = [];
+  /// List of Markes for User
   Map<MarkerId, Marker> userMarkers = <MarkerId, Marker>{};
 
   Stream<List<UserInfo>> usersStream = const Stream.empty();
 
+  /// Initial Position for Google Map (Singapore)
   // Singapore
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(1.3521, 103.8198),
     zoom: 10,
   );
-
+  /// State Changes
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
@@ -71,7 +84,7 @@ class MapViewState extends State<MapView> {
     // todo: userstream
     // usersStream = dbService.usersStream();
   }
-
+  ///Process for Mapping 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -156,7 +169,7 @@ class MapViewState extends State<MapView> {
     );
   }
 
-  // Getting the current user location
+  /// Getting the current user location
   _onMapCreated(GoogleMapController controller) {
     setState(() {
       mapController = controller;
@@ -165,7 +178,7 @@ class MapViewState extends State<MapView> {
     });
   }
 
-  // Getting user location using geolocator
+  /// Getting user location using geolocator
   getUserLocation() async {
     getLocationPermission();
 
@@ -238,7 +251,7 @@ class MapViewState extends State<MapView> {
   //     });
   //   });
   // }
-
+/// Get Device Current Location
   Future<GeoPoint> getCurrentLocation() async {
     await getLocationPermission();
     Position position = await Geolocator.getCurrentPosition(
@@ -246,7 +259,7 @@ class MapViewState extends State<MapView> {
     return GeoPoint(position.latitude, position.longitude);
   }
 
-// convert gymsList to markers
+/// convert gymsList to markers
   void loadGyms() {
     for (int i = 0; i < gymsList.length; i++) {
       var markerIdVal = i.toString();
@@ -280,7 +293,7 @@ class MapViewState extends State<MapView> {
       gymMarkers[markerId] = marker;
     }
   }
-
+/// convert Userlist to markers
   void loadUsers() async {
     for (int i = 0; i < usersList.length; i++) {
       var markerIdVal = usersList[i].uid;
