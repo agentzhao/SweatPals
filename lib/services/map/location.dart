@@ -1,7 +1,7 @@
 /// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
 /// Version 1.1.5
 import 'package:geolocator/geolocator.dart';
-/// Get Device Location 
+/// Get Device GPS Permission
 Future<void> getLocationPermission() async {
   bool serviceEnabled;
   LocationPermission permission;
