@@ -1,7 +1,11 @@
+/// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+/// Version 1.1.5
 import 'package:flutter/material.dart';
-
+/// Message Widget
 class MessageWidget extends StatefulWidget {
+  /// Text for Username
   final String username;
+  /// Text for Messages
   final String message;
 
   const MessageWidget({
@@ -13,8 +17,9 @@ class MessageWidget extends StatefulWidget {
   @override
   MessageWidgetState createState() => MessageWidgetState();
 }
-
+/// Message Widget background
 class MessageWidgetState extends State<MessageWidget> {
+  /// Process for Message widget
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(8),
