@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 6.1.5">
+  <meta name="description" content="sweatpals API docs, for the Dart programming language.">
+  <title>sweatpals - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">sweatpals package</li>
+  </ol>
+  <div class="self-name">sweatpals</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span class="material-symbols-outlined">
+        brightness_4
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="sweatpals">SweatPals</h1>
+<p>AY22/23 SC2006 SWE</p>
+<p>Members: <a href="https://github.com/iLowLife">Cheng Feng</a>, <a href="https://github.com/LCP2022">Chin Poh</a>, <a href="https://github.com/agentzhao">Hong Zhao</a>, <a href="https://github.com/JarrelNT">Jarrel</a>, <a href="https://github.com/rphoen">Ryan</a></p>
+<h3 id="setup-environment">Setup Environment</h3>
+<ul>
+<li>Make sure you have <a href="https://docs.flutter.dev/get-started/install">flutter</a> installed</li>
+<li>Use an <a href="https://developer.android.com/studio/index.html#command-tools">emulator</a> or mirror your android phone using <a href="https://github.com/Genymobile/scrcpy">scrcpy</a></li>
+</ul>
+<pre class="language-dart"><code>git clone https://github.com/agentzhao/SweatPals.git
+flutter pub get
+</code></pre>
+<p>Create project on firebase and use <a href="https://firebase.flutter.dev/docs/cli/">flutterfire</a> to generate <code>firebase_options.dart</code></p>
+<h3 id="todo">Todo</h3>
+<ul>
+<li><code> </code> Favicons and splash screen</li>
+</ul>
+<h3 id="building-for-production">Building for production</h3>
+<pre class="language-dart"><code>flutter build web
+firebase deploy
+</code></pre>
+<h3 id="research">Research</h3>
+<ul>
+<li><a href="https://pub.dev/packages/location/">https://pub.dev/packages/location/</a></li>
+<li><a href="https://pub.dev/packages/geolocator/">https://pub.dev/packages/geolocator/</a></li>
+<li><a href="https://pub.dev/packages/swipeable_card_stack">https://pub.dev/packages/swipeable_card_stack</a></li>
+</ul>
+<h3 id="resources">Resources</h3>
+<ul>
+<li><a href="https://docs.flutter.dev/get-started/codelab">Lab: Write your first Flutter app</a></li>
+<li><a href="https://docs.flutter.dev/cookbook">Cookbook: Useful Flutter samples</a></li>
+<li><a href="https://docs.flutter.dev/">Flutter Docs</a></li>
+</ul>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="activities">
+  <span class="name"><a href="constants_activities/constants_activities-library.html">activities</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="auth_exceptions">
+  <span class="name"><a href="services_auth_auth_exceptions/services_auth_auth_exceptions-library.html">auth_exceptions</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="auth_provider">
+  <span class="name"><a href="services_auth_auth_provider/services_auth_auth_provider-library.html">auth_provider</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="auth_service">
+  <span class="name"><a href="services_auth_auth_service/services_auth_auth_service-library.html">auth_service</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="auth_user">
+  <span class="name"><a href="services_auth_auth_user/services_auth_auth_user-library.html">auth_user</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="chat_box_view">
+  <span class="name"><a href="views_chat_box_view/views_chat_box_view-library.html">chat_box_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="chats_view">
+  <span class="name"><a href="views_chats_view/views_chats_view-library.html">chats_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="db_service">
+  <span class="name"><a href="services_db_db_service/services_db_db_service-library.html">db_service</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="edit_profile_view">
+  <span class="name"><a href="views_edit_profile_view/views_edit_profile_view-library.html">edit_profile_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="firebase_auth_provider">
+  <span class="name"><a href="services_auth_firebase_auth_provider/services_auth_firebase_auth_provider-library.html">firebase_auth_provider</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="firebase_options">
+  <span class="name"><a href="firebase_options/firebase_options-library.html">firebase_options</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="friend_finder">
+  <span class="name"><a href="views_friend_finder/views_friend_finder-library.html">friend_finder</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="gym_view">
+  <span class="name"><a href="views_gym_view/views_gym_view-library.html">gym_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="home_view">
+  <span class="name"><a href="views_home_view/views_home_view-library.html">home_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="location">
+  <span class="name"><a href="services_map_location/services_map_location-library.html">location</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="login_view">
+  <span class="name"><a href="views_login_view/views_login_view-library.html">login_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="main">
+  <span class="name"><a href="main/main-library.html">main</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="map_view">
+  <span class="name"><a href="views_map_view/views_map_view-library.html">map_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="message">
+  <span class="name"><a href="components_message/components_message-library.html">message</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="message_textfield">
+  <span class="name"><a href="views_message_textfield/views_message_textfield-library.html">message_textfield</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="navi_bar">
+  <span class="name"><a href="views_navi_bar/views_navi_bar-library.html">navi_bar</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="profile_picture">
+  <span class="name"><a href="components_profile_picture/components_profile_picture-library.html">profile_picture</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="profile_view">
+  <span class="name"><a href="views_profile_view/views_profile_view-library.html">profile_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="register_view">
+  <span class="name"><a href="views_register_view/views_register_view-library.html">register_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="routes">
+  <span class="name"><a href="constants_routes/constants_routes-library.html">routes</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="routetrack_view">
+  <span class="name"><a href="views_routetrack_view/views_routetrack_view-library.html">routetrack_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="settings_view">
+  <span class="name"><a href="views_settings_view/views_settings_view-library.html">settings_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="show_error_dialog">
+  <span class="name"><a href="utilities_show_error_dialog/utilities_show_error_dialog-library.html">show_error_dialog</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="singlemessage">
+  <span class="name"><a href="views_singlemessage/views_singlemessage-library.html">singlemessage</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="storage_service">
+  <span class="name"><a href="services_storage_storage_service/services_storage_storage_service-library.html">storage_service</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="swiper_buttons">
+  <span class="name"><a href="components_swiper_buttons/components_swiper_buttons-library.html">swiper_buttons</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="taskadd_view">
+  <span class="name"><a href="views_taskadd_view/views_taskadd_view-library.html">taskadd_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="text_field_widget">
+  <span class="name"><a href="components_text_field_widget/components_text_field_widget-library.html">text_field_widget</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="toast">
+  <span class="name"><a href="utilities_toast/utilities_toast-library.html">toast</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="user_view">
+  <span class="name"><a href="views_user_view/views_user_view-library.html">user_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="verify_email_view">
+  <span class="name"><a href="views_verify_email_view/views_verify_email_view-library.html">verify_email_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+          <dt id="workout_view">
+  <span class="name"><a href="views_workout_view/views_workout_view-library.html">workout_view</a></span> 
+
+</dt>
+<dd>Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
+Version 1.1.5
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li class="self-crumb">sweatpals package</li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">sweatpals</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="constants_activities/constants_activities-library.html">activities</a></li>
+      <li><a href="services_auth_auth_exceptions/services_auth_auth_exceptions-library.html">auth_exceptions</a></li>
+      <li><a href="services_auth_auth_provider/services_auth_auth_provider-library.html">auth_provider</a></li>
+      <li><a href="services_auth_auth_service/services_auth_auth_service-library.html">auth_service</a></li>
+      <li><a href="services_auth_auth_user/services_auth_auth_user-library.html">auth_user</a></li>
+      <li><a href="views_chat_box_view/views_chat_box_view-library.html">chat_box_view</a></li>
+      <li><a href="views_chats_view/views_chats_view-library.html">chats_view</a></li>
+      <li><a href="services_db_db_service/services_db_db_service-library.html">db_service</a></li>
+      <li><a href="views_edit_profile_view/views_edit_profile_view-library.html">edit_profile_view</a></li>
+      <li><a href="services_auth_firebase_auth_provider/services_auth_firebase_auth_provider-library.html">firebase_auth_provider</a></li>
+      <li><a href="firebase_options/firebase_options-library.html">firebase_options</a></li>
+      <li><a href="views_friend_finder/views_friend_finder-library.html">friend_finder</a></li>
+      <li><a href="views_gym_view/views_gym_view-library.html">gym_view</a></li>
+      <li><a href="views_home_view/views_home_view-library.html">home_view</a></li>
+      <li><a href="services_map_location/services_map_location-library.html">location</a></li>
+      <li><a href="views_login_view/views_login_view-library.html">login_view</a></li>
+      <li><a href="main/main-library.html">main</a></li>
+      <li><a href="views_map_view/views_map_view-library.html">map_view</a></li>
+      <li><a href="components_message/components_message-library.html">message</a></li>
+      <li><a href="views_message_textfield/views_message_textfield-library.html">message_textfield</a></li>
+      <li><a href="views_navi_bar/views_navi_bar-library.html">navi_bar</a></li>
+      <li><a href="components_profile_picture/components_profile_picture-library.html">profile_picture</a></li>
+      <li><a href="views_profile_view/views_profile_view-library.html">profile_view</a></li>
+      <li><a href="views_register_view/views_register_view-library.html">register_view</a></li>
+      <li><a href="constants_routes/constants_routes-library.html">routes</a></li>
+      <li><a href="views_routetrack_view/views_routetrack_view-library.html">routetrack_view</a></li>
+      <li><a href="views_settings_view/views_settings_view-library.html">settings_view</a></li>
+      <li><a href="utilities_show_error_dialog/utilities_show_error_dialog-library.html">show_error_dialog</a></li>
+      <li><a href="views_singlemessage/views_singlemessage-library.html">singlemessage</a></li>
+      <li><a href="services_storage_storage_service/services_storage_storage_service-library.html">storage_service</a></li>
+      <li><a href="components_swiper_buttons/components_swiper_buttons-library.html">swiper_buttons</a></li>
+      <li><a href="views_taskadd_view/views_taskadd_view-library.html">taskadd_view</a></li>
+      <li><a href="components_text_field_widget/components_text_field_widget-library.html">text_field_widget</a></li>
+      <li><a href="utilities_toast/utilities_toast-library.html">toast</a></li>
+      <li><a href="views_user_view/views_user_view-library.html">user_view</a></li>
+      <li><a href="views_verify_email_view/views_verify_email_view-library.html">verify_email_view</a></li>
+      <li><a href="views_workout_view/views_workout_view-library.html">workout_view</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    sweatpals
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

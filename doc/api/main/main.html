@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the main function from the main library, for the Dart programming language.">
+  <title>main function - main library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">sweatpals</a></li>
+    <li><a href="../main/main-library.html">main</a></li>
+    <li class="self-crumb">main function</li>
+  </ol>
+  <div class="self-name">main</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span class="material-symbols-outlined">
+        brightness_4
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-function">main</span> function 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+
+<span class="returntype">void</span>
+<span class="name ">main</span>(<wbr>)
+
+        
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Main Function to Run the App</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  &#47;&#47; loading env vars
+  &#47;&#47; await dotenv.load(fileName: &quot;.env&quot;);
+  &#47;&#47; initialize firebase
+  await AuthService.firebase().initialize();
+
+  runApp(
+    MaterialApp(
+      title: &#39;SweatPals&#39;,
+      theme: ThemeData(
+        &#47;&#47; #079A4B
+        brightness: Brightness.light,
+        primarySwatch: Colors.green,
+        primaryColor: Colors.greenAccent[400],
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.green,
+        primaryColor: Colors.greenAccent[400],
+      ),
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      home: const MainPage(),
+      routes: {
+        Routes.loginRoute: (context) =&gt; const LoginView(),
+        Routes.registerRoute: (context) =&gt; const RegisterView(),
+        Routes.verifyEmailRoute: (context) =&gt; const VerifyEmailView(),
+        Routes.naviBarRoute: (context) =&gt; const NaviBar(),
+        Routes.homeRoute: (context) =&gt; const HomeView(),
+        Routes.mapRoute: (context) =&gt; const MapView(),
+        Routes.profileRoute: (context) =&gt; const ProfileView(),
+        Routes.editProfileRoute: (context) =&gt; const EditProfileView(),
+        Routes.settingsRoute: (context) =&gt; const SettingsView(),
+        Routes.friendFinderRoute: (context) =&gt; const FriendFinderView(),
+        Routes.workoutRoute: (context) =&gt; const WorkoutView(),
+        Routes.routeTrackRoute: (context) =&gt; const RouteTrackView(),
+        Routes.taskAddRoute: (context) =&gt; const TaskAddView(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == Routes.userRoute) {
+          final args = settings.arguments as UserInfo;
+          return MaterialPageRoute(
+            builder: (context) =&gt; UserView(
+              user: args,
+            ),
+          );
+        }
+        if (settings.name == Routes.gymRoute) {
+          final args = settings.arguments as GymInfo;
+          return MaterialPageRoute(
+            builder: (context) =&gt; GymView(
+              gym: args,
+            ),
+          );
+        }
+        if (settings.name == Routes.chatboxRoute) {
+          final args = settings.arguments as UserInfo;
+          return MaterialPageRoute(
+            builder: (context) =&gt; ChatBoxView(
+              otherUser: args,
+            ),
+          );
+        }
+        return null;
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) =&gt; const Scaffold(
+            body: Center(
+              child: Text(&#39;Page not found&#39;),
+            ),
+          ),
+        );
+      },
+    ),
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../index.html">sweatpals</a></li>
+  <li><a href="../main/main-library.html">main</a></li>
+  <li class="self-crumb">main function</li>
+</ol>
+
+
+    <h5>main library</h5>
+    <ol>
+      <li class="section-title"><a href="../main/main-library.html#classes">Classes</a></li>
+        <li><a href="../main/MainPage-class.html">MainPage</a></li>
+
+
+
+
+
+      <li class="section-title"><a href="../main/main-library.html#functions">Functions</a></li>
+        <li><a href="../main/main.html">main</a></li>
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-left-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    sweatpals
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

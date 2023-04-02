@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the build method from the RouteTrackViewState class, for the Dart programming language.">
+  <title>build method - RouteTrackViewState class - routetrack_view library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">sweatpals</a></li>
+    <li><a href="../../views_routetrack_view/views_routetrack_view-library.html">routetrack_view</a></li>
+    <li><a href="../../views_routetrack_view/RouteTrackViewState-class.html">RouteTrackViewState</a></li>
+    <li class="self-crumb">build method</li>
+  </ol>
+  <div class="self-name">build</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span class="material-symbols-outlined">
+        brightness_4
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">build</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></span>
+<span class="name ">build</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="build-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span></span></li>
+</ol>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Process of Route Tracker</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: SizedBox(
+      child: Scaffold(
+        &#47;&#47;Title Bar
+        appBar: AppBar(
+            title: const Text(&quot;Route Tracker&quot;),
+            backgroundColor: Colors.green),
+        &#47;&#47; Google Map
+        body: _isGpsEnabled
+            ? Stack(children: [
+                &#47;&#47; Google Map
+                GoogleMap(
+                  initialCameraPosition: SetCameraPostion(1.3521, 103.8198),
+                  onMapCreated: (GoogleMapController controller) {
+                    _mapController = controller;
+                    sS0.setGMControler(controller);
+                  },
+                  polylines: _polylines,
+                  markers: _markers,
+                  myLocationEnabled: true,
+                ),
+                &#47;&#47; floating btm
+                Positioned(
+                  right: 5,
+                  bottom: 220,
+                  child: SizedBox(
+                    height: 40,
+                    child: FloatingActionButton(
+                        child: checkbtmoepn
+                            ? const Icon(Icons.expand_more)
+                            : const Icon(Icons.expand_less),
+                        onPressed: () {
+                          setState(() {
+                            checkbtmoepn = !checkbtmoepn;
+                          });
+                        }),
+                  ),
+                ),
+                &#47;&#47;Bottom Sheet Bar
+                Positioned(
+                  bottom: 0,
+                  child: checkbtmoepn
+                      ? SizedBox(
+                          child: Container(
+                            height: 200,
+                            width: 380,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                                color: Colors.black87,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(45),
+                                    topRight: Radius.circular(45))),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  &#47;&#47; StartButton
+                                  checkStartbtn
+                                      ? FloatingActionButton(
+                                          child: const Icon(Icons.start),
+                                          onPressed: () {
+                                            if (count == 1) _clearTracking();
+                                            setState(() {
+                                              if (count == 1) count = 0;
+                                              checkStartbtn = false;
+                                              checkStopbtn = true;
+                                              _isTracking = true;
+                                              totaldistance = 0;
+                                              count++;
+                                            });
+                                            checkGps();
+                                            _getLocation();
+                                            _addMarker(
+                                                LatLng(currentloc.latitude,
+                                                    currentloc.longitude),
+                                                &quot;Start point&quot;);
+                                            _startTracking();
+                                            _updatePolyline();
+                                            timer.start();
+                                          })
+                                      : const Text(&quot;&quot;),
+                                  &#47;&#47; Stop Button
+                                  checkStopbtn
+                                      ? FloatingActionButton(
+                                          child: const Icon(Icons.stop),
+                                          onPressed: () {
+                                            setState(() {
+                                              checkStartbtn = true;
+                                              checkStopbtn = false;
+                                              _isTracking = false;
+                                              sS0.setdistance(
+                                                  totaldistance.toString());
+                                              sS0.settime(
+                                                  timer.displaytime());
+                                            });
+                                            _addMarker(
+                                                LatLng(currentloc.latitude,
+                                                    currentloc.longitude),
+                                                &quot;End Point&quot;);
+                                            _stopTracking();
+                                            sS0.captureAndSaveScreenshot();
+                                            timer.stop();
+                                            _showSnackBar();
+                                          })
+                                      : const Text(&quot;&quot;),
+                                  &#47;&#47;------
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        width: 100,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blue,
+                                            borderRadius:
+                                                BorderRadius.circular(45)),
+                                        child: Text(
+                                          timer.displaytime(),
+                                          style:
+                                              const TextStyle(fontSize: 20),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 50,
+                                        width: 100,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blue,
+                                            borderRadius:
+                                                BorderRadius.circular(45)),
+                                        child: Text(
+                                          &quot;${totaldistance.toStringAsFixed(2).padLeft(2, &quot;0&quot;).padRight(2, &quot;0&quot;)}:KM&quot;,
+                                          style:
+                                              const TextStyle(fontSize: 20),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                          ),
+                        )
+                      : SizedBox(
+                          child: Container(
+                          height: 0,
+                        )),
+                ),
+                Visibility(
+                  visible: _isSnackBarVisible,
+                  child: Positioned(
+                    bottom: 16,
+                    left: 16,
+                    right: 16,
+                    child: Container(
+                      alignment: Alignment.center,
+                      color: Colors.green,
+                      child: const Text(&quot;File Saved to gallery&quot;),
+                    ),
+                  ),
+                ),
+              ])
+            : const Center(
+                child: CircularProgressIndicator(),
+              ),
+      ),
+    ),
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">sweatpals</a></li>
+  <li><a href="../../views_routetrack_view/views_routetrack_view-library.html">routetrack_view</a></li>
+  <li><a href="../../views_routetrack_view/RouteTrackViewState-class.html">RouteTrackViewState</a></li>
+  <li class="self-crumb">build method</li>
+</ol>
+
+
+    <h5>RouteTrackViewState class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../views_routetrack_view/RouteTrackViewState-class.html#constructors">Constructors</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/RouteTrackViewState.html">RouteTrackViewState</a></li>
+
+
+        <li class="section-title">
+          <a href="../../views_routetrack_view/RouteTrackViewState-class.html#instance-properties">Properties</a>
+        </li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/checkbtmoepn.html">checkbtmoepn</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/checkStartbtn.html">checkStartbtn</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/checkStopbtn.html">checkStopbtn</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/context.html">context</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/count.html">count</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/currentloc.html">currentloc</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/mounted.html">mounted</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/sS0.html">sS0</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/timer.html">timer</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/totaldistance.html">totaldistance</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/widget.html">widget</a></li>
+
+        <li class="section-title"><a href="../../views_routetrack_view/RouteTrackViewState-class.html#instance-methods">Methods</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/activate.html">activate</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/build.html">build</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/checkGps.html">checkGps</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/deactivate.html">deactivate</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/debugFillProperties.html">debugFillProperties</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/didChangeDependencies.html">didChangeDependencies</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/didUpdateWidget.html">didUpdateWidget</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/dispose.html">dispose</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/distanceBetween.html">distanceBetween</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/initState.html">initState</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/reassemble.html">reassemble</a></li>
+          <li><a href="../../views_routetrack_view/RouteTrackViewState/SetCameraPostion.html">SetCameraPostion</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/setState.html">setState</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toDiagnosticsNode.html">toDiagnosticsNode</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toString.html">toString</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toStringShort.html">toStringShort</a></li>
+
+        <li class="section-title inherited"><a href="../../views_routetrack_view/RouteTrackViewState-class.html#operators">Operators</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    sweatpals
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

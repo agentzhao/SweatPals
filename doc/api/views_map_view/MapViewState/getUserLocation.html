@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getUserLocation method from the MapViewState class, for the Dart programming language.">
+  <title>getUserLocation method - MapViewState class - map_view library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">sweatpals</a></li>
+    <li><a href="../../views_map_view/views_map_view-library.html">map_view</a></li>
+    <li><a href="../../views_map_view/MapViewState-class.html">MapViewState</a></li>
+    <li class="self-crumb">getUserLocation method</li>
+  </ol>
+  <div class="self-name">getUserLocation</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span class="material-symbols-outlined">
+        brightness_4
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">getUserLocation</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype">dynamic</span>
+<span class="name ">getUserLocation</span>(<wbr>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Getting user location using geolocator</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">getUserLocation() async {
+  getLocationPermission();
+
+  Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+      .then((Position position) {
+    setState(() {
+      &#47;&#47; Updating the camera position to the user position
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(
+              position.latitude,
+              position.longitude,
+            ),
+            zoom: 15,
+          ),
+        ),
+      );
+    });
+    &#47;&#47; update user location in database
+    dbService.updateUserLocation(
+      uid,
+      position.latitude,
+      position.longitude,
+    );
+  }).catchError((e) {});
+
+  &#47;&#47; refresh markers
+  await dbService.getAllGyms().then((value) {
+    setState(() {
+      gymsList = value;
+      loadGyms();
+    });
+  });
+  await dbService.getAllUsers(uid).then((value) {
+    setState(() {
+      usersList = value;
+      loadUsers();
+    });
+  });
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">sweatpals</a></li>
+  <li><a href="../../views_map_view/views_map_view-library.html">map_view</a></li>
+  <li><a href="../../views_map_view/MapViewState-class.html">MapViewState</a></li>
+  <li class="self-crumb">getUserLocation method</li>
+</ol>
+
+
+    <h5>MapViewState class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../views_map_view/MapViewState-class.html#constructors">Constructors</a></li>
+          <li><a href="../../views_map_view/MapViewState/MapViewState.html">MapViewState</a></li>
+
+
+        <li class="section-title">
+          <a href="../../views_map_view/MapViewState-class.html#instance-properties">Properties</a>
+        </li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/context.html">context</a></li>
+          <li><a href="../../views_map_view/MapViewState/currentLocation.html">currentLocation</a></li>
+          <li><a href="../../views_map_view/MapViewState/currentUser.html">currentUser</a></li>
+          <li><a href="../../views_map_view/MapViewState/dbService.html">dbService</a></li>
+          <li><a href="../../views_map_view/MapViewState/geo.html">geo</a></li>
+          <li><a href="../../views_map_view/MapViewState/gymMarkers.html">gymMarkers</a></li>
+          <li><a href="../../views_map_view/MapViewState/gymsList.html">gymsList</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+          <li><a href="../../views_map_view/MapViewState/mapController.html">mapController</a></li>
+          <li><a href="../../views_map_view/MapViewState/markers.html">markers</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/mounted.html">mounted</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+          <li><a href="../../views_map_view/MapViewState/uid.html">uid</a></li>
+          <li><a href="../../views_map_view/MapViewState/userMarkers.html">userMarkers</a></li>
+          <li><a href="../../views_map_view/MapViewState/usersList.html">usersList</a></li>
+          <li><a href="../../views_map_view/MapViewState/usersStream.html">usersStream</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/widget.html">widget</a></li>
+
+        <li class="section-title"><a href="../../views_map_view/MapViewState-class.html#instance-methods">Methods</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/activate.html">activate</a></li>
+          <li><a href="../../views_map_view/MapViewState/build.html">build</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/deactivate.html">deactivate</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/debugFillProperties.html">debugFillProperties</a></li>
+          <li><a href="../../views_map_view/MapViewState/didChangeDependencies.html">didChangeDependencies</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/didUpdateWidget.html">didUpdateWidget</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/dispose.html">dispose</a></li>
+          <li><a href="../../views_map_view/MapViewState/getCurrentLocation.html">getCurrentLocation</a></li>
+          <li><a href="../../views_map_view/MapViewState/getUserLocation.html">getUserLocation</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/initState.html">initState</a></li>
+          <li><a href="../../views_map_view/MapViewState/loadGyms.html">loadGyms</a></li>
+          <li><a href="../../views_map_view/MapViewState/loadUsers.html">loadUsers</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/reassemble.html">reassemble</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/setState.html">setState</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toDiagnosticsNode.html">toDiagnosticsNode</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toString.html">toString</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toStringShort.html">toStringShort</a></li>
+
+        <li class="section-title inherited"><a href="../../views_map_view/MapViewState-class.html#operators">Operators</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    sweatpals
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

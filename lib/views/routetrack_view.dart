@@ -19,36 +19,51 @@ class RouteTrackView extends StatefulWidget {
   // ignore: library_private_types_in_public_api
   RouteTrackViewState createState() => RouteTrackViewState();
 }
-/// Route Tracker Page Background 
+
+/// Route Tracker Page Background
 class RouteTrackViewState extends State<RouteTrackView> {
   /// Check GPS Enabled
   bool _isGpsEnabled = false;
+
   /// List of Marker for Google Map
   Set<Marker> _markers = {};
+
   /// Current Postion From Device
   late Position currentloc;
+
   /// Check Bottom Sheet button Status
   bool checkbtmoepn = false;
+
   /// Check Start Button Status
   bool checkStartbtn = true;
+
   /// Check Stop button Status
   bool checkStopbtn = false;
+
   /// Gooogle Map Controller
   GoogleMapController? _mapController;
+
   ///  List of Cordinates Point
   List<LatLng> _points = [];
+
   /// Use for Drawing line to the Google Map
   Set<Polyline> _polylines = {};
+
   /// Check Tracking Status
   bool _isTracking = false;
+
   /// initalilise MyTimer Class
   MyTimer timer = MyTimer();
-  ///  Totla distance 
+
+  ///  Totla distance
   double totaldistance = 0;
+
   /// initalilise ScreshotSaveOpen Class
   ScreshotSaveOpen sS0 = ScreshotSaveOpen();
+
   /// Check number of Button press
   int count = 0;
+
   /// Check SnackBar visiable Status
   bool _isSnackBarVisible = false;
 
@@ -58,6 +73,7 @@ class RouteTrackViewState extends State<RouteTrackView> {
     super.initState();
     checkGps(); // Check in Beginning
   }
+
   /// Enable Snackbar
   void _showSnackBar() {
     setState(() {
@@ -65,12 +81,13 @@ class RouteTrackViewState extends State<RouteTrackView> {
     });
 
     // Hide the SnackBar after 2 seconds
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       setState(() {
         _isSnackBarVisible = false;
       });
     });
   }
+
   /// Check GPS is Enabled
   Future<void> checkGps() async {
     //Check inital GPS status
@@ -133,15 +150,15 @@ class RouteTrackViewState extends State<RouteTrackView> {
       _mapController!.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(
-            currentloc.latitude!,
-            currentloc.longitude!,
+            currentloc.latitude,
+            currentloc.longitude,
           ),
           zoom: 15,
         ),
       ));
       // End
     } catch (e) {
-      print('Could not get location: $e');
+      // print('Could not get location: $e');
     }
   }
 
@@ -152,32 +169,33 @@ class RouteTrackViewState extends State<RouteTrackView> {
         currentloc = locationData;
         if (_isTracking) {
           _points.add(LatLng(
-            currentloc.latitude!,
-            currentloc.longitude!,
+            currentloc.latitude,
+            currentloc.longitude,
           ));
         }
         if (_isTracking && _mapController != null) {
           _mapController?.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(
-              target: LatLng(currentloc.latitude!, currentloc.longitude!),
+              target: LatLng(currentloc.latitude, currentloc.longitude),
               zoom: 18,
             ),
           ));
         }
         if (_isTracking) {
-          LatLng curt = LatLng(currentloc.latitude!, currentloc.longitude!);
+          LatLng curt = LatLng(currentloc.latitude, currentloc.longitude);
           _points.add(curt);
           if (_points.length >= 2) {
             double distance =
                 distanceBetween(_points[_points.length - 2], curt);
             totaldistance = totaldistance + (distance + 0.0005);
-            print(totaldistance);
+            // print(totaldistance);
           }
         }
       });
     });
   }
- /// Calculate sitance between each point
+
+  /// Calculate sitance between each point
   double distanceBetween(LatLng point1, LatLng point2) {
     double lat1 = point1.latitude * (pi / 180);
     double lon1 = point1.longitude * (pi / 180);
@@ -194,21 +212,23 @@ class RouteTrackViewState extends State<RouteTrackView> {
     double result = earthRadius * c;
     return result;
   }
-  /// Stop Tracking 
+
+  /// Stop Tracking
   Future<void> _stopTracking() async {
     Geolocator.getPositionStream().listen(null);
     setState(() {
       if (_mapController != null) {
         _mapController?.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(
-            target: LatLng(currentloc.latitude!, currentloc.longitude!),
+            target: LatLng(currentloc.latitude, currentloc.longitude),
             zoom: 14, // Set the zoom level to a default value
           ),
         ));
       }
     });
   }
- /// Clear Tracking Info
+
+  /// Clear Tracking Info
   void _clearTracking() {
     setState(() {
       _points = [];
@@ -221,13 +241,14 @@ class RouteTrackViewState extends State<RouteTrackView> {
   void _updatePolyline() {
     setState(() {
       _polylines.add(Polyline(
-        polylineId: PolylineId('route'),
+        polylineId: const PolylineId('route'),
         points: _points,
         color: Colors.green,
         width: 7,
       ));
     });
   }
+
   /// Process of Route Tracker
   @override
   Widget build(BuildContext context) {
@@ -291,7 +312,7 @@ class RouteTrackViewState extends State<RouteTrackView> {
                                     // StartButton
                                     checkStartbtn
                                         ? FloatingActionButton(
-                                            child: Icon(Icons.start),
+                                            child: const Icon(Icons.start),
                                             onPressed: () {
                                               if (count == 1) _clearTracking();
                                               setState(() {
@@ -305,14 +326,14 @@ class RouteTrackViewState extends State<RouteTrackView> {
                                               checkGps();
                                               _getLocation();
                                               _addMarker(
-                                                  LatLng(currentloc.latitude!,
-                                                      currentloc.longitude!),
+                                                  LatLng(currentloc.latitude,
+                                                      currentloc.longitude),
                                                   "Start point");
                                               _startTracking();
                                               _updatePolyline();
                                               timer.start();
                                             })
-                                        : Text(""),
+                                        : const Text(""),
                                     // Stop Button
                                     checkStopbtn
                                         ? FloatingActionButton(
@@ -328,8 +349,8 @@ class RouteTrackViewState extends State<RouteTrackView> {
                                                     timer.displaytime());
                                               });
                                               _addMarker(
-                                                  LatLng(currentloc.latitude!,
-                                                      currentloc.longitude!),
+                                                  LatLng(currentloc.latitude,
+                                                      currentloc.longitude),
                                                   "End Point");
                                               _stopTracking();
                                               sS0.captureAndSaveScreenshot();
@@ -387,7 +408,7 @@ class RouteTrackViewState extends State<RouteTrackView> {
                       child: Container(
                         alignment: Alignment.center,
                         color: Colors.green,
-                        child: Text("File Saved to gallery"),
+                        child: const Text("File Saved to gallery"),
                       ),
                     ),
                   ),
@@ -400,59 +421,72 @@ class RouteTrackViewState extends State<RouteTrackView> {
     );
   }
 }
+
 /// Timer Class
 class MyTimer {
   /// Number of Seconds
   int _seconds = 0;
+
   /// Number of Minutes
-  int _Minutes = 0;
+  int _minutes = 0;
+
   /// Number of Hours
   int _hour = 0;
+
   /// Timer Variable
-  var _timer;
+  late Timer _timer;
+
   /// Start Timer
   void start() {
     _seconds = 0;
-    _Minutes = 0;
+    _minutes = 0;
     _hour = 0;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _seconds++;
-      print("Elapsed time: $_seconds seconds");
+      // print("Elapsed time: $_seconds seconds");
       calculatetime();
     });
   }
+
   /// Stop Timer
   void stop() {
-    _timer?.cancel();
-    print("Timer stopped");
+    _timer.cancel();
+    // print("Timer stopped");
   }
- /// Calculate Time
+
+  /// Calculate Time
   void calculatetime() {
     if (_seconds >= 60) {
-      _Minutes++;
+      _minutes++;
       _seconds = 0;
     }
-    if (_Minutes >= 60) {
+    if (_minutes >= 60) {
       _hour++;
-      _Minutes = 0;
+      _minutes = 0;
       _seconds = 0;
     }
   }
- /// Display Time in MM:SS
+
+  /// Display Time in MM:SS
   String displaytime() {
-    return "${_hour.toString().padLeft(2, "0")}:${_Minutes.toString().padLeft(2, "0")}:${_seconds.toString().padLeft(2, "0")}";
+    return "${_hour.toString().padLeft(2, "0")}:${_minutes.toString().padLeft(2, "0")}:${_seconds.toString().padLeft(2, "0")}";
   }
 }
+
 /// Screenshot Map and Save to device Class
 class ScreshotSaveOpen {
   /// Google Map controller
   late GoogleMapController _googleMapController;
+
   /// intialise ImageGallerSaver class
   ImageGallerySaver img = ImageGallerySaver();
+
   /// Text for distance
   String distane = "";
+
   /// Text for time
   String time = "";
+
   /// Random Number
   int rannum = Random().nextInt(1000);
 
@@ -460,14 +494,17 @@ class ScreshotSaveOpen {
   void setGMControler(GoogleMapController c) {
     _googleMapController = c;
   }
+
   /// Set Distance string
   void setdistance(String s) {
     distane = s;
   }
- /// Set time String
+
+  /// Set time String
   void settime(String t) {
     time = t;
   }
+
   /// Capture and Save Function
   Future<void> captureAndSaveScreenshot() async {
     File file;
@@ -491,7 +528,7 @@ class ScreshotSaveOpen {
         file = File('$path/$fileName');
         exist = await file.exists();
       } while (exist);
-      print(file);
+      // print(file);
       await file.writeAsBytes(
           imageBytes!); // save to android.data -> some android does not allow access
       await ImageGallerySaver.saveImage(imageBytes,
@@ -499,9 +536,9 @@ class ScreshotSaveOpen {
 
       // 5. Show a message indicating where the screenshot was saved
 
-      print('Screenshot saved to $path/$fileName');
+      // print('Screenshot saved to $path/$fileName');
     } catch (e) {
-      print('Error capturing screenshot: $e');
+      // print('Error capturing screenshot: $e');
     }
   }
 }

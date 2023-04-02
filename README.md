@@ -1,6 +1,13 @@
 # SweatPals
 
-- google_maps_flutter does not support web yet, there is google_maps_flutter_web but too many limitations to work around
+AY22/23 SC2006 SWE
+
+Members: [Cheng Feng](https://github.com/iLowLife), [Chin Poh](https://github.com/LCP2022), [Hong Zhao](https://github.com/agentzhao), [Jarrel](https://github.com/JarrelNT), [Ryan](https://github.com/rphoen)
+
+### Directories
+
+- code under /lib
+- docs under /doc/api/index.html
 
 ### Setup Environment
 

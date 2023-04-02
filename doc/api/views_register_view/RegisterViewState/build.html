@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the build method from the RegisterViewState class, for the Dart programming language.">
+  <title>build method - RegisterViewState class - register_view library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">sweatpals</a></li>
+    <li><a href="../../views_register_view/views_register_view-library.html">register_view</a></li>
+    <li><a href="../../views_register_view/RegisterViewState-class.html">RegisterViewState</a></li>
+    <li class="self-crumb">build method</li>
+  </ol>
+  <div class="self-name">build</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span class="material-symbols-outlined">
+        brightness_4
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">build</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></span>
+<span class="name ">build</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="build-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span></span></li>
+</ol>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Process of Registration Page</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text(&#39;Register&#39;),
+    ),
+    body: ListView(
+      children: [
+        const SizedBox(height: 10),
+        Container(
+          decoration: const BoxDecoration(
+              &#47;&#47; color: Theme.of(context).primaryColor.withOpacity(.4),
+              &#47;&#47; border: Border.all(
+              &#47;&#47;   color: Theme.of(context).primaryColor,
+              &#47;&#47;   width: 2,
+              &#47;&#47; ),
+              ),
+          child: Column(
+            children: &lt;Widget&gt;[
+              MultiSelectBottomSheetField(
+                initialChildSize: 0.4,
+                listType: MultiSelectListType.CHIP,
+                searchable: true,
+                buttonText: const Text(
+                  &quot;Favorite Activities (Select at least 3)&quot;,
+                ),
+                title: const Text(&quot;Activities&quot;),
+                items: _activities,
+                onConfirm: (values) {
+                  setState(() {
+                    _selectedActivities = values.cast&lt;Activity&gt;();
+                  });
+                },
+                chipDisplay: MultiSelectChipDisplay(
+                  onTap: (value) {
+                    setState(() {
+                      _selectedActivities.remove(value);
+                    });
+                  },
+                ),
+              ),
+              _selectedActivities.length &lt; 3
+                  ? Container(
+                      padding: const EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        &quot;Please select at least 3 activities&quot;,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        ),
+        &#47;&#47; first name and last name
+        Container(
+          padding: const EdgeInsets.only(
+            left: 12.0,
+            right: 12.0,
+            &#47;&#47; top: 12.0,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _firstName,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  keyboardType: TextInputType.name,
+                  decoration: const InputDecoration(
+                    labelText: &#39;First Name&#39;,
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return &#39;Please enter your first name&#39;;
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextFormField(
+                  controller: _lastName,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  keyboardType: TextInputType.name,
+                  decoration: const InputDecoration(
+                    labelText: &#39;Last Name&#39;,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+          child: TextFormField(
+            controller: _username,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.name,
+            decoration: const InputDecoration(
+              labelText: &#39;Username&#39;,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () async {
+            &#47;&#47; new anon user
+            if (_username.text.isEmpty) {
+              await showErrorDialog(
+                context,
+                &#39;Please enter a username&#39;,
+              );
+              return;
+            }
+            try {
+              dynamic result = await AuthService.firebase().logInAnon(
+                username: _username.text,
+              );
+              if (result == null) {
+                showToast(&#39;Error signing in as guest&#39;);
+              } else {
+                showToast(&#39;Signed in as guest&#39;);
+
+                dbService.generateNewUser(
+                  AuthService.firebase().currentUser!.uid,
+                  _username.text,
+                  _firstName.text,
+                  _lastName.text,
+                  activityToIds(_selectedActivities),
+                );
+              }
+            } on GenericAuthException {
+              await showErrorDialog(
+                context,
+                &#39;Authentication error&#39;,
+              );
+            }
+            if (context.mounted) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                Routes.naviBarRoute,
+                (route) =&gt; false,
+              );
+            }
+          },
+          child: const Text(
+            &#39;Continue as guest&#39;,
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.only(
+            left: 12.0,
+            right: 12.0,
+          ),
+          child: TextFormField(
+            controller: _email,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(
+              labelText: &#39;Email&#39;,
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.only(
+            left: 12.0,
+            right: 12.0,
+            bottom: 12.0,
+          ),
+          child: TextFormField(
+            controller: _password,
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            decoration: const InputDecoration(
+              labelText: &#39;Password&#39;,
+            ),
+          ),
+        ),
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              if (_username.text.isEmpty) {
+                await showErrorDialog(
+                  context,
+                  &#39;Username cannot be empty&#39;,
+                );
+                return;
+              }
+              try {
+                await AuthService.firebase().createUser(
+                  username: _username.text,
+                  email: _email.text,
+                  password: _password.text,
+                );
+                AuthService.firebase().sendEmailVerification();
+                if (context.mounted) {
+                  Navigator.of(context).pushNamed(
+                    Routes.verifyEmailRoute,
+                  );
+                }
+                &#47;&#47; todo save user to database
+                dbService.generateNewUser(
+                  AuthService.firebase().currentUser!.uid,
+                  _username.text,
+                  _firstName.text,
+                  _lastName.text,
+                  activityToIds(_selectedActivities),
+                );
+                showToast(&quot;Registration successful!&quot;);
+              } on WeakPasswordAuthException {
+                await showErrorDialog(
+                  context,
+                  &#39;Weak password&#39;,
+                );
+              } on EmailAlreadyInUseAuthException {
+                await showErrorDialog(
+                  context,
+                  &#39;Email is already in use&#39;,
+                );
+              } on InvalidEmailAuthException {
+                await showErrorDialog(
+                  context,
+                  &#39;This is an invalid email address&#39;,
+                );
+              } on GenericAuthException {
+                await showErrorDialog(
+                  context,
+                  &#39;Failed to register&#39;,
+                );
+              }
+            },
+            child: const Text(&#39;Register&#39;),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.loginRoute,
+              (route) =&gt; false,
+            );
+          },
+          child: const Text(&#39;Already registered? Login here!&#39;),
+        ),
+      ],
+    ),
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">sweatpals</a></li>
+  <li><a href="../../views_register_view/views_register_view-library.html">register_view</a></li>
+  <li><a href="../../views_register_view/RegisterViewState-class.html">RegisterViewState</a></li>
+  <li class="self-crumb">build method</li>
+</ol>
+
+
+    <h5>RegisterViewState class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../views_register_view/RegisterViewState-class.html#constructors">Constructors</a></li>
+          <li><a href="../../views_register_view/RegisterViewState/RegisterViewState.html">RegisterViewState</a></li>
+
+
+        <li class="section-title">
+          <a href="../../views_register_view/RegisterViewState-class.html#instance-properties">Properties</a>
+        </li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/context.html">context</a></li>
+          <li><a href="../../views_register_view/RegisterViewState/dbService.html">dbService</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/mounted.html">mounted</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/widget.html">widget</a></li>
+
+        <li class="section-title"><a href="../../views_register_view/RegisterViewState-class.html#instance-methods">Methods</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/activate.html">activate</a></li>
+          <li><a href="../../views_register_view/RegisterViewState/build.html">build</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/deactivate.html">deactivate</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/debugFillProperties.html">debugFillProperties</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/didChangeDependencies.html">didChangeDependencies</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/didUpdateWidget.html">didUpdateWidget</a></li>
+          <li><a href="../../views_register_view/RegisterViewState/dispose.html">dispose</a></li>
+          <li><a href="../../views_register_view/RegisterViewState/initState.html">initState</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/reassemble.html">reassemble</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/widgets/State/setState.html">setState</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toDiagnosticsNode.html">toDiagnosticsNode</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toString.html">toString</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/foundation/Diagnosticable/toStringShort.html">toStringShort</a></li>
+
+        <li class="section-title inherited"><a href="../../views_register_view/RegisterViewState-class.html#operators">Operators</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    sweatpals
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

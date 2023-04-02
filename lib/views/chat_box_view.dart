@@ -8,11 +8,11 @@ import 'package:sweatpals/services/storage/storage_service.dart';
 import 'package:sweatpals/views/singlemessage.dart';
 import 'package:sweatpals/views/message_textfield.dart';
 
-
 /// Chat Message Page
 class ChatBoxView extends StatefulWidget {
   /// Initialise UserInfo Class
   final UserInfo otherUser;
+
   /// Contrustor
   const ChatBoxView({
     Key? key,
@@ -22,16 +22,21 @@ class ChatBoxView extends StatefulWidget {
   @override
   ChatBoxViewState createState() => ChatBoxViewState();
 }
+
 /// Chat Message Page Background
 class ChatBoxViewState extends State<ChatBoxView> {
   /// Initialise Firebase Database Class
   final DbService dbService = DbService();
+
   /// Initliase Storage Service Class
   final storageService = StorageService();
+
   /// Retrieve Current User UID
   String get uid => AuthService.firebase().currentUser!.uid;
+
   /// Initialise UserInfo Class
   UserInfo? currentUser;
+
   /// Retrieve Other User UID
   UserInfo get otherUser => widget.otherUser;
 
@@ -46,6 +51,7 @@ class ChatBoxViewState extends State<ChatBoxView> {
       });
     });
   }
+
   /// Process for Chat Message page
   @override
   Widget build(BuildContext context) {
@@ -59,10 +65,9 @@ class ChatBoxViewState extends State<ChatBoxView> {
           // Show chat Message list
           Expanded(
               child: Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             color: Colors.grey.shade800,
             child: StreamBuilder(
-            
               stream: FirebaseFirestore.instance
                   .collection("users")
                   .doc(currentUser!.uid)
@@ -74,7 +79,7 @@ class ChatBoxViewState extends State<ChatBoxView> {
                   .asBroadcastStream(),
               builder: (context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
                 if (snapshot.hasData) {
                   if (snapshot.data.docs.length < 1) {
@@ -82,19 +87,18 @@ class ChatBoxViewState extends State<ChatBoxView> {
                       child: Text("Say Hi"),
                     );
                   }
-                  ScrollController sc = ScrollController();
                   return ListView.builder(
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
                       bool isMe = snapshot.data.docs[index]['senderId'] ==
                           currentUser!.uid;
                       return SingleMessage(
-                          Message: snapshot.data.docs[index]['message'],
+                          message: snapshot.data.docs[index]['message'],
                           isMe: isMe);
                     },
                   );
                 }
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
             ),
           )),

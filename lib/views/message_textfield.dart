@@ -7,24 +7,28 @@ import 'package:flutter/material.dart';
 class MessageTextField extends StatefulWidget {
   /// Current User UID
   final String currentId;
+
   /// Friend User UID
   final String friendId;
+
   /// Contrustor
-  MessageTextField(this.currentId, this.friendId);
+  const MessageTextField(this.currentId, this.friendId, {super.key});
 
   @override
-  _MessageTextFieldState createState() => _MessageTextFieldState();
+  MessageTextFieldState createState() => MessageTextFieldState();
 }
+
 /// Message TextField Background Task
-class _MessageTextFieldState extends State<MessageTextField> {
+class MessageTextFieldState extends State<MessageTextField> {
   /// Message TextBox Controller
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+
   /// Process for Message Text Field
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.grey.shade800,
-      padding: EdgeInsetsDirectional.all(8),
+      padding: const EdgeInsetsDirectional.all(8),
       child: Row(
         children: [
           Expanded(
@@ -35,11 +39,11 @@ class _MessageTextFieldState extends State<MessageTextField> {
                 fillColor: Colors.grey.shade800,
                 filled: true,
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(width: 0),
+                    borderSide: const BorderSide(width: 0),
                     gapPadding: 10,
                     borderRadius: BorderRadius.circular(25))),
           )),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           GestureDetector(
@@ -91,12 +95,12 @@ class _MessageTextFieldState extends State<MessageTextField> {
               });
             },
             child: Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.green,
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.send,
                 color: Colors.white,
               ),
