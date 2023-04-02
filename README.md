@@ -8,6 +8,7 @@ Members: [Cheng Feng](https://github.com/iLowLife), [Chin Poh](https://github.co
 
 - code under /lib
 - docs under /doc/api/index.html
+- apk files under /build/app/outputs/flutter-apk
 
 ### Setup Environment
 
