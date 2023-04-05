@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:geolocator/geolocator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -66,6 +67,9 @@ class RouteTrackViewState extends State<RouteTrackView> {
   /// Check SnackBar visiable Status
   bool _isSnackBarVisible = false;
 
+  /// Check Camera Zoom out Status
+  bool _hasZoomedOut = false;
+
   /// Inital Statue
   @override
   void initState() {
@@ -80,15 +84,12 @@ class RouteTrackViewState extends State<RouteTrackView> {
     });
 
     // Hide the SnackBar after 2 seconds
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       setState(() {
         _isSnackBarVisible = false;
       });
     });
   }
-
-  /// Check Camera Zoom out Status
-  bool _hasZoomedOut = false;
 
   /// Check GPS is Enabled
   Future<void> checkGps() async {
@@ -152,15 +153,15 @@ class RouteTrackViewState extends State<RouteTrackView> {
       _mapController!.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(
-            currentloc.latitude!,
-            currentloc.longitude!,
+            currentloc.latitude,
+            currentloc.longitude,
           ),
           zoom: 15,
         ),
       ));
       // End
     } catch (e) {
-      print('Could not get location: $e');
+      // print('Could not get location: $e');
     }
   }
 
@@ -171,26 +172,26 @@ class RouteTrackViewState extends State<RouteTrackView> {
         currentloc = locationData;
         if (_isTracking) {
           _points.add(LatLng(
-            currentloc.latitude!,
-            currentloc.longitude!,
+            currentloc.latitude,
+            currentloc.longitude,
           ));
         }
         if (_isTracking && _mapController != null) {
           _mapController?.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(
-              target: LatLng(currentloc.latitude!, currentloc.longitude!),
+              target: LatLng(currentloc.latitude, currentloc.longitude),
               zoom: 18,
             ),
           ));
         }
         if (_isTracking) {
-          LatLng curt = LatLng(currentloc.latitude!, currentloc.longitude!);
+          LatLng curt = LatLng(currentloc.latitude, currentloc.longitude);
           _points.add(curt);
           if (_points.length >= 2) {
             double distance =
                 distanceBetween(_points[_points.length - 2], curt);
             totaldistance = totaldistance + (distance + 0.0005);
-            print(totaldistance);
+            // print(totaldistance);
           }
         }
       });
@@ -218,17 +219,16 @@ class RouteTrackViewState extends State<RouteTrackView> {
   /// Stop Tracking
   Future<void> _stopTracking() async {
     Geolocator.getPositionStream().listen(null);
-    if (_mapController != null) {
-      _mapController?.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: LatLng(currentloc.latitude!, currentloc.longitude!),
-          zoom: 14, // Set the zoom level to a default value
-        ),
-      ));
-      _addMarker(
-          LatLng(currentloc.latitude, currentloc.longitude), "End Point");
-      _hasZoomedOut = true;
-    }
+      if (_mapController != null) {
+        _mapController?.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(currentloc.latitude, currentloc.longitude),
+            zoom: 14, // Set the zoom level to a default value
+          ),
+        ));
+      }
+   _addMarker(LatLng(currentloc.latitude,currentloc.longitude),"End Point");
+    _hasZoomedOut = true;
   }
 
   /// Clear Tracking Info
@@ -244,7 +244,7 @@ class RouteTrackViewState extends State<RouteTrackView> {
   void _updatePolyline() {
     setState(() {
       _polylines.add(Polyline(
-        polylineId: PolylineId('route'),
+        polylineId: const PolylineId('route'),
         points: _points,
         color: Colors.green,
         width: 7,
@@ -314,7 +314,7 @@ class RouteTrackViewState extends State<RouteTrackView> {
                                     // StartButton
                                     checkStartbtn
                                         ? FloatingActionButton(
-                                            child: Icon(Icons.start),
+                                            child: const Icon(Icons.start),
                                             onPressed: () {
                                               if (count == 1) _clearTracking();
                                               setState(() {
@@ -328,14 +328,14 @@ class RouteTrackViewState extends State<RouteTrackView> {
                                               checkGps();
                                               _getLocation();
                                               _addMarker(
-                                                  LatLng(currentloc.latitude!,
-                                                      currentloc.longitude!),
+                                                  LatLng(currentloc.latitude,
+                                                      currentloc.longitude),
                                                   "Start point");
                                               _startTracking();
                                               _updatePolyline();
                                               timer.start();
                                             })
-                                        : Text(""),
+                                        : const Text(""),
                                     // Stop Button
                                     checkStopbtn
                                         ? FloatingActionButton(
@@ -352,8 +352,8 @@ class RouteTrackViewState extends State<RouteTrackView> {
                                               });
                                               _stopTracking();
                                               timer.stop();
-                                              await Future.delayed(
-                                                  Duration(seconds: 5));
+                                               await Future.delayed(
+                                                  const Duration(seconds: 5));
                                                     print("Test");
                                               if (_hasZoomedOut) {
                                                 sS0.setGMControler(
@@ -416,7 +416,7 @@ class RouteTrackViewState extends State<RouteTrackView> {
                       child: Container(
                         alignment: Alignment.center,
                         color: Colors.green,
-                        child: Text("File Saved to gallery"),
+                        child: const Text("File Saved to gallery"),
                       ),
                     ),
                   ),
@@ -436,48 +436,48 @@ class MyTimer {
   int _seconds = 0;
 
   /// Number of Minutes
-  int _Minutes = 0;
+  int _minutes = 0;
 
   /// Number of Hours
   int _hour = 0;
 
   /// Timer Variable
-  var _timer;
+  late Timer _timer;
 
   /// Start Timer
   void start() {
     _seconds = 0;
-    _Minutes = 0;
+    _minutes = 0;
     _hour = 0;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _seconds++;
-      print("Elapsed time: $_seconds seconds");
+      // print("Elapsed time: $_seconds seconds");
       calculatetime();
     });
   }
 
   /// Stop Timer
   void stop() {
-    _timer?.cancel();
-    print("Timer stopped");
+    _timer.cancel();
+    // print("Timer stopped");
   }
 
   /// Calculate Time
   void calculatetime() {
     if (_seconds >= 60) {
-      _Minutes++;
+      _minutes++;
       _seconds = 0;
     }
-    if (_Minutes >= 60) {
+    if (_minutes >= 60) {
       _hour++;
-      _Minutes = 0;
+      _minutes = 0;
       _seconds = 0;
     }
   }
 
   /// Display Time in MM:SS
   String displaytime() {
-    return "${_hour.toString().padLeft(2, "0")}:${_Minutes.toString().padLeft(2, "0")}:${_seconds.toString().padLeft(2, "0")}";
+    return "${_hour.toString().padLeft(2, "0")}:${_minutes.toString().padLeft(2, "0")}:${_seconds.toString().padLeft(2, "0")}";
   }
 }
 
@@ -536,7 +536,7 @@ class ScreshotSaveOpen {
         file = File('$path/$fileName');
         exist = await file.exists();
       } while (exist);
-      print(file);
+      // print(file);
       await file.writeAsBytes(
           imageBytes!); // save to android.data -> some android does not allow access
       await ImageGallerySaver.saveImage(imageBytes,
@@ -544,9 +544,9 @@ class ScreshotSaveOpen {
 
       // 5. Show a message indicating where the screenshot was saved
 
-      print('Screenshot saved to $path/$fileName');
+      // print('Screenshot saved to $path/$fileName');
     } catch (e) {
-      print('Error capturing screenshot: $e');
+      // print('Error capturing screenshot: $e');
     }
   }
 }
