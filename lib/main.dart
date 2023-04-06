@@ -2,13 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:sweatpals/constants/routes.dart';
 
+import 'package:sweatpals/constants/GymInfo.dart';
+import 'package:sweatpals/constants/UserInfo.dart';
+
 import 'package:sweatpals/services/auth/auth_service.dart';
+
 import 'package:sweatpals/views/login_view.dart';
 import 'package:sweatpals/views/register_view.dart';
 import 'package:sweatpals/views/verify_email_view.dart';
 import 'package:sweatpals/views/navi_bar.dart';
-import 'package:sweatpals/services/db/db_service.dart';
-
 import 'package:sweatpals/views/home_view.dart';
 import 'package:sweatpals/views/map_view.dart';
 import 'package:sweatpals/views/profile_view.dart';
@@ -17,10 +19,7 @@ import 'package:sweatpals/views/edit_profile_view.dart';
 import 'package:sweatpals/views/user_view.dart';
 import 'package:sweatpals/views/gym_view.dart';
 import 'package:sweatpals/views/friend_finder.dart';
-import 'package:sweatpals/views/chat_box_view.dart';
-import 'package:sweatpals/views/workout_view.dart';
-import 'package:sweatpals/views/routetrack_view.dart';
-import 'package:sweatpals/views/taskadd_view.dart';
+import 'package:sweatpals/views/chat_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,9 +56,6 @@ void main() async {
         Routes.editProfileRoute: (context) => const EditProfileView(),
         Routes.settingsRoute: (context) => const SettingsView(),
         Routes.friendFinderRoute: (context) => const FriendFinderView(),
-        Routes.workoutRoute: (context) => const WorkoutView(),
-        Routes.routeTrackRoute: (context) => const RouteTrackView(),
-        Routes.taskAddRoute: (context) => const TaskAddView(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == Routes.userRoute) {
@@ -81,7 +77,7 @@ void main() async {
         if (settings.name == Routes.chatboxRoute) {
           final args = settings.arguments as UserInfo;
           return MaterialPageRoute(
-            builder: (context) => ChatBoxView(
+            builder: (context) => ChatView(
               otherUser: args,
             ),
           );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sweatpals/constants/GymInfo.dart';
+import 'package:sweatpals/constants/UserInfo.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
@@ -117,36 +119,6 @@ class HomeViewState extends State<HomeView> {
                   : const Center(
                       child: CircularProgressIndicator(),
                     ),
-            ),
-
-            const SizedBox(height: 10),
-
-            // Workout and Route Track buttons
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.workoutRoute,
-                      );
-                    },
-                    child: const Text("Workout"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.routeTrackRoute,
-                      );
-                    },
-                    child: const Text("Route Tracker"),
-                  ),
-                ],
-              ),
             ),
           ],
         ),

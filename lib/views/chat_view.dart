@@ -1,20 +1,21 @@
 import "package:flutter/material.dart";
+import 'package:sweatpals/constants/UserInfo.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
 
-class ChatBoxView extends StatefulWidget {
+class ChatView extends StatefulWidget {
   final UserInfo otherUser;
-  const ChatBoxView({
+  const ChatView({
     Key? key,
     required this.otherUser,
   }) : super(key: key);
 
   @override
-  ChatBoxViewState createState() => ChatBoxViewState();
+  ChatViewState createState() => ChatViewState();
 }
 
-class ChatBoxViewState extends State<ChatBoxView> {
+class ChatViewState extends State<ChatView> {
   final DbService dbService = DbService();
   final storageService = StorageService();
 
