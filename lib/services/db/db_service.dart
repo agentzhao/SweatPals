@@ -1,107 +1,11 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_database/firebase_database.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
+import 'package:sweatpals/constants/UserInfo.dart';
+import 'package:sweatpals/constants/GymInfo.dart';
 
 final geo = GeoFlutterFire();
-
-class UserInfo {
-  final String uid;
-  final String username;
-  final String firstName;
-  final String lastName;
-  final String photoURL;
-  final List<dynamic> activities;
-  final GeoPoint location;
-  final Timestamp lastUpdated;
-  final List<dynamic> friends;
-  final List<dynamic> favourites;
-
-  UserInfo({
-    required this.uid,
-    required this.username,
-    required this.firstName,
-    required this.lastName,
-    required this.photoURL,
-    required this.activities,
-    required this.location,
-    required this.lastUpdated,
-    required this.friends,
-    required this.favourites,
-  });
-
-  factory UserInfo.fromMap(Map<String, dynamic> data) {
-    return UserInfo(
-      uid: data['uid'],
-      username: data['username'],
-      firstName: data['firstName'],
-      lastName: data['lastName'],
-      photoURL: data['photoURL'],
-      activities: data['activities'],
-      location: data['location'],
-      lastUpdated: data['lastUpdated'],
-      friends: data['friends'],
-      favourites: data['favourites'],
-    );
-  }
-}
-
-class GymInfo {
-  final String addressBlockHouseNumber;
-  final String addressBuildingName;
-  final String addressFloorNumber;
-  final String addressPostalCode;
-  final String addressStreetName;
-  final String addressUnitNumber;
-  final String description;
-  final String hyperlink;
-  final String incCrc;
-  final String landXAddressPoint;
-  final String landYAddressPoint;
-  final String name;
-  final String photoURL;
-  final GeoPoint coordinates;
-  final int crowdLevel;
-
-  GymInfo({
-    required this.addressBlockHouseNumber,
-    required this.addressBuildingName,
-    required this.addressFloorNumber,
-    required this.addressPostalCode,
-    required this.addressStreetName,
-    required this.addressUnitNumber,
-    required this.description,
-    required this.hyperlink,
-    required this.incCrc,
-    required this.landXAddressPoint,
-    required this.landYAddressPoint,
-    required this.name,
-    required this.photoURL,
-    required this.coordinates,
-    required this.crowdLevel,
-  });
-
-  factory GymInfo.fromMap(Map<String, dynamic> data) {
-    return GymInfo(
-      addressBlockHouseNumber: data['addressBlockHouseNumber'],
-      addressBuildingName: data['addressBuildingName'],
-      addressFloorNumber: data['addressFloorNumber'],
-      addressPostalCode: data['addressPostalCode'],
-      addressStreetName: data['addressStreetName'],
-      addressUnitNumber: data['addressUnitNumber'],
-      description: data['description'],
-      hyperlink: data['hyperlink'],
-      incCrc: data['incCrc'],
-      landXAddressPoint: data['landXAddressPoint'],
-      landYAddressPoint: data['landYAddressPoint'],
-      name: data['name'],
-      photoURL: data['photoURL'],
-      coordinates: data['coordinates'],
-      crowdLevel: data['crowdLevel'],
-    );
-  }
-}
 
 class DbService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;

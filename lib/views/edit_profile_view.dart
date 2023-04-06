@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sweatpals/constants/UserInfo.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';

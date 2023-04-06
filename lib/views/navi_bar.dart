@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sweatpals/views/home_view.dart';
 import 'package:sweatpals/views/map_view.dart';
-import 'package:sweatpals/views/chats_view.dart';
+import 'package:sweatpals/views/friends_view.dart';
 import 'package:sweatpals/views/profile_view.dart';
 
 class NaviBar extends StatefulWidget {
@@ -18,7 +18,7 @@ class NaviBarState extends State<NaviBar> {
   final screens = [
     const HomeView(),
     const MapView(),
-    const ChatsView(),
+    const FriendsView(),
     const ProfileView(),
   ];
 
