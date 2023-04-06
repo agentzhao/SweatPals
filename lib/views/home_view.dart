@@ -1,6 +1,8 @@
 /// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
 /// Version 1.1.5
 import 'package:flutter/material.dart';
+import 'package:sweatpals/constants/GymInfo.dart';
+import 'package:sweatpals/constants/UserInfo.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
@@ -16,22 +18,30 @@ class HomeView extends StatefulWidget {
   @override
   HomeViewState createState() => HomeViewState();
 }
+
 /// Home Page Background
 class HomeViewState extends State<HomeView> {
   /// Intialise FireBase Database Class
   final DbService dbService = DbService();
+
   /// Initalise Storage Service Class
   final storageService = StorageService();
+
   /// Retrieve Current User UID
   String get uid => AuthService.firebase().currentUser!.uid;
+
   /// Retireve Current Username
   String get username => AuthService.firebase().currentUser!.username!;
+
   /// Initialise Geo Point
   GeoPoint? currentLocation;
+
   /// Initialise Current UserInfo
   UserInfo? currentUser;
+
   /// List of Gym Info
   List<GymInfo> gymsList = [];
+
   /// Check isitMounted Status
   bool _isMounted = true;
 
@@ -42,6 +52,7 @@ class HomeViewState extends State<HomeView> {
     _isMounted = true;
     // rest of initState code...
   }
+
   /// State Changes
   @override
   void didChangeDependencies() async {
@@ -66,12 +77,14 @@ class HomeViewState extends State<HomeView> {
       });
     });
   }
+
   /// Exit State
   @override
   void dispose() {
     _isMounted = false;
     super.dispose();
   }
+
   /// Process for Home Page
   @override
   Widget build(BuildContext context) {
@@ -162,7 +175,8 @@ class HomeViewState extends State<HomeView> {
       ),
     );
   }
-  /// Refresh Data 
+
+  /// Refresh Data
   Future<void> _refreshData() async {
     // Perform any asynchronous operation to refresh data.
     getCurrentLocation().then((value) {
@@ -181,7 +195,8 @@ class HomeViewState extends State<HomeView> {
       });
     });
   }
-  /// Display Welcome Text 
+
+  /// Display Welcome Text
   Widget welcomeText(UserInfo user) {
     return Column(
       children: [
@@ -195,7 +210,8 @@ class HomeViewState extends State<HomeView> {
       ],
     );
   }
-  /// Display Nearby Gym 
+
+  /// Display Nearby Gym
   Widget buildTile(GymInfo gym) => Container(
         margin: const EdgeInsets.symmetric(
           vertical: 0,
@@ -217,7 +233,8 @@ class HomeViewState extends State<HomeView> {
               );
             }),
       );
- /// Get Device Current Location
+
+  /// Get Device Current Location
   Future<GeoPoint> getCurrentLocation() async {
     await getLocationPermission();
     Position position = await Geolocator.getCurrentPosition(

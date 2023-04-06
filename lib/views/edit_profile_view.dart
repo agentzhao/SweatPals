@@ -1,13 +1,14 @@
 /// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
 /// Version 1.1.5
 import 'package:flutter/material.dart';
+import 'package:sweatpals/constants/UserInfo.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:sweatpals/constants/activities.dart';
 import 'package:sweatpals/utilities/toast.dart';
 
-/// Edit Profile Page 
+/// Edit Profile Page
 class EditProfileView extends StatefulWidget {
   const EditProfileView({Key? key}) : super(key: key);
 
@@ -20,30 +21,41 @@ class EditProfileView extends StatefulWidget {
 class EditProfileViewState extends State<EditProfileView> {
   /// Text for User UID
   late final String _uid;
+
   /// Text Box Controller for FirstName
   late final TextEditingController _firstName;
+
   /// Text Box Controller for LastName
   late final TextEditingController _lastName;
+
   /// Text Box Controller for UserName
   late final TextEditingController _username;
+
   /// Check User Verify Status
   late final bool _isUserVerified;
+
   /// Initliase Firebase DataBase Class
   final dbService = DbService();
+
   /// List of Activities
   List<Activity> _selectedActivities = [];
+
   /// Initialise User Info Class
   UserInfo? user;
   // late UserInfo user;
   /// Retrieve Current User UID
   String get uid => AuthService.firebase().currentUser!.uid;
+
   /// Retrieve Current User UserName
   String get username => AuthService.firebase().currentUser!.username!;
+
   /// Retrive User Verify Status from Firebase
   bool get isUserVerified =>
       AuthService.firebase().currentUser!.isEmailVerified;
+
   /// Check Mounted Status
   bool _isMounted = false;
+
   /// Initial State
   @override
   void initState() {
@@ -55,6 +67,7 @@ class EditProfileViewState extends State<EditProfileView> {
     _username = TextEditingController(text: username);
     _isUserVerified = isUserVerified;
   }
+
   ///State Changes
   @override
   void didChangeDependencies() async {
@@ -69,6 +82,7 @@ class EditProfileViewState extends State<EditProfileView> {
       });
     });
   }
+
   /// Exit State
   @override
   void dispose() {
@@ -77,6 +91,7 @@ class EditProfileViewState extends State<EditProfileView> {
     _lastName.dispose();
     _username.dispose();
   }
+
   ///Process For Edit Profile page
   @override
   Widget build(BuildContext context) {

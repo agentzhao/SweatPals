@@ -8,14 +8,19 @@ import 'package:flutter/foundation.dart';
 class AuthUser {
   /// Text for UID
   final String uid;
+
   /// Text for Username
   final String? username;
+
   /// Text For Email Address
   final String? email;
+
   /// Check Email Verify Status
   final bool isEmailVerified;
+
   /// Text for Photo URL
   final String? photoURL;
+
   /// Contrustor
   const AuthUser({
     required this.uid,
@@ -24,6 +29,7 @@ class AuthUser {
     required this.isEmailVerified,
     required this.photoURL,
   });
+
   /// Convert User object to AuthUser object
   factory AuthUser.fromFirebase(User user) => AuthUser(
         uid: user.uid,

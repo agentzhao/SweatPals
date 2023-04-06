@@ -4,160 +4,11 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_database/firebase_database.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
+import 'package:sweatpals/constants/UserInfo.dart';
+import 'package:sweatpals/constants/GymInfo.dart';
 
 ///Initliase GeoFlutterFire Class
 final geo = GeoFlutterFire();
-
-/// UserInfo Class
-class UserInfo {
-  /// Text for UID
-  final String uid;
-
-  /// Text for Username
-  final String username;
-
-  /// Text for Firstname
-  final String firstName;
-
-  /// Text for Lastname
-  final String lastName;
-
-  /// Text for PhotoURL
-  final String photoURL;
-
-  /// List of Activities
-  final List<dynamic> activities;
-
-  /// User Cordinates
-  final GeoPoint location;
-
-  /// Time Update
-  final Timestamp lastUpdated;
-
-  /// List of Firends
-  final List<dynamic> friends;
-
-  /// List of Favourites
-  final List<dynamic> favourites;
-
-  /// Contrustor
-  UserInfo({
-    required this.uid,
-    required this.username,
-    required this.firstName,
-    required this.lastName,
-    required this.photoURL,
-    required this.activities,
-    required this.location,
-    required this.lastUpdated,
-    required this.friends,
-    required this.favourites,
-  });
-
-  /// Create Userinfo Linked Hash Map
-  factory UserInfo.fromMap(Map<String, dynamic> data) {
-    return UserInfo(
-      uid: data['uid'],
-      username: data['username'],
-      firstName: data['firstName'],
-      lastName: data['lastName'],
-      photoURL: data['photoURL'],
-      activities: data['activities'],
-      location: data['location'],
-      lastUpdated: data['lastUpdated'],
-      friends: data['friends'],
-      favourites: data['favourites'],
-    );
-  }
-}
-
-/// Gym Info Class
-class GymInfo {
-  /// Text for address block House Number
-  final String addressBlockHouseNumber;
-
-  /// Text for address Building Name
-  final String addressBuildingName;
-
-  /// Text for address Floor Number
-  final String addressFloorNumber;
-
-  /// Text for address Postal Code
-  final String addressPostalCode;
-
-  /// Text for address Street Name
-  final String addressStreetName;
-
-  /// Text for address Unit Number
-  final String addressUnitNumber;
-
-  /// Text for Description
-  final String description;
-
-  /// Text for Weblink
-  final String hyperlink;
-
-  /// Text for Increment
-  final String incCrc;
-
-  /// Text for x Position
-  final String landXAddressPoint;
-
-  /// Text for Y Position
-  final String landYAddressPoint;
-
-  /// Text for Name
-  final String name;
-
-  /// Text for Photo URL
-  final String photoURL;
-
-  /// Gym Cordinates
-  final GeoPoint coordinates;
-
-  /// Gym Crowl Level Value
-  final int crowdLevel;
-
-  /// Contrustor
-  GymInfo({
-    required this.addressBlockHouseNumber,
-    required this.addressBuildingName,
-    required this.addressFloorNumber,
-    required this.addressPostalCode,
-    required this.addressStreetName,
-    required this.addressUnitNumber,
-    required this.description,
-    required this.hyperlink,
-    required this.incCrc,
-    required this.landXAddressPoint,
-    required this.landYAddressPoint,
-    required this.name,
-    required this.photoURL,
-    required this.coordinates,
-    required this.crowdLevel,
-  });
-
-  /// Create GymInfo Linked Hash Map
-  factory GymInfo.fromMap(Map<String, dynamic> data) {
-    return GymInfo(
-      addressBlockHouseNumber: data['addressBlockHouseNumber'],
-      addressBuildingName: data['addressBuildingName'],
-      addressFloorNumber: data['addressFloorNumber'],
-      addressPostalCode: data['addressPostalCode'],
-      addressStreetName: data['addressStreetName'],
-      addressUnitNumber: data['addressUnitNumber'],
-      description: data['description'],
-      hyperlink: data['hyperlink'],
-      incCrc: data['incCrc'],
-      landXAddressPoint: data['landXAddressPoint'],
-      landYAddressPoint: data['landYAddressPoint'],
-      name: data['name'],
-      photoURL: data['photoURL'],
-      coordinates: data['coordinates'],
-      crowdLevel: data['crowdLevel'],
-    );
-  }
-}
 
 /// Firebase Database Class
 class DbService {
@@ -377,6 +228,13 @@ class DbService {
     });
 
     return gymsList.take(6).toList();
+  }
+
+  void updateCrowdLevel(String incCrc, int crowdLevel) {
+    final CollectionReference gyms = firestore.collection('gyms');
+    gyms.doc(incCrc).update({
+      'crowdLevel': crowdLevel,
+    });
   }
 
   /// Calculate Distance between Each Cordinates

@@ -1,6 +1,7 @@
 /// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
 /// Version 1.1.5
 import "package:flutter/material.dart";
+import 'package:sweatpals/constants/UserInfo.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
@@ -29,8 +30,10 @@ class UserViewState extends State<UserView> {
 
   /// initialise Firebase Storage service Clsss
   final storageService = StorageService();
+
   /// initialise UserInfo Class
   UserInfo? currentUser;
+
   /// Check Friend Status
   bool isFriend = false;
 
@@ -48,6 +51,7 @@ class UserViewState extends State<UserView> {
       });
     });
   }
+
   /// Process for User Profile
   @override
   Widget build(BuildContext context) {

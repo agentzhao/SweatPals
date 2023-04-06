@@ -22,6 +22,7 @@ class FirebaseAuthProvider implements AuthProvider {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
+
   /// Create Users
   @override
   Future<AuthUser> createUser({
@@ -57,6 +58,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw GenericAuthException();
     }
   }
+
   /// Retrieve Current User Authenticate Status
   @override
   AuthUser? get currentUser {
@@ -67,7 +69,8 @@ class FirebaseAuthProvider implements AuthProvider {
       return null;
     }
   }
-  /// Login 
+
+  /// Login
   @override
   Future<AuthUser> logIn({
     required String email,
@@ -96,6 +99,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw GenericAuthException();
     }
   }
+
   /// Logout
   @override
   Future<void> logOut() async {
@@ -106,7 +110,8 @@ class FirebaseAuthProvider implements AuthProvider {
       throw UserNotLoggedInAuthException();
     }
   }
-  /// Send Email Verification 
+
+  /// Send Email Verification
   @override
   Future<void> sendEmailVerification() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -116,6 +121,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw UserNotLoggedInAuthException();
     }
   }
+
   /// Login Annonymously
   @override
   Future<AuthUser> logInAnon({
@@ -144,6 +150,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw GenericAuthException();
     }
   }
+
   /// Update Display Name
   @override
   Future<void> updateDisplayName(String username) async {
@@ -154,6 +161,7 @@ class FirebaseAuthProvider implements AuthProvider {
       throw DisplayNameNotUpdatedException();
     }
   }
+
   /// Update User Photo URL
   @override
   Future<void> updatePhotoURL(String photoURL) async {

@@ -1,34 +1,43 @@
 /// Done by Chin poh, Jarrel , Cheng Feng , Hong Zhao , Ryan
 /// Version 1.1.5
+import 'package:sweatpals/constants/UserInfo.dart';
 import 'package:sweatpals/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:sweatpals/services/auth/auth_service.dart';
 import 'package:sweatpals/services/db/db_service.dart';
 import 'package:sweatpals/services/storage/storage_service.dart';
 
-/// Friend List Page 
+/// Friend List Page
 class ChatsView extends StatefulWidget {
   const ChatsView({Key? key}) : super(key: key);
 
   @override
   ChatsViewState createState() => ChatsViewState();
 }
+
 /// Friend List Page Background
 class ChatsViewState extends State<ChatsView> {
   /// Initalise Firebase DataBase Class
   final DbService dbService = DbService();
+
   /// Initliase Storage Service Class
   final storageService = StorageService();
+
   /// Retrieve Current User UID
   String get uid => AuthService.firebase().currentUser!.uid;
+
   /// Initialise UserInfo Class
   UserInfo? friendInfo;
+
   /// Initialise UserInfo Class
   UserInfo? currentUser;
-  /// List of Friend 
+
+  /// List of Friend
   List<dynamic> friendsList = [];
+
   /// List of Friend Info
   List<UserInfo>? friendsInfo = [];
+
   /// State Changes
   @override
   void didChangeDependencies() async {
@@ -41,6 +50,7 @@ class ChatsViewState extends State<ChatsView> {
       });
     });
   }
+
   /// Process for Friend List Page
   @override
   Widget build(BuildContext context) {
@@ -117,7 +127,8 @@ class ChatsViewState extends State<ChatsView> {
       ),
     );
   }
-/// Display Account Information
+
+  /// Display Account Information
   Widget buildTile(UserInfo user) => ListTile(
       leading: GestureDetector(
         onTap: () {

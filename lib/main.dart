@@ -2,6 +2,8 @@
 /// Version 1.1.5
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
+import 'package:sweatpals/constants/GymInfo.dart';
+import 'package:sweatpals/constants/UserInfo.dart';
 import 'package:sweatpals/constants/routes.dart';
 
 import 'package:sweatpals/services/auth/auth_service.dart';
@@ -23,6 +25,7 @@ import 'package:sweatpals/views/chat_box_view.dart';
 import 'package:sweatpals/views/workout_view.dart';
 import 'package:sweatpals/views/routetrack_view.dart';
 import 'package:sweatpals/views/taskadd_view.dart';
+
 /// Main Function to Run the App
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -102,10 +105,12 @@ void main() async {
     ),
   );
 }
+
 /// Main Page + Background Task
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
-/// Process for Main Page
+
+  /// Process for Main Page
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

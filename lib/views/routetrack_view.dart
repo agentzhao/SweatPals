@@ -219,15 +219,15 @@ class RouteTrackViewState extends State<RouteTrackView> {
   /// Stop Tracking
   Future<void> _stopTracking() async {
     Geolocator.getPositionStream().listen(null);
-      if (_mapController != null) {
-        _mapController?.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(currentloc.latitude, currentloc.longitude),
-            zoom: 14, // Set the zoom level to a default value
-          ),
-        ));
-      }
-   _addMarker(LatLng(currentloc.latitude,currentloc.longitude),"End Point");
+    if (_mapController != null) {
+      _mapController?.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(currentloc.latitude, currentloc.longitude),
+          zoom: 14, // Set the zoom level to a default value
+        ),
+      ));
+    }
+    _addMarker(LatLng(currentloc.latitude, currentloc.longitude), "End Point");
     _hasZoomedOut = true;
   }
 
@@ -352,9 +352,9 @@ class RouteTrackViewState extends State<RouteTrackView> {
                                               });
                                               _stopTracking();
                                               timer.stop();
-                                               await Future.delayed(
+                                              await Future.delayed(
                                                   const Duration(seconds: 5));
-                                                    print("Test");
+                                              // print("Test");
                                               if (_hasZoomedOut) {
                                                 sS0.setGMControler(
                                                     _mapController!);
